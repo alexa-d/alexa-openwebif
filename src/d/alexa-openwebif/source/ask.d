@@ -3,7 +3,24 @@ module ask;
 import vibe.d;
 
 ///
-struct AlexaSession {
+struct AlexaUser {
+  string userId;
+  string accessToken;
+}
+
+///
+struct AlexaApplication {
+  string applicationId;
+}
+
+///
+struct AlexaRequstSession {
+  @byName("new")
+  bool _new;
+  string sessionId;
+  AlexaApplication application;
+  string[string] attributes;
+  AlexaUser user;
 }
 
 ///
@@ -58,9 +75,92 @@ struct AlexaResult {
   @name("version") 
   string _version = "1.0";
 
-  AlexaSession sessionAttributes;
+  AlexaRequstSession sessionAttributes;
   
   bool shouldEndSession;
 
   AlexaResponse response;
+}
+
+///
+struct AlexaAudioPlayer
+{
+  string token;
+  int offsetInMilliseconds;
+  string playerActivity;
+}
+
+///
+/+struct AlexaDevice
+{
+  supportedInterfaces
+}+/
+
+//see https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference#system-object
+///
+struct AlexaSystem
+{
+  AlexaApplication application;
+  AlexaUser user;
+  //AlexaDevice device;
+}
+
+//see https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference#context-object
+///
+struct AlexaRequestContext {
+ AlexaSystem System;
+ AlexaAudioPlayer AudioPlayer;
+}
+
+///
+struct AlexaSlot
+{
+  string name;
+  string value;
+}
+
+///
+struct AlexaIntent
+{
+  string name;
+
+  @optional
+  AlexaSlot[string] slots;
+}
+
+///
+struct AlexaRequestError
+{
+  string type;
+  string message;
+}
+
+///
+struct AlexaRequest
+{
+  string type;
+  string requestId;
+  string timestamp;
+  string locale;
+
+  @optional
+  string reason;
+
+  @optional
+  AlexaRequestError error;
+
+  @optional
+  AlexaIntent intent;
+}
+
+//see https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference#request-format
+///
+struct AlexaRequestBody {
+
+  @name("version") 
+  string _version;
+
+  AlexaSession session;
+
+  AlexaRequest request;
 }
