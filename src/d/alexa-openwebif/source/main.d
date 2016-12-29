@@ -35,17 +35,9 @@ int main(string[] args)
 
   runTask({
 
-    requestHTTP(baseUrl ~ "/api/movielist",
-      (scope req) {
-        // could add headers here before sending,
-        // write a POST body, or do similar things.
-      },
-      (scope res) {
-        auto list = deserializeJson!MovieList(res.bodyReader.readAllUTF8());
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-        parseMovieList(list);
-      }
-    );
+    parseMovieList(apiClient.movielist());
   });
 
   return runEventLoop();
