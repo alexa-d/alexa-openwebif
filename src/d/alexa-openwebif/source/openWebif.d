@@ -43,6 +43,7 @@ struct Service
 	Subservice[] subservices;
 }
 
+///
 struct ServicesList
 {
 	bool result;
@@ -50,10 +51,34 @@ struct ServicesList
 }
 
 ///
+struct CurrentServiceInfo
+{
+	string name;
+}
+struct CurrentServiceEPG
+{
+	string sname;
+	string title;
+	long begin_timestamp;
+	long now_timestamp;
+	string shortdesc;
+	string longdesc;
+}
+
+///
+struct CurrentService
+{
+	CurrentServiceInfo info;	
+	CurrentServiceEPG now;
+	CurrentServiceEPG next;
+}
+
+///
 interface OpenWebifApi {
 	MovieList movielist();
 	
 	ServicesList getallservices();
+	CurrentService getcurrent();
 
 	@method(HTTPMethod.GET)
 	Json message(string text, int type, int timeout);

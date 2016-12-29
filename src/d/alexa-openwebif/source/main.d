@@ -27,6 +27,49 @@ void parseMovieList(MovieList movies)
   exitEventLoop();
 }
 
+void parseServicesList(ServicesList serviceList)
+{
+  AlexaResult result;
+  result.response.card.title = "Webif Kanäle";
+  result.response.card.content = "Webif Kanalliste...";
+
+  result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+  result.response.outputSpeech.ssml = "<speak>Du hast die folgenden Kanäle:";
+  writeln("test");
+
+  foreach(service; serviceList.services)
+  {
+    foreach(subservice; service.subservices) {
+
+      result.response.outputSpeech.ssml ~= "<p>" ~ subservice.servicename ~ "</p>";
+    }
+  }
+
+  result.response.outputSpeech.ssml ~= "</speak>";
+
+  writeln(serializeToJson(result).toPrettyString());
+
+  exitEventLoop();
+}
+
+void parseCurrent(CurrentService currentService)
+{
+  AlexaResult result;
+  result.response.card.title = "Webif aktueller Kanal";
+  result.response.card.content = "Webif aktueller Kanal...";
+
+  auto nextTime = SysTime.fromUnixTime(currentService.next.begin_timestamp);
+
+  result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+  result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info.name ~ "</p> Aktuell läuft:<p>" ~ currentService.now.title ~ "</p> anschließend läuft: <p>" ~ currentService.next.title ~ "</p><p>Um:" ~ nextTime.hour ~ ":" ~ nextTime.minute ~ " Uhr" ;
+  
+  result.response.outputSpeech.ssml ~= "</speak>";
+
+  writeln(serializeToJson(result).toPrettyString());
+
+  exitEventLoop();
+}
+
 int main(string[] args)
 {
   import std.process;
@@ -37,7 +80,10 @@ int main(string[] args)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    parseMovieList(apiClient.movielist());
+    //parseMovieList(apiClient.movielist());
+    //parseServicesList(apiClient.getallservices());
+    parseCurrent(apiClient.getcurrent());
+
   });
 
   return runEventLoop();
