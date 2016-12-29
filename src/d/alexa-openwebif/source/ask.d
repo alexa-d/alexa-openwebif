@@ -15,7 +15,7 @@ struct AlexaApplication {
 
 ///
 struct AlexaRequstSession {
-  @byName("new")
+  @name("new")
   bool _new;
   string sessionId;
   AlexaApplication application;
@@ -160,7 +160,7 @@ struct AlexaRequestBody {
   @name("version") 
   string _version;
 
-  AlexaSession session;
+  AlexaRequstSession session;
 
   AlexaRequest request;
 }
