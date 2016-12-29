@@ -1,0 +1,5 @@
+HelloWorldIntent sag hallo
+HelloWorldIntent hallo
+HelloWorldIntent sag hallo dlang
+HelloWorldIntent sag hi
+HelloWorldIntent nach meinen filmen

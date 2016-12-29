@@ -1,0 +1,13 @@
+{
+	"name": "alexa-openwebif",
+	"authors": [
+		"Stephan Dilly"
+	],
+	"description": "",
+	"copyright": "Copyright © 2016, Stephan Dilly",
+	"license": "MIT",
+	"dependencies": {
+		"vibe-d": "~>0.7.30"
+	},
+	"versions": ["VibeCustomMain"]
+}
