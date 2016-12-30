@@ -55,14 +55,19 @@ void parseServicesList(ServicesList serviceList)
 void parseCurrent(CurrentService currentService)
 {
   AlexaResult result;
-  result.response.card.title = "Webif aktueller Kanal";
-  result.response.card.content = "Webif aktueller Kanal...";
-
   auto nextTime = SysTime.fromUnixTime(currentService.next.begin_timestamp);
 
   result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-  result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info.name ~ "</p> Aktuell läuft:<p>" ~ currentService.now.title ~ "</p> anschließend läuft: <p>" ~ currentService.next.title ~ "</p><p>Um:" ~ nextTime.hour ~ ":" ~ nextTime.minute ~ " Uhr" ;
-  
+  result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info.name ~ 
+    "</p>Aktuell läuft:<p>" ~ currentService.now.title ~ "</p>";
+
+  if(currentService.next.title.length > 0)
+  {
+    result.response.outputSpeech.ssml ~=
+      " anschließend läuft: <p>" ~ currentService.next.title ~ 
+      "</p><p>Um: " ~ nextTime.hour ~ ":" ~ nextTime.minute ~ " Uhr </p>";
+  }
+
   result.response.outputSpeech.ssml ~= "</speak>";
 
   writeln(serializeToJson(result).toPrettyString());
