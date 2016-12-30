@@ -80,6 +80,9 @@ int main(string[] args)
 
   auto baseUrl = environment["OPENWEBIF_URL"];
 
+  import std.stdio:stderr;
+  stderr.writefln("args: %s",args);
+
   runTask({
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
