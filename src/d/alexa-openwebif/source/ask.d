@@ -52,9 +52,22 @@ struct AlexaCard {
 
   @byName
   Type type = Type.Simple;
+  @optional
   string title;
+  @optional
   string text;
+  @optional
   string content;
+
+  ///
+  struct Image
+  {
+    string smallImageUrl;
+    string largeImageUrl;
+  }
+
+  @optional
+  Image image;
 }
 
 ///
