@@ -1,6 +1,7 @@
 module ask;
 
 import vibe.d;
+import std.typecons:Nullable;
 
 ///
 struct AlexaUser {
@@ -52,11 +53,8 @@ struct AlexaCard {
 
   @byName
   Type type = Type.Simple;
-  @optional
   string title;
-  @optional
   string text;
-  @optional
   string content;
 
   ///
@@ -66,7 +64,6 @@ struct AlexaCard {
     string largeImageUrl;
   }
 
-  @optional
   Image image;
 }
 
@@ -78,10 +75,8 @@ struct AlexaResponseReprompt {
 ///
 struct AlexaResponse {
   AlexaOutputSpeech outputSpeech;
-  @optional
   AlexaCard card;
-  //@optional
-  //AlexaResponseReprompt reprompt;
+  Nullable!AlexaResponseReprompt reprompt;
 }
 
 ///

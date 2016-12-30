@@ -64,8 +64,7 @@ void parseCurrent(CurrentService currentService)
   if(currentService.next.title.length > 0)
   {
     result.response.outputSpeech.ssml ~=
-      " anschließend läuft: <p>" ~ currentService.next.title ~ 
-      "</p><p>Um: " ~ nextTime.hour ~ ":" ~ nextTime.minute ~ " Uhr </p>";
+      " anschliessend läuft: <p>" ~ currentService.next.title ~ "</p>";
   }
 
   result.response.outputSpeech.ssml ~= "</speak>";
