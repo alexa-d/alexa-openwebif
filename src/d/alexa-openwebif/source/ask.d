@@ -65,8 +65,8 @@ struct AlexaResponseReprompt {
 ///
 struct AlexaResponse {
   AlexaOutputSpeech outputSpeech;
-  AlexaCard card;
-  AlexaResponseReprompt reprompt;
+  Nullable!AlexaCard card;
+  Nullable!AlexaResponseReprompt reprompt;
 }
 
 ///
