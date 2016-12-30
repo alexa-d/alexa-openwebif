@@ -74,6 +74,13 @@ struct CurrentService
 }
 
 ///
+struct Zap
+{
+	string message;
+	bool result;
+}
+
+///
 interface OpenWebifApi {
 	MovieList movielist();
 	
@@ -81,5 +88,6 @@ interface OpenWebifApi {
 	CurrentService getcurrent();
 
 	@method(HTTPMethod.GET)
+	Zap zap(string sRef);
 	Json message(string text, int type, int timeout);
 }
