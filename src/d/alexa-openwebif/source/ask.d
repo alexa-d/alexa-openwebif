@@ -75,7 +75,7 @@ struct AlexaResult {
   @name("version") 
   string _version = "1.0";
 
-  AlexaRequstSession sessionAttributes;
+  string[string] sessionAttributes;
   
   bool shouldEndSession;
 
