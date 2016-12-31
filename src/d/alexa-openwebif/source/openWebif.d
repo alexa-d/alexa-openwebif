@@ -88,6 +88,6 @@ interface OpenWebifApi {
 	CurrentService getcurrent();
 
 	@method(HTTPMethod.GET)
-	Zap zap(string sRef);
+	@property Zap zap(string sRef);
 	Json message(string text, int type, int timeout);
 }
