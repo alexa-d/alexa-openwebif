@@ -175,3 +175,17 @@ struct AlexaEvent {
 
   AlexaRequest request;
 }
+
+///
+struct AlexaContext
+{
+  string functionName;
+  string invokedFunctionArn;
+  string awsRequestId;
+  string logStreamName;
+  string invokeid;
+  bool callbackWaitsForEmptyEventLoop;
+  string logGroupName;
+  string functionVersion;
+  int memoryLimitInMB;
+}

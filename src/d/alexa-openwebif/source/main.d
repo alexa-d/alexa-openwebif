@@ -73,7 +73,7 @@ void parseCurrent(CurrentService currentService)
   exitEventLoop();
 }
 
-void intentServices(AlexaEvent event, AlexaRequestContext context)
+void intentServices(AlexaEvent event, AlexaContext context)
 {
   runTask({
 
@@ -83,7 +83,7 @@ void intentServices(AlexaEvent event, AlexaRequestContext context)
   });
 }
 
-void intentMovies(AlexaEvent event, AlexaRequestContext context)
+void intentMovies(AlexaEvent event, AlexaContext context)
 {
   runTask({
 
@@ -93,7 +93,7 @@ void intentMovies(AlexaEvent event, AlexaRequestContext context)
   });
 }
 
-void intentCurrent(AlexaEvent event, AlexaRequestContext context)
+void intentCurrent(AlexaEvent event, AlexaContext context)
 {
   runTask({
 
@@ -103,7 +103,7 @@ void intentCurrent(AlexaEvent event, AlexaRequestContext context)
   });
 }
 
-void intentToggleMute(AlexaEvent event, AlexaRequestContext context)
+void intentToggleMute(AlexaEvent event, AlexaContext context)
 {
   runTask({
 
@@ -114,7 +114,7 @@ void intentToggleMute(AlexaEvent event, AlexaRequestContext context)
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
     result.response.outputSpeech.ssml = "<speak>Stummschalten umgeschaltet</speak>";
-    
+
     writeln(serializeToJson(result).toPrettyString());
 
     exitEventLoop();
@@ -138,20 +138,21 @@ int main(string[] args)
   auto contextJson = parseJson(decodedArg2);
 
   auto event = deserializeJson!AlexaEvent(eventJson);
+  auto context = deserializeJson!AlexaContext(contextJson);
 
   import std.stdio:stderr;
   stderr.writefln("event: %s\n",event);
-  stderr.writefln("context: %s",contextJson.toPrettyString());
+  stderr.writefln("context: %s",context);
 
   runTask({
     if(event.request.intent.name == "IntentCurrent")
-      intentCurrent(event, AlexaRequestContext.init);
+      intentCurrent(event, context);
     else if(event.request.intent.name == "IntentServices")
-      intentServices(event, AlexaRequestContext.init);
+      intentServices(event, context);
     else if(event.request.intent.name == "IntentMovies")
-      intentMovies(event, AlexaRequestContext.init);
+      intentMovies(event, context);
      else if(event.request.intent.name == "IntentToggleMute")
-      intentToggleMute(event, AlexaRequestContext.init);
+      intentToggleMute(event, context);
     else
       exitEventLoop();
   });
