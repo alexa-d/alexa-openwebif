@@ -13,6 +13,13 @@
       "intent": "IntentToggleMute"
     },
     {
+      "intent": "IntentZap",
+      "slots": [{
+        "name": "targetChannel",
+        "value": "CHANNEL"
+      }]
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]

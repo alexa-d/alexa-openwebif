@@ -137,7 +137,7 @@ struct AlexaIntent
   string name;
 
   @optional
-  AlexaSlot[string] slots;
+  AlexaSlot[] slots;
 }
 
 ///

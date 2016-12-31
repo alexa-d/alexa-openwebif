@@ -126,6 +126,49 @@ void intentToggleMute(AlexaEvent event, AlexaContext context)
   });
 }
 
+void intentZap(AlexaEvent event, AlexaContext context)
+{
+  runTask({
+
+    auto targetChannel = event.request.intent.slots[0].value;
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    auto allservices = apiClient.getallservices();
+
+    ulong minDistance = ulong.max;
+    size_t minIndex;
+
+    foreach(i, subservice; allservices.services[0].subservices)
+    {
+      if(subservice.servicename.length < 2)
+        continue;
+
+      import std.algorithm:levenshteinDistance;
+      
+      auto dist = levenshteinDistance(subservice.servicename,targetChannel);
+      if(dist < minDistance)
+      {
+        minDistance = dist;
+        minIndex = i;
+        //stderr.writefln("better match found: %s (%s)",subservice,dist);
+      }
+    }
+
+    auto matchedServices = allservices.services[0].subservices[minIndex];
+
+    apiClient.zap(matchedServices.servicereference);
+
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ matchedServices.servicename ~"</p></speak>";
+
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
 string baseUrl;
 
 int main(string[] args)
@@ -180,6 +223,8 @@ int main(string[] args)
       intentMovies(event, context);
      else if(event.request.intent.name == "IntentToggleMute")
       intentToggleMute(event, context);
+    else if(event.request.intent.name == "IntentZap")
+      intentZap(event, context);
     else
       exitEventLoop();
   });
