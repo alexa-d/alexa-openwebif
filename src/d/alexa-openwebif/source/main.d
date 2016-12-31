@@ -35,7 +35,6 @@ void parseServicesList(ServicesList serviceList)
 
   result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
   result.response.outputSpeech.ssml = "<speak>Du hast die folgenden Kanäle:";
-  writeln("test");
 
   foreach(service; serviceList.services)
   {
@@ -74,14 +73,32 @@ void parseCurrent(CurrentService currentService)
   exitEventLoop();
 }
 
-void intentHelloWorld(AlexaEvent event, AlexaRequestContext context)
+void intentServices(AlexaEvent event, AlexaRequestContext context)
 {
   runTask({
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    //parseMovieList(apiClient.movielist());
-    //parseServicesList(apiClient.getallservices());
+    parseServicesList(apiClient.getallservices());
+  });
+}
+
+void intentMovies(AlexaEvent event, AlexaRequestContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    parseMovieList(apiClient.movielist());
+  });
+}
+
+void intentCurrent(AlexaEvent event, AlexaRequestContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
     parseCurrent(apiClient.getcurrent());
   });
 }
@@ -109,8 +126,12 @@ int main(string[] args)
   stderr.writefln("context: %s",contextJson.toPrettyString());
 
   runTask({
-    if(event.request.intent.name == "HelloWorldIntent")
-      intentHelloWorld(event, AlexaRequestContext.init);
+    if(event.request.intent.name == "IntentCurrent")
+      intentCurrent(event, AlexaRequestContext.init);
+    else if(event.request.intent.name == "IntentServices")
+      intentServices(event, AlexaRequestContext.init);
+    else if(event.request.intent.name == "IntentMovies")
+      intentMovies(event, AlexaRequestContext.init);
     else
       exitEventLoop();
   });

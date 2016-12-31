@@ -1,5 +1,11 @@
-HelloWorldIntent sag hallo
-HelloWorldIntent hallo
-HelloWorldIntent sag hallo dlang
-HelloWorldIntent sag hi
-HelloWorldIntent nach meinen filmen
+IntentCurrent was gerade läuft
+IntentCurrent was aktuell läuft
+IntentCurrent was ist das
+IntentCurrent aktuell
+
+IntentServices nach meinen kanälen
+IntentServices nach meinen sendern
+IntentServices nach meinen services
+
+IntentMovies nach meinen aufnahmen
+IntentMovies nach meinen filmen

@@ -1,7 +1,13 @@
 {
   "intents": [
     {
-      "intent": "HelloWorldIntent"
+      "intent": "IntentCurrent"
+    },
+    {
+      "intent": "IntentServices"
+    },
+    {
+      "intent": "IntentMovies"
     },
     {
       "intent": "AMAZON.HelpIntent"
