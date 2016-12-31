@@ -81,6 +81,15 @@ struct Zap
 }
 
 ///
+struct Vol
+{
+	int current;
+	string message;
+	bool result;
+	bool ismute;
+}
+
+///
 interface OpenWebifApi {
 	MovieList movielist();
 	
@@ -89,5 +98,7 @@ interface OpenWebifApi {
 
 	@method(HTTPMethod.GET)
 	@property Zap zap(string sRef);
+	/* vol expects a string containing up (increase by 5), down (decrease by 5), set<int> (set100) or mute for toogle mute state */ 
+	@property Vol vol(string set);
 	Json message(string text, int type, int timeout);
 }
