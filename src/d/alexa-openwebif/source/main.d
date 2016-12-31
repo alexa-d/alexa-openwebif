@@ -76,12 +76,18 @@ void parseCurrent(CurrentService currentService)
 
 int main(string[] args)
 {
-  import std.process;
-
+  import std.process:environment;
   auto baseUrl = environment["OPENWEBIF_URL"];
 
   import std.stdio:stderr;
   stderr.writefln("args: %s",args);
+
+  if(args.length > 1)
+  {
+    import std.base64;
+    auto decoded = cast(string)Base64.decode(args[1]);
+    stderr.writefln("decoded: %s",parseJson(decoded));
+  }
 
   runTask({
 
