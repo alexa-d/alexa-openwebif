@@ -13,4 +13,4 @@ aws lambda update-function-configuration --function-name $AWS_LAMBDA_NAME --envi
 
 printf "\ntest invoke\n"
 cd ../../
-aws lambda invoke --invocation-type RequestResponse --function-name $AWS_LAMBDA_NAME --region $AWS_REGION --log-type Tail --payload '{"session": {"sessionId": "","application": {"applicationId": ""},"attributes": {},"user": {"userId": ""},"new": true},"request": {"type": "","requestId": "","locale": "","timestamp": ""},"version": ""}' outputfile.txt
+aws lambda invoke --invocation-type RequestResponse --function-name $AWS_LAMBDA_NAME --region $AWS_REGION --log-type Tail --payload '{"session": {"sessionId": "","application": {"applicationId": ""},"attributes": {},"user": {"userId": ""},"new": true},"request": {"type": "IntentRequest","requestId": "","locale": "","timestamp": "", "intent":{"name":"HelloWorldIntent"}},"version": ""}' outputfile.txt
