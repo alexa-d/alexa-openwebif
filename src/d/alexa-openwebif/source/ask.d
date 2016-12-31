@@ -21,6 +21,7 @@ struct AlexaRequstSession {
   bool _new;
   string sessionId;
   AlexaApplication application;
+  @optional
   string[string] attributes;
   AlexaUser user;
 }
