@@ -90,11 +90,29 @@ struct Vol
 }
 
 ///
+struct Timer 
+{
+	string servicename;
+	string name;
+	string realbegin;
+	string realend;
+}
+
+///
+struct TimerList
+{
+	Timer[] timers;
+	bool result;
+	string[] locations;
+}
+
+///
 interface OpenWebifApi {
 	MovieList movielist();
 	
 	ServicesList getallservices();
 	CurrentService getcurrent();
+	TimerList timerlist();
 
 	@method(HTTPMethod.GET)
 	@property Zap zap(string sRef);
