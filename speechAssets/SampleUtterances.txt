@@ -9,3 +9,8 @@ IntentServices nach meinen services
 
 IntentMovies nach meinen aufnahmen
 IntentMovies nach meinen filmen
+
+IntentToggleMute nach Stumm
+IntentToggleMute Ton auszumachen
+IntentToggleMute Ton an
+IntentToggleMute Ton aus

@@ -103,6 +103,24 @@ void intentCurrent(AlexaEvent event, AlexaRequestContext context)
   });
 }
 
+void intentToggleMute(AlexaEvent event, AlexaRequestContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    apiClient.vol("mute");
+
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Stummschalten umgeschaltet</speak>";
+    
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
 string baseUrl;
 
 int main(string[] args)
@@ -132,6 +150,8 @@ int main(string[] args)
       intentServices(event, AlexaRequestContext.init);
     else if(event.request.intent.name == "IntentMovies")
       intentMovies(event, AlexaRequestContext.init);
+     else if(event.request.intent.name == "IntentToggleMute")
+      intentToggleMute(event, AlexaRequestContext.init);
     else
       exitEventLoop();
   });

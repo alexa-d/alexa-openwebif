@@ -10,6 +10,9 @@
       "intent": "IntentMovies"
     },
     {
+      "intent": "IntentToggleMute"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]
