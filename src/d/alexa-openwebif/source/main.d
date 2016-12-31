@@ -74,10 +74,24 @@ void parseCurrent(CurrentService currentService)
   exitEventLoop();
 }
 
+void intentHelloWorld(AlexaEvent event, AlexaRequestContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    //parseMovieList(apiClient.movielist());
+    //parseServicesList(apiClient.getallservices());
+    parseCurrent(apiClient.getcurrent());
+  });
+}
+
+string baseUrl;
+
 int main(string[] args)
 {
   import std.process:environment;
-  auto baseUrl = environment["OPENWEBIF_URL"];
+  baseUrl = environment["OPENWEBIF_URL"];
 
   if(args.length != 3)
     return -1;
@@ -88,18 +102,17 @@ int main(string[] args)
   auto eventJson = parseJson(decodedArg1);
   auto contextJson = parseJson(decodedArg2);
 
+  auto event = deserializeJson!AlexaEvent(eventJson);
+
   import std.stdio:stderr;
-  stderr.writefln("event: %s\n",eventJson.toPrettyString());
+  stderr.writefln("event: %s\n",event);
   stderr.writefln("context: %s",contextJson.toPrettyString());
 
   runTask({
-
-    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
-
-    //parseMovieList(apiClient.movielist());
-    //parseServicesList(apiClient.getallservices());
-    parseCurrent(apiClient.getcurrent());
-
+    if(event.request.intent.name == "HelloWorldIntent")
+      intentHelloWorld(event, AlexaRequestContext.init);
+    else
+      exitEventLoop();
   });
 
   return runEventLoop();

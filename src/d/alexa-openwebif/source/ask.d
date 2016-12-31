@@ -6,6 +6,7 @@ import std.typecons:Nullable;
 ///
 struct AlexaUser {
   string userId;
+  @optional
   string accessToken;
 }
 
@@ -165,7 +166,7 @@ struct AlexaRequest
 
 //see https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/alexa-skills-kit-interface-reference#request-format
 ///
-struct AlexaRequestBody {
+struct AlexaEvent {
 
   @name("version") 
   string _version;
