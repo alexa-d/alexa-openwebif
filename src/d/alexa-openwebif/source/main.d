@@ -109,11 +109,16 @@ void intentToggleMute(AlexaEvent event, AlexaContext context)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    apiClient.vol("mute");
+    auto res = apiClient.vol("mute");
 
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Stummschalten umgeschaltet</speak>";
+    result.response.outputSpeech.ssml = "<speak>Stummschalten fehlgeschlagen</speak>";
+
+    if(res.result && res.ismute)
+      result.response.outputSpeech.ssml = "<speak>Stumm geschaltet</speak>";
+    else if(res.result && !res.ismute)
+      result.response.outputSpeech.ssml = "<speak>Stummschalten abgeschaltet</speak>";
 
     writeln(serializeToJson(result).toPrettyString());
 
@@ -128,14 +133,23 @@ int main(string[] args)
   import std.process:environment;
   baseUrl = environment["OPENWEBIF_URL"];
 
-  if(args.length != 3)
+  if(args.length != 4)
     return -1;
   
-  import std.base64;
-  auto decodedArg1 = cast(string)Base64.decode(args[1]);
-  auto decodedArg2 = cast(string)Base64.decode(args[2]);
-  auto eventJson = parseJson(decodedArg1);
-  auto contextJson = parseJson(decodedArg2);
+  auto testingMode = args[1] == "true";
+
+  string eventParamStr = args[2];
+  string contextParamStr = args[3];
+
+  if(!testingMode)
+  {
+    import std.base64;
+    eventParamStr = cast(string)Base64.decode(eventParamStr);
+    contextParamStr = cast(string)Base64.decode(contextParamStr);
+  }
+  
+  auto eventJson = parseJson(eventParamStr);
+  auto contextJson = parseJson(contextParamStr);
 
   AlexaEvent event;
   try{
