@@ -137,13 +137,21 @@ int main(string[] args)
   auto eventJson = parseJson(decodedArg1);
   auto contextJson = parseJson(decodedArg2);
 
-  auto event = deserializeJson!AlexaEvent(eventJson);
+  AlexaEvent event;
+  try{
+    event = deserializeJson!AlexaEvent(eventJson);
+  }
+  catch(Exception e){
+    stderr.writefln("could not deserialize event: %s",e);
+  }
 
   AlexaContext context;
   try{
     context = deserializeJson!AlexaContext(contextJson);
   }
-  catch(Exception){}
+  catch(Exception e){
+    stderr.writefln("could not deserialize context: %s",e);
+  }
 
   import std.stdio:stderr;
   stderr.writefln("event: %s\n",event);
