@@ -14,3 +14,10 @@ IntentToggleMute nach Stumm
 IntentToggleMute Ton auszumachen
 IntentToggleMute Ton an
 IntentToggleMute Ton aus
+
+IntentZap und schalte auf {targetChannel}
+IntentZap auf {targetChannel} zu schalten
+IntentZap auf {targetChannel} zu wechseln
+IntentZap den Sender {targetChannel} einzuschalten
+IntentZap zu {targetChannel} zu schalten
+IntentZap zu {targetChannel} zu wechseln

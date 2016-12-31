@@ -16,7 +16,7 @@
       "intent": "IntentZap",
       "slots": [{
         "name": "targetChannel",
-        "value": "CHANNEL"
+        "type": "CHANNEL"
       }]
     },
     {

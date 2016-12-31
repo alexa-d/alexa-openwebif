@@ -128,6 +128,7 @@ struct AlexaRequestContext {
 struct AlexaSlot
 {
   string name;
+  @optional
   string value;
 }
 
@@ -137,7 +138,7 @@ struct AlexaIntent
   string name;
 
   @optional
-  AlexaSlot[] slots;
+  AlexaSlot[string] slots;
 }
 
 ///

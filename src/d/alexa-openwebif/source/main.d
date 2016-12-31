@@ -130,38 +130,45 @@ void intentZap(AlexaEvent event, AlexaContext context)
 {
   runTask({
 
-    auto targetChannel = event.request.intent.slots[0].value;
+    auto targetChannel = event.request.intent.slots["targetChannel"].value;
 
-    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+    auto switchedTo = "nichts";
 
-    auto allservices = apiClient.getallservices();
-
-    ulong minDistance = ulong.max;
-    size_t minIndex;
-
-    foreach(i, subservice; allservices.services[0].subservices)
+    if(targetChannel.length > 0)
     {
-      if(subservice.servicename.length < 2)
-        continue;
+      auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-      import std.algorithm:levenshteinDistance;
-      
-      auto dist = levenshteinDistance(subservice.servicename,targetChannel);
-      if(dist < minDistance)
+      auto allservices = apiClient.getallservices();
+
+      ulong minDistance = ulong.max;
+      size_t minIndex;
+
+      foreach(i, subservice; allservices.services[0].subservices)
       {
-        minDistance = dist;
-        minIndex = i;
-        //stderr.writefln("better match found: %s (%s)",subservice,dist);
+        if(subservice.servicename.length < 2)
+          continue;
+
+        import std.algorithm:levenshteinDistance;
+        
+        auto dist = levenshteinDistance(subservice.servicename,targetChannel);
+        if(dist < minDistance)
+        {
+          minDistance = dist;
+          minIndex = i;
+          //stderr.writefln("better match found: %s (%s)",subservice,dist);
+        }
       }
+
+      auto matchedServices = allservices.services[0].subservices[minIndex];
+
+      apiClient.zap(matchedServices.servicereference);
+
+      switchedTo = matchedServices.servicename;
     }
-
-    auto matchedServices = allservices.services[0].subservices[minIndex];
-
-    apiClient.zap(matchedServices.servicereference);
 
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ matchedServices.servicename ~"</p></speak>";
+    result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
 
     writeln(serializeToJson(result).toPrettyString());
 
