@@ -116,6 +116,13 @@ struct SleepTimer
 }
 
 ///
+struct RecordNow
+{
+	string message;
+	bool result;
+}
+
+///
 interface OpenWebifApi {
 	MovieList movielist();
 	
@@ -128,6 +135,7 @@ interface OpenWebifApi {
 	Vol getVol(string set);
 	/* sleeptimer expects cmd=set|get action=standby|shutdown time=minutes 1-999 enabled=True|False */
 	SleepTimer getSleeptimer(string cmd, string action, int time, string enabled);
+	RecordNow getRecordnow();
 	
 	Json message(string text, int type, int timeout);
 }
