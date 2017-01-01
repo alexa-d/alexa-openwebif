@@ -123,9 +123,9 @@ interface OpenWebifApi {
 	CurrentService getcurrent();
 	TimerList timerlist();
 	@method(HTTPMethod.GET)
-	@property Zap zap(string sRef);
+	Zap getZap(string sRef);
 	/* vol expects a string containing up (increase by 5), down (decrease by 5), set<int> (set100) or mute for toogle mute state */ 
-	@property Vol vol(string set);
+	Vol getVol(string set);
 	/* sleeptimer expects cmd=set|get action=standby|shutdown time=minutes 1-999 enabled=True|False */
 	SleepTimer getSleeptimer(string cmd, string action, int time, string enabled);
 	
