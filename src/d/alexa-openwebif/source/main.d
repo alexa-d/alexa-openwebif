@@ -127,6 +127,67 @@ void intentToggleMute(AlexaEvent event, AlexaContext context)
   });
 }
 
+void intentIncreaseVolume(AlexaEvent event, AlexaContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    auto res = apiClient.getVol("up");
+
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
+    if (res.result)
+      result.response.outputSpeech.ssml = "<speak>Ok</speak>";
+    
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
+void intentDecreaseVolume(AlexaEvent event, AlexaContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    auto res = apiClient.getVol("down");
+
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
+    if (res.result)
+      result.response.outputSpeech.ssml = "<speak>Ok</speak>";
+    
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
+void intentSetVolume(AlexaEvent event, AlexaContext context)
+{
+  runTask({
+    auto volume = event.request.intent.slots["volume"].value;
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    auto res = apiClient.getVol("set"~volume);
+
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
+    if (res.result)
+      result.response.outputSpeech.ssml = "<speak>Ok</speak>";
+    
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
 void intentZap(AlexaEvent event, AlexaContext context)
 {
   runTask({
@@ -288,6 +349,12 @@ int main(string[] args)
       intentZap(event, context);
     else if(event.request.intent.name == "IntentSleepTimer")
       intentSleepTimer(event, context);
+    else if(event.request.intent.name == "IntentDecreaseVolume")
+      intentDecreaseVolume(event, context);
+    else if(event.request.intent.name == "IntentIncreaseVolume")
+      intentIncreaseVolume(event, context);
+    else if(event.request.intent.name == "IntentSetVolume")
+      intentSetVolume(event, context);
     else
       exitEventLoop();
   });
