@@ -197,14 +197,17 @@ void intentSetVolume(AlexaEvent event, AlexaContext context)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    auto res = apiClient.getVol("set"~volume);
-
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
     result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
-    if (res.result)
-      result.response.outputSpeech.ssml = "<speak>Ok</speak>";
     
+    if (to!int(volume) >=0 && to!int(volume) < 100)
+    {
+      auto res = apiClient.getVol("set"~volume);
+      if (res.result)
+      result.response.outputSpeech.ssml = "<speak>Ok</speak>";
+    }
+
     writeln(serializeToJson(result).toPrettyString());
 
     exitEventLoop();
