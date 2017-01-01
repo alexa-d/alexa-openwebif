@@ -301,7 +301,7 @@ void intentSleepTimer(AlexaEvent event, AlexaContext context)
         if (minutes == 0)
         {
           sleepTimer = apiClient.getSleeptimer("set","",0, "False");
-          result.response.outputSpeech.ssml = "<speak><p>Sleep Timer wurde deaktiviert</p></speak>";
+          result.response.outputSpeech.ssml = "<speak>Sleep Timer wurde deaktiviert</speak>";
         }
         else 
         {
@@ -322,13 +322,13 @@ void intentSleepTimer(AlexaEvent event, AlexaContext context)
         }
         else
         {
-          result.response.outputSpeech.ssml = "<speak><p>Der Timer konnte nicht gesetzt werden.</p></speak>";
+          result.response.outputSpeech.ssml = "<speak>Der Timer konnte nicht gesetzt werden.</speak>";
         }
       }
     }
     else 
     {
-      result.response.outputSpeech.ssml = "<speak><p>Das kann ich leider nicht tun.</p></speak>";
+      result.response.outputSpeech.ssml = "<speak>Das kann ich leider nicht tun.</speak>";
     }
 
     writeln(serializeToJson(result).toPrettyString());
