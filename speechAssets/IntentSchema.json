@@ -13,6 +13,32 @@
       "intent": "IntentToggleMute"
     },
     {
+      "intent": "IntentVolumeUp"
+    },
+    {
+      "intent": "IntentVolumeDown"
+    },
+    {
+      "intent": "IntentToggleStandby"
+    },
+    {
+      "intent": "IntentRecordNow"
+    },
+    {
+      "intent": "IntentSetVolume",
+      "slots": [{
+        "name": "volume",
+        "type": "AMAZON.NUMBER"
+      }]
+    },
+    {
+      "intent": "IntentSleepTimer",
+      "slots": [{
+        "name": "minutes",
+        "type": "AMAZON.DURATION"
+      }]
+    },
+    {
       "intent": "IntentZap",
       "slots": [{
         "name": "targetChannel",

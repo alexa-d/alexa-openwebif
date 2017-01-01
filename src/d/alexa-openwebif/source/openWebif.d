@@ -142,6 +142,7 @@ interface OpenWebifApi {
 	/* vol expects a string containing up (increase by 5), down (decrease by 5), set<int> (set100) or mute for toogle mute state */ 
 	@method(HTTPMethod.GET)
 	Vol vol(string set);
+	Vol vol();
 	/* sleeptimer expects cmd=set|get action=standby|shutdown time=minutes 1-999 enabled=True|False */
 	@method(HTTPMethod.GET)
 	SleepTimer sleeptimer(string cmd, string action, int time, string enabled);

@@ -150,13 +150,16 @@ void intentToggleStandby(AlexaEvent event, AlexaContext context)
   });
 }
 
-void intentVolume(AlexaEvent event, AlexaContext context)
+void intentVolume(AlexaEvent event, AlexaContext context, bool increase)
 {
   runTask({
 
-    auto action = event.request.intent.slots["action"].value;
+    auto action = "down";
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    if(increase)
+      action = "up";
 
     auto res = apiClient.vol(action);
 
@@ -377,8 +380,10 @@ int main(string[] args)
       intentZap(event, context);
     else if(event.request.intent.name == "IntentSleepTimer")
       intentSleepTimer(event, context);
-    else if(event.request.intent.name == "IntentVolume")
-      intentVolume(event, context);
+    else if(event.request.intent.name == "IntentVolumeUp")
+      intentVolume(event, context, true);
+    else if(event.request.intent.name == "IntentVolumeDown")
+      intentVolume(event, context, false);
     else if(event.request.intent.name == "IntentSetVolume")
       intentSetVolume(event, context);
     else if(event.request.intent.name == "IntentRecordNow")

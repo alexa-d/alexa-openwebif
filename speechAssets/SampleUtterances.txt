@@ -21,3 +21,25 @@ IntentZap auf {targetChannel} zu wechseln
 IntentZap den Sender {targetChannel} einzuschalten
 IntentZap zu {targetChannel} zu schalten
 IntentZap zu {targetChannel} zu wechseln
+
+IntentVolumeUp erhöhe die Lautstärke
+IntentVolumeUp Lautstärke hoch
+
+IntentVolumeDown verringer die Lautstärke
+IntentVolumeDown Lautstärke runter
+
+IntentToggleStandby Standby umschalten
+IntentToggleStandby Standby einschalten
+IntentToggleStandby Standby ausschalten
+IntentToggleStandby Standby
+
+IntentRecordNow aufnehmen
+IntentRecordNow Aufnahme starten
+IntentRecordNow jetzt aufnehmen
+
+IntentSetVolume die Lautstärke auf {volume} setzen
+IntentSetVolume die Lautstärke auf {volume} zu setzen
+IntentSetVolume Lautstärke auf {volume}
+
+IntentSleepTimer einschlafen in {minutes}
+IntentSleepTimer ausschalten in {minutes}
