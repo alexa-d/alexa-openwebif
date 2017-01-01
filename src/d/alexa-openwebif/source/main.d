@@ -1,10 +1,11 @@
 import std.stdio;
-import vibe.d;
 import std.xml;
 import std.string;
 
+import vibe.d;
+import ask.ask;
+
 import openWebif;
-import ask;
 
 void parseMovieList(MovieList movies)
 {

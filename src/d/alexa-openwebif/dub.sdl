@@ -1,0 +1,8 @@
+name "alexa-openwebif"
+description "Amazon Alexa Skill to interact with a openwebif tv receiver"
+authors "Stephan Dilly"
+copyright "Copyright © 2017, Stephan Dilly"
+license "MIT"
+dependency "vibe-d" version="~>0.7.30"
+dependency "alexa-skill-kit-d" version="~>0.0.1"
+versions "VibeCustomMain"
