@@ -110,7 +110,7 @@ void intentToggleMute(AlexaEvent event, AlexaContext context)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    auto res = apiClient.vol("mute");
+    auto res = apiClient.getVol("mute");
 
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -162,7 +162,7 @@ void intentZap(AlexaEvent event, AlexaContext context)
 
       auto matchedServices = allservices.services[0].subservices[minIndex];
 
-      apiClient.zap(matchedServices.servicereference);
+      apiClient.getZap(matchedServices.servicereference);
 
       switchedTo = matchedServices.servicename;
     }
