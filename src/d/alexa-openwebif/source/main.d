@@ -177,6 +177,59 @@ void intentZap(AlexaEvent event, AlexaContext context)
   });
 }
 
+void intentSleepTimer(AlexaEvent event, AlexaContext context)
+{
+  runTask({
+
+    auto minutes = to!int(event.request.intent.slots["minutes"].value);
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+
+    if(minutes >= 0 && minutes < 999) 
+    {
+      auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+      auto sleepTimer = apiClient.getSleeptimer("get","standby",0, "False");
+      if (sleepTimer.enabled)
+      {
+        if (minutes == 0)
+        {
+          sleepTimer = apiClient.getSleeptimer("set","",0, "False");
+          result.response.outputSpeech.ssml = "<speak><p>Sleep Timer wurde deaktiviert</p></speak>";
+        }
+        else 
+        {
+          auto sleepTimerNew = apiClient.getSleeptimer("set","standby", to!int(minutes), "True");
+          result.response.outputSpeech.ssml = "<speak>Es existiert bereits ein Sleep Timer mit <p>"~ to!string(sleepTimer.minutes) ~" verbleibenden Minuten. Timer wurde auf "~ to!string(sleepTimerNew.minutes) ~ " Minuten zurückgesetzt.</p></speak>";
+        }
+      }
+      else
+      {
+        if (minutes == 0)
+        {
+          result.response.outputSpeech.ssml = "<speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>";   
+        }
+        else if (minutes >0)
+        {
+          sleepTimer = apiClient.getSleeptimer("set", "standby", to!int(minutes), "True");
+          result.response.outputSpeech.ssml = "<speak>Ich habe den Sleep Timer auf <p>"~ to!string(sleepTimer.minutes) ~" Minuten eingestellt</p></speak>";
+        }
+        else
+        {
+          result.response.outputSpeech.ssml = "<speak><p>Der Timer konnte nicht gesetzt werden.</p></speak>";
+        }
+      }
+    }
+    else 
+    {
+      result.response.outputSpeech.ssml = "<speak><p>Das kann ich leider nicht tun.</p></speak>";
+    }
+
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
 string baseUrl;
 
 int main(string[] args)
@@ -229,10 +282,12 @@ int main(string[] args)
       intentServices(event, context);
     else if(event.request.intent.name == "IntentMovies")
       intentMovies(event, context);
-     else if(event.request.intent.name == "IntentToggleMute")
+    else if(event.request.intent.name == "IntentToggleMute")
       intentToggleMute(event, context);
     else if(event.request.intent.name == "IntentZap")
       intentZap(event, context);
+    else if(event.request.intent.name == "IntentSleepTimer")
+      intentSleepTimer(event, context);
     else
       exitEventLoop();
   });

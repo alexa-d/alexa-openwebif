@@ -107,16 +107,27 @@ struct TimerList
 }
 
 ///
+struct SleepTimer
+{
+	string action;
+	int minutes;
+	string message;
+	bool enabled;
+}
+
+///
 interface OpenWebifApi {
 	MovieList movielist();
 	
 	ServicesList getallservices();
 	CurrentService getcurrent();
 	TimerList timerlist();
-
 	@method(HTTPMethod.GET)
 	@property Zap zap(string sRef);
 	/* vol expects a string containing up (increase by 5), down (decrease by 5), set<int> (set100) or mute for toogle mute state */ 
 	@property Vol vol(string set);
+	/* sleeptimer expects cmd=set|get action=standby|shutdown time=minutes 1-999 enabled=True|False */
+	SleepTimer getSleeptimer(string cmd, string action, int time, string enabled);
+	
 	Json message(string text, int type, int timeout);
 }
