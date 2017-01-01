@@ -110,7 +110,7 @@ void intentToggleMute(AlexaEvent event, AlexaContext context)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    auto res = apiClient.getVol("mute");
+    auto res = apiClient.vol("mute");
 
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -133,11 +133,11 @@ void intentToggleStandby(AlexaEvent event, AlexaContext context)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    auto res = apiClient.getPowerstate(0);
+    auto res = apiClient.powerstate(0);
 
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Stanbdy fehlgeschlagen</speak>";
+    result.response.outputSpeech.ssml = "<speak>Standby fehlgeschlagen</speak>";
 
     if(res.result && res.instandby)
       result.response.outputSpeech.ssml = "<speak>Box gestartet</speak>";
@@ -158,13 +158,13 @@ void intentVolume(AlexaEvent event, AlexaContext context)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    auto res = apiClient.getVol(action);
+    auto res = apiClient.vol(action);
 
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
     result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
     if (res.result)
-      result.response.outputSpeech.ssml = "<speak>Ok</speak>";
+      result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
     
     writeln(serializeToJson(result).toPrettyString());
 
@@ -175,7 +175,7 @@ void intentVolume(AlexaEvent event, AlexaContext context)
 void intentSetVolume(AlexaEvent event, AlexaContext context)
 {
   runTask({
-    auto volume = event.request.intent.slots["volume"].value;
+    auto targetVolume = to!int(event.request.intent.slots["volume"].value);
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
@@ -183,11 +183,11 @@ void intentSetVolume(AlexaEvent event, AlexaContext context)
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
     result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
     
-    if (to!int(volume) >=0 && to!int(volume) < 100)
+    if (targetVolume >=0 && targetVolume < 100)
     {
-      auto res = apiClient.getVol("set"~volume);
+      auto res = apiClient.vol("set"~to!string(targetVolume));
       if (res.result)
-      result.response.outputSpeech.ssml = "<speak>Ok</speak>";
+        result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
     }
 
     writeln(serializeToJson(result).toPrettyString());
@@ -202,7 +202,7 @@ void intentRecordNow(AlexaEvent event, AlexaContext context)
 
     auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-    auto res = apiClient.getRecordnow();
+    auto res = apiClient.recordnow();
 
     AlexaResult result;
     result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -251,7 +251,7 @@ void intentZap(AlexaEvent event, AlexaContext context)
 
       auto matchedServices = allservices.services[0].subservices[minIndex];
 
-      apiClient.getZap(matchedServices.servicereference);
+      apiClient.zap(matchedServices.servicereference);
 
       switchedTo = matchedServices.servicename;
     }
@@ -277,17 +277,17 @@ void intentSleepTimer(AlexaEvent event, AlexaContext context)
     if(minutes >= 0 && minutes < 999) 
     {
       auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
-      auto sleepTimer = apiClient.getSleeptimer("get","standby",0, "False");
+      auto sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
       if (sleepTimer.enabled)
       {
         if (minutes == 0)
         {
-          sleepTimer = apiClient.getSleeptimer("set","",0, "False");
+          sleepTimer = apiClient.sleeptimer("set","",0, "False");
           result.response.outputSpeech.ssml = "<speak>Sleep Timer wurde deaktiviert</speak>";
         }
         else 
         {
-          auto sleepTimerNew = apiClient.getSleeptimer("set","standby", to!int(minutes), "True");
+          auto sleepTimerNew = apiClient.sleeptimer("set","standby", to!int(minutes), "True");
           result.response.outputSpeech.ssml = "<speak>Es existiert bereits ein Sleep Timer mit <p>"~ to!string(sleepTimer.minutes) ~" verbleibenden Minuten. Timer wurde auf "~ to!string(sleepTimerNew.minutes) ~ " Minuten zurückgesetzt.</p></speak>";
         }
       }
@@ -299,7 +299,7 @@ void intentSleepTimer(AlexaEvent event, AlexaContext context)
         }
         else if (minutes >0)
         {
-          sleepTimer = apiClient.getSleeptimer("set", "standby", to!int(minutes), "True");
+          sleepTimer = apiClient.sleeptimer("set", "standby", to!int(minutes), "True");
           result.response.outputSpeech.ssml = "<speak>Ich habe den Sleep Timer auf <p>"~ to!string(sleepTimer.minutes) ~" Minuten eingestellt</p></speak>";
         }
         else

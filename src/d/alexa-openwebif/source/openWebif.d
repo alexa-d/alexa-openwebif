@@ -136,15 +136,20 @@ interface OpenWebifApi {
 	ServicesList getallservices();
 	CurrentService getcurrent();
 	TimerList timerlist();
+
 	@method(HTTPMethod.GET)
-	Zap getZap(string sRef);
+	Zap zap(string sRef);
 	/* vol expects a string containing up (increase by 5), down (decrease by 5), set<int> (set100) or mute for toogle mute state */ 
-	Vol getVol(string set);
+	@method(HTTPMethod.GET)
+	Vol vol(string set);
 	/* sleeptimer expects cmd=set|get action=standby|shutdown time=minutes 1-999 enabled=True|False */
-	SleepTimer getSleeptimer(string cmd, string action, int time, string enabled);
-	RecordNow getRecordnow();
+	@method(HTTPMethod.GET)
+	SleepTimer sleeptimer(string cmd, string action, int time, string enabled);
+	@method(HTTPMethod.GET)
+	RecordNow recordnow();
 	/* powerstate expects 0 for toggle standby, 1 for deep stanbdy, 2 reboot box, 3 restart gui */
-	PowerState getPowerstate(int newstate);
+	@method(HTTPMethod.GET)
+	PowerState powerstate(int newstate);
 	
 	Json message(string text, int type, int timeout);
 }
