@@ -188,6 +188,26 @@ void intentSetVolume(AlexaEvent event, AlexaContext context)
   });
 }
 
+void intentRecordNow(AlexaEvent event, AlexaContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    auto res = apiClient.getRecordnow();
+
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Aufnahme starten fehlgeschlagen</speak>";
+    if (res.result)
+      result.response.outputSpeech.ssml = "<speak>Aufnahme gestartet</speak>";
+    
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
 void intentZap(AlexaEvent event, AlexaContext context)
 {
   runTask({
@@ -355,6 +375,8 @@ int main(string[] args)
       intentIncreaseVolume(event, context);
     else if(event.request.intent.name == "IntentSetVolume")
       intentSetVolume(event, context);
+    else if(event.request.intent.name == "IntentRecordNow")
+      intentRecordNow(event, context);
     else
       exitEventLoop();
   });
