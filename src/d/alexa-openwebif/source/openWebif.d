@@ -123,6 +123,13 @@ struct RecordNow
 }
 
 ///
+struct PowerState
+{
+	bool instandby;
+	bool result;
+}
+
+///
 interface OpenWebifApi {
 	MovieList movielist();
 	
@@ -136,6 +143,8 @@ interface OpenWebifApi {
 	/* sleeptimer expects cmd=set|get action=standby|shutdown time=minutes 1-999 enabled=True|False */
 	SleepTimer getSleeptimer(string cmd, string action, int time, string enabled);
 	RecordNow getRecordnow();
+	/* powerstate expects 0 for toggle standby, 1 for deep stanbdy, 2 reboot box, 3 restart gui */
+	PowerState getPowerstate(int newstate);
 	
 	Json message(string text, int type, int timeout);
 }
