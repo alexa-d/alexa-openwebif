@@ -127,6 +127,29 @@ void intentToggleMute(AlexaEvent event, AlexaContext context)
   });
 }
 
+void intentToggleStandby(AlexaEvent event, AlexaContext context)
+{
+  runTask({
+
+    auto apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+    auto res = apiClient.getPowerstate(0);
+
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Stanbdy fehlgeschlagen</speak>";
+
+    if(res.result && res.instandby)
+      result.response.outputSpeech.ssml = "<speak>Box gestartet</speak>";
+    else if(res.result && !res.instandby)
+      result.response.outputSpeech.ssml = "<speak>Box in Standby geschaltet</speak>";
+
+    writeln(serializeToJson(result).toPrettyString());
+
+    exitEventLoop();
+  });
+}
+
 void intentIncreaseVolume(AlexaEvent event, AlexaContext context)
 {
   runTask({
@@ -377,6 +400,8 @@ int main(string[] args)
       intentSetVolume(event, context);
     else if(event.request.intent.name == "IntentRecordNow")
       intentRecordNow(event, context);
+    else if(event.request.intent.name == "IntentToggleStandby")
+      intentToggleStandby(event, context);
     else
       exitEventLoop();
   });
