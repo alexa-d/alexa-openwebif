@@ -6,8 +6,6 @@ import vibe.d;
 import ask.ask;
 import openwebif.api;
 
-import alexaskill;
-
 int main(string[] args)
 {
   import std.process:environment;
@@ -57,7 +55,7 @@ int main(string[] args)
 }
 
 ///
-final class OpenWebifSkill : AlexaBaseSkill!OpenWebifSkill
+final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 {
   RestInterfaceClient!OpenWebifApi apiClient;
 
