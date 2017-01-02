@@ -4,8 +4,7 @@ import std.string;
 
 import vibe.d;
 import ask.ask;
-
-import openWebif;
+import openwebif.api;
 
 void parseMovieList(MovieList movies)
 {
