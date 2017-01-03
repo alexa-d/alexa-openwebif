@@ -45,10 +45,6 @@ int main(string[] args)
     stderr.writefln("could not deserialize context: %s",e);
   }
 
-  import std.stdio:stderr;
-  stderr.writefln("event: %s\n",event);
-  stderr.writefln("context: %s",context);
-
   auto skill = new OpenWebifSkill(baseUrl);
 
   return skill.execute(event, context);
