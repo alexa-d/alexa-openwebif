@@ -8,326 +8,326 @@ import openwebif.api;
 
 int main(string[] args)
 {
-  import std.process:environment;
-  auto baseUrl = environment["OPENWEBIF_URL"];
+	import std.process:environment;
+	immutable baseUrl = environment["OPENWEBIF_URL"];
 
-  if(args.length != 4)
-    return -1;
-  
-  auto testingMode = args[1] == "true";
+	if(args.length != 4)
+		return -1;
 
-  string eventParamStr = args[2];
-  string contextParamStr = args[3];
+	immutable testingMode = args[1] == "true";
 
-  if(!testingMode)
-  {
-    import std.base64;
-    eventParamStr = cast(string)Base64.decode(eventParamStr);
-    contextParamStr = cast(string)Base64.decode(contextParamStr);
-  }
-  
-  auto eventJson = parseJson(eventParamStr);
-  auto contextJson = parseJson(contextParamStr);
+	string eventParamStr = args[2];
+	string contextParamStr = args[3];
 
-  AlexaEvent event;
-  try{
-    event = deserializeJson!AlexaEvent(eventJson);
-  }
-  catch(Exception e){
-    stderr.writefln("could not deserialize event: %s",e);
-  }
+	if(!testingMode)
+	{
+		import std.base64:Base64;
+		eventParamStr = cast(string)Base64.decode(eventParamStr);
+		contextParamStr = cast(string)Base64.decode(contextParamStr);
+	}
 
-  AlexaContext context;
-  try{
-    context = deserializeJson!AlexaContext(contextJson);
-  }
-  catch(Exception e){
-    stderr.writefln("could not deserialize context: %s",e);
-  }
+	auto eventJson = parseJson(eventParamStr);
+	auto contextJson = parseJson(contextParamStr);
 
-  auto skill = new OpenWebifSkill(baseUrl);
+	AlexaEvent event;
+	try{
+		event = deserializeJson!AlexaEvent(eventJson);
+	}
+	catch(Exception e){
+		stderr.writefln("could not deserialize event: %s",e);
+	}
 
-  return skill.execute(event, context);
+	AlexaContext context;
+	try{
+		context = deserializeJson!AlexaContext(contextJson);
+	}
+	catch(Exception e){
+		stderr.writefln("could not deserialize context: %s",e);
+	}
+
+	auto skill = new OpenWebifSkill(baseUrl);
+
+	return skill.execute(event, context);
 }
 
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 {
-  RestInterfaceClient!OpenWebifApi apiClient;
+	RestInterfaceClient!OpenWebifApi apiClient;
 
-  ///
-  this(string baseUrl)
-  {
-    apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
-  }
+	///
+	this(string baseUrl)
+	{
+		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+	}
 
-  ///
-  @CustomIntent("IntentServices")
-  AlexaResult onIntentServices(AlexaEvent event, AlexaContext context)
-  {
-    auto serviceList = apiClient.getallservices();
+	///
+	@CustomIntent("IntentServices")
+	AlexaResult onIntentServices(AlexaEvent event, AlexaContext context)
+	{
+		auto serviceList = apiClient.getallservices();
 
-    AlexaResult result;
-    result.response.card.title = "Webif Kanäle";
-    result.response.card.content = "Webif Kanalliste...";
+		AlexaResult result;
+		result.response.card.title = "Webif Kanäle";
+		result.response.card.content = "Webif Kanalliste...";
 
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Du hast die folgenden Kanäle:";
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Du hast die folgenden Kanäle:";
 
-    foreach(service; serviceList.services)
-    {
-      foreach(subservice; service.subservices) {
+		foreach(service; serviceList.services)
+		{
+			foreach(subservice; service.subservices) {
 
-        result.response.outputSpeech.ssml ~= "<p>" ~ subservice.servicename ~ "</p>";
-      }
-    }
+				result.response.outputSpeech.ssml ~= "<p>" ~ subservice.servicename ~ "</p>";
+			}
+		}
 
-    result.response.outputSpeech.ssml ~= "</speak>";
+		result.response.outputSpeech.ssml ~= "</speak>";
 
-    return result;
-  }
+		return result;
+	}
 
-  ///
-  @CustomIntent("IntentMovies")
-  AlexaResult onIntentMovies(AlexaEvent event, AlexaContext context)
-  {
-    auto movies = apiClient.movielist();
+	///
+	@CustomIntent("IntentMovies")
+	AlexaResult onIntentMovies(AlexaEvent event, AlexaContext context)
+	{
+		auto movies = apiClient.movielist();
 
-    AlexaResult result;
-    result.response.card.title = "Webif movies";
-    result.response.card.content = "Webif movie liste...";
+		AlexaResult result;
+		result.response.card.title = "Webif movies";
+		result.response.card.content = "Webif movie liste...";
 
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Du hast die folgenden Filme:";
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Du hast die folgenden Filme:";
 
-    foreach(movie; movies.movies)
-    {
-      result.response.outputSpeech.ssml ~= "<p>" ~ movie.eventname ~ "</p>";
-    }
+		foreach(movie; movies.movies)
+		{
+			result.response.outputSpeech.ssml ~= "<p>" ~ movie.eventname ~ "</p>";
+		}
 
-    result.response.outputSpeech.ssml ~= "</speak>";
-    
-    return result;
-  }
+		result.response.outputSpeech.ssml ~= "</speak>";
 
-  ///
-  @CustomIntent("IntentToggleMute")
-  AlexaResult onIntentToggleMute(AlexaEvent event, AlexaContext context)
-  {
-    auto res = apiClient.vol("mute");
+		return result;
+	}
 
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Stummschalten fehlgeschlagen</speak>";
+	///
+	@CustomIntent("IntentToggleMute")
+	AlexaResult onIntentToggleMute(AlexaEvent event, AlexaContext context)
+	{
+		auto res = apiClient.vol("mute");
 
-    if(res.result && res.ismute)
-      result.response.outputSpeech.ssml = "<speak>Stumm geschaltet</speak>";
-    else if(res.result && !res.ismute)
-      result.response.outputSpeech.ssml = "<speak>Stummschalten abgeschaltet</speak>";
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Stummschalten fehlgeschlagen</speak>";
 
-    return result;
-  }
+		if(res.result && res.ismute)
+			result.response.outputSpeech.ssml = "<speak>Stumm geschaltet</speak>";
+		else if(res.result && !res.ismute)
+			result.response.outputSpeech.ssml = "<speak>Stummschalten abgeschaltet</speak>";
 
-  ///
-  @CustomIntent("IntentToggleStandby")
-  AlexaResult onIntentToggleStandby(AlexaEvent event, AlexaContext context)
-  {
-    auto res = apiClient.powerstate(0);
+		return result;
+	}
 
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Standby fehlgeschlagen</speak>";
+	///
+	@CustomIntent("IntentToggleStandby")
+	AlexaResult onIntentToggleStandby(AlexaEvent event, AlexaContext context)
+	{
+		auto res = apiClient.powerstate(0);
 
-    if(res.result && res.instandby)
-      result.response.outputSpeech.ssml = "<speak>Box gestartet</speak>";
-    else if(res.result && !res.instandby)
-      result.response.outputSpeech.ssml = "<speak>Box in Standby geschaltet</speak>";
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Standby fehlgeschlagen</speak>";
 
-    return result;
-  }
+		if(res.result && res.instandby)
+			result.response.outputSpeech.ssml = "<speak>Box gestartet</speak>";
+		else if(res.result && !res.instandby)
+			result.response.outputSpeech.ssml = "<speak>Box in Standby geschaltet</speak>";
 
-  ///
-  @CustomIntent("IntentVolumeDown")
-  AlexaResult onIntentVolumeDown(AlexaEvent event, AlexaContext context)
-  {
-    return onIntentVolume(false);
-  }
+		return result;
+	}
 
-  ///
-  @CustomIntent("IntentVolumeUp")
-  AlexaResult onIntentVolumeUp(AlexaEvent event, AlexaContext context)
-  {
-    return onIntentVolume(true);
-  }
+	///
+	@CustomIntent("IntentVolumeDown")
+	AlexaResult onIntentVolumeDown(AlexaEvent event, AlexaContext context)
+	{
+		return onIntentVolume(false);
+	}
 
-  ///
-  AlexaResult onIntentVolume(bool increase)
-  {
-    auto action = "down";
+	///
+	@CustomIntent("IntentVolumeUp")
+	AlexaResult onIntentVolumeUp(AlexaEvent event, AlexaContext context)
+	{
+		return onIntentVolume(true);
+	}
 
-    if(increase)
-      action = "up";
+	///
+	AlexaResult onIntentVolume(bool increase)
+	{
+		auto action = "down";
 
-    auto res = apiClient.vol(action);
+		if(increase)
+			action = "up";
 
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
-    if (res.result)
-      result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
-    
-    return result;
-  }
+		auto res = apiClient.vol(action);
 
-  ///
-  @CustomIntent("IntentSetVolume")
-  AlexaResult onIntentSetVolume(AlexaEvent event, AlexaContext context)
-  {
-    auto targetVolume = to!int(event.request.intent.slots["volume"].value);
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
+		if (res.result)
+			result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
 
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
-    
-    if (targetVolume >=0 && targetVolume < 100)
-    {
-      auto res = apiClient.vol("set"~to!string(targetVolume));
-      if (res.result)
-        result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
-    }
+		return result;
+	}
 
-    return result;
-  }
+	///
+	@CustomIntent("IntentSetVolume")
+	AlexaResult onIntentSetVolume(AlexaEvent event, AlexaContext context)
+	{
+		auto targetVolume = to!int(event.request.intent.slots["volume"].value);
 
-  ///
-  @CustomIntent("IntentRecordNow")
-  AlexaResult onIntentRecordNow(AlexaEvent event, AlexaContext context)
-  {
-    auto res = apiClient.recordnow();
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
 
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Aufnahme starten fehlgeschlagen</speak>";
-    if (res.result)
-      result.response.outputSpeech.ssml = "<speak>Aufnahme gestartet</speak>";
-    
-    return result;
-  }
+		if (targetVolume >=0 && targetVolume < 100)
+		{
+			auto res = apiClient.vol("set"~to!string(targetVolume));
+			if (res.result)
+				result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
+		}
 
-  ///
-  @CustomIntent("IntentZap")
-  AlexaResult onIntentZap(AlexaEvent event, AlexaContext context)
-  {
-    auto targetChannel = event.request.intent.slots["targetChannel"].value;
+		return result;
+	}
 
-    auto switchedTo = "nichts";
+	///
+	@CustomIntent("IntentRecordNow")
+	AlexaResult onIntentRecordNow(AlexaEvent event, AlexaContext context)
+	{
+		auto res = apiClient.recordnow();
 
-    if(targetChannel.length > 0)
-    {
-      auto allservices = apiClient.getallservices();
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Aufnahme starten fehlgeschlagen</speak>";
+		if (res.result)
+			result.response.outputSpeech.ssml = "<speak>Aufnahme gestartet</speak>";
 
-      ulong minDistance = ulong.max;
-      size_t minIndex;
+		return result;
+	}
 
-      foreach(i, subservice; allservices.services[0].subservices)
-      {
-        if(subservice.servicename.length < 2)
-          continue;
+	///
+	@CustomIntent("IntentZap")
+	AlexaResult onIntentZap(AlexaEvent event, AlexaContext context)
+	{
+		auto targetChannel = event.request.intent.slots["targetChannel"].value;
 
-        import std.algorithm:levenshteinDistance;
-        
-        auto dist = levenshteinDistance(subservice.servicename,targetChannel);
-        if(dist < minDistance)
-        {
-          minDistance = dist;
-          minIndex = i;
-        }
-      }
+		auto switchedTo = "nichts";
 
-      auto matchedServices = allservices.services[0].subservices[minIndex];
+		if(targetChannel.length > 0)
+		{
+			auto allservices = apiClient.getallservices();
 
-      apiClient.zap(matchedServices.servicereference);
+			ulong minDistance = ulong.max;
+			size_t minIndex;
 
-      switchedTo = matchedServices.servicename;
-    }
+			foreach(i, subservice; allservices.services[0].subservices)
+			{
+				if(subservice.servicename.length < 2)
+					continue;
 
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
+				import std.algorithm:levenshteinDistance;
 
-    return result;
-  }
+				auto dist = levenshteinDistance(subservice.servicename,targetChannel);
+				if(dist < minDistance)
+				{
+					minDistance = dist;
+					minIndex = i;
+				}
+			}
 
-  ///
-  @CustomIntent("IntentSleepTimer")
-  AlexaResult onIntentSleepTimer(AlexaEvent event, AlexaContext context)
-  {
-    auto minutes = to!int(event.request.intent.slots["minutes"].value);
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+			auto matchedServices = allservices.services[0].subservices[minIndex];
 
-    if(minutes >= 0 && minutes < 999) 
-    {
-      auto sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
-      if (sleepTimer.enabled)
-      {
-        if (minutes == 0)
-        {
-          sleepTimer = apiClient.sleeptimer("set","",0, "False");
-          result.response.outputSpeech.ssml = "<speak>Sleep Timer wurde deaktiviert</speak>";
-        }
-        else 
-        {
-          auto sleepTimerNew = apiClient.sleeptimer("set","standby", to!int(minutes), "True");
-          result.response.outputSpeech.ssml = "<speak>Es existiert bereits ein Sleep Timer mit <p>"~ to!string(sleepTimer.minutes) ~" verbleibenden Minuten. Timer wurde auf "~ to!string(sleepTimerNew.minutes) ~ " Minuten zurückgesetzt.</p></speak>";
-        }
-      }
-      else
-      {
-        if (minutes == 0)
-        {
-          result.response.outputSpeech.ssml = "<speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>";   
-        }
-        else if (minutes >0)
-        {
-          sleepTimer = apiClient.sleeptimer("set", "standby", to!int(minutes), "True");
-          result.response.outputSpeech.ssml = "<speak>Ich habe den Sleep Timer auf <p>"~ to!string(sleepTimer.minutes) ~" Minuten eingestellt</p></speak>";
-        }
-        else
-        {
-          result.response.outputSpeech.ssml = "<speak>Der Timer konnte nicht gesetzt werden.</speak>";
-        }
-      }
-    }
-    else 
-    {
-      result.response.outputSpeech.ssml = "<speak>Das kann ich leider nicht tun.</speak>";
-    }
+			apiClient.zap(matchedServices.servicereference);
 
-    return result;
-  }
+			switchedTo = matchedServices.servicename;
+		}
 
-  ///
-  @CustomIntent("IntentCurrent")
-  AlexaResult onIntentCurrent(AlexaEvent event, AlexaContext context)
-  {
-    auto currentService = apiClient.getcurrent();
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
 
-    AlexaResult result;
-    auto nextTime = SysTime.fromUnixTime(currentService.next.begin_timestamp);
+		return result;
+	}
 
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info.name ~ 
-      "</p>Aktuell läuft:<p>" ~ currentService.now.title ~ "</p>";
+	///
+	@CustomIntent("IntentSleepTimer")
+	AlexaResult onIntentSleepTimer(AlexaEvent event, AlexaContext context)
+	{
+		auto minutes = to!int(event.request.intent.slots["minutes"].value);
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
-    if(currentService.next.title.length > 0)
-    {
-      result.response.outputSpeech.ssml ~=
-        " anschliessend läuft: <p>" ~ currentService.next.title ~ "</p>";
-    }
+		if(minutes >= 0 && minutes < 999)
+		{
+			auto sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
+			if (sleepTimer.enabled)
+			{
+				if (minutes == 0)
+				{
+					sleepTimer = apiClient.sleeptimer("set","",0, "False");
+					result.response.outputSpeech.ssml = "<speak>Sleep Timer wurde deaktiviert</speak>";
+				}
+				else
+				{
+					auto sleepTimerNew = apiClient.sleeptimer("set","standby", to!int(minutes), "True");
+					result.response.outputSpeech.ssml = "<speak>Es existiert bereits ein Sleep Timer mit <p>"~ to!string(sleepTimer.minutes) ~" verbleibenden Minuten. Timer wurde auf "~ to!string(sleepTimerNew.minutes) ~ " Minuten zurückgesetzt.</p></speak>";
+				}
+			}
+			else
+			{
+				if (minutes == 0)
+				{
+					result.response.outputSpeech.ssml = "<speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>";
+				}
+				else if (minutes >0)
+				{
+					sleepTimer = apiClient.sleeptimer("set", "standby", to!int(minutes), "True");
+					result.response.outputSpeech.ssml = "<speak>Ich habe den Sleep Timer auf <p>"~ to!string(sleepTimer.minutes) ~" Minuten eingestellt</p></speak>";
+				}
+				else
+				{
+					result.response.outputSpeech.ssml = "<speak>Der Timer konnte nicht gesetzt werden.</speak>";
+				}
+			}
+		}
+		else
+		{
+			result.response.outputSpeech.ssml = "<speak>Das kann ich leider nicht tun.</speak>";
+		}
 
-    result.response.outputSpeech.ssml ~= "</speak>";
+		return result;
+	}
 
-    return result;
-  }
+	///
+	@CustomIntent("IntentCurrent")
+	AlexaResult onIntentCurrent(AlexaEvent event, AlexaContext context)
+	{
+		auto currentService = apiClient.getcurrent();
+
+		AlexaResult result;
+		auto nextTime = SysTime.fromUnixTime(currentService.next.begin_timestamp);
+
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info.name ~
+			"</p>Aktuell läuft:<p>" ~ currentService.now.title ~ "</p>";
+
+		if(currentService.next.title.length > 0)
+		{
+			result.response.outputSpeech.ssml ~=
+				" anschliessend läuft: <p>" ~ currentService.next.title ~ "</p>";
+		}
+
+		result.response.outputSpeech.ssml ~= "</speak>";
+
+		return result;
+	}
 }
