@@ -61,6 +61,28 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 	}
 
+	override AlexaResult onLaunch(AlexaEvent event, AlexaContext)
+	{
+		AlexaResult result;
+		result.response.card.title = "Webif";
+
+		if(event.session.user.accessToken.length == 0)
+		{
+			result.response.card.content = "Webif please login";
+			result.response.card.type = AlexaCard.Type.LinkAccount;
+			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+			result.response.outputSpeech.ssml = "<speak>Bitte log dich in deiner Alexa App ein</speak>";
+		}
+		else
+		{
+			result.response.card.content = "Webif says hello";
+			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+			result.response.outputSpeech.ssml = "<speak>Hallo, was kann ich für dich tun?</speak>";
+		}
+
+		return result;
+	}
+
 	///
 	@CustomIntent("IntentServices")
 	AlexaResult onIntentServices(AlexaEvent, AlexaContext)
@@ -150,33 +172,14 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	@CustomIntent("IntentVolumeDown")
 	AlexaResult onIntentVolumeDown(AlexaEvent, AlexaContext)
 	{
-		return onIntentVolume(false);
+		return doVolumeIntent(false);
 	}
 
 	///
 	@CustomIntent("IntentVolumeUp")
 	AlexaResult onIntentVolumeUp(AlexaEvent, AlexaContext)
 	{
-		return onIntentVolume(true);
-	}
-
-	///
-	AlexaResult onIntentVolume(bool increase)
-	{
-		auto action = "down";
-
-		if(increase)
-			action = "up";
-
-		auto res = apiClient.vol(action);
-
-		AlexaResult result;
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
-		if (res.result)
-			result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
-
-		return result;
+		return doVolumeIntent(true);
 	}
 
 	///
@@ -328,6 +331,25 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 
 		result.response.outputSpeech.ssml ~= "</speak>";
+
+		return result;
+	}
+
+	///
+	private AlexaResult doVolumeIntent(bool increase)
+	{
+		auto action = "down";
+
+		if(increase)
+			action = "up";
+
+		auto res = apiClient.vol(action);
+
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
+		if (res.result)
+			result.response.outputSpeech.ssml = format("<speak>Lautstärke auf %s gesetzt</speak>",res.current);
 
 		return result;
 	}
