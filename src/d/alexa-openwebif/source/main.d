@@ -53,7 +53,7 @@ int main(string[] args)
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 {
-	RestInterfaceClient!OpenWebifApi apiClient;
+	private RestInterfaceClient!OpenWebifApi apiClient;
 
 	///
 	this(string baseUrl)
@@ -63,7 +63,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentServices")
-	AlexaResult onIntentServices(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentServices(AlexaEvent, AlexaContext)
 	{
 		auto serviceList = apiClient.getallservices();
 
@@ -89,7 +89,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentMovies")
-	AlexaResult onIntentMovies(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentMovies(AlexaEvent, AlexaContext)
 	{
 		auto movies = apiClient.movielist();
 
@@ -112,9 +112,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentToggleMute")
-	AlexaResult onIntentToggleMute(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentToggleMute(AlexaEvent, AlexaContext)
 	{
-		auto res = apiClient.vol("mute");
+		immutable res = apiClient.vol("mute");
 
 		AlexaResult result;
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -130,9 +130,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentToggleStandby")
-	AlexaResult onIntentToggleStandby(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentToggleStandby(AlexaEvent, AlexaContext)
 	{
-		auto res = apiClient.powerstate(0);
+		immutable res = apiClient.powerstate(0);
 
 		AlexaResult result;
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -148,14 +148,14 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentVolumeDown")
-	AlexaResult onIntentVolumeDown(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentVolumeDown(AlexaEvent, AlexaContext)
 	{
 		return onIntentVolume(false);
 	}
 
 	///
 	@CustomIntent("IntentVolumeUp")
-	AlexaResult onIntentVolumeUp(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentVolumeUp(AlexaEvent, AlexaContext)
 	{
 		return onIntentVolume(true);
 	}
@@ -181,7 +181,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentSetVolume")
-	AlexaResult onIntentSetVolume(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentSetVolume(AlexaEvent event, AlexaContext)
 	{
 		auto targetVolume = to!int(event.request.intent.slots["volume"].value);
 
@@ -201,9 +201,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentRecordNow")
-	AlexaResult onIntentRecordNow(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentRecordNow(AlexaEvent, AlexaContext)
 	{
-		auto res = apiClient.recordnow();
+		immutable res = apiClient.recordnow();
 
 		AlexaResult result;
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -216,7 +216,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentZap")
-	AlexaResult onIntentZap(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentZap(AlexaEvent event, AlexaContext)
 	{
 		auto targetChannel = event.request.intent.slots["targetChannel"].value;
 
@@ -236,7 +236,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 				import std.algorithm:levenshteinDistance;
 
-				auto dist = levenshteinDistance(subservice.servicename,targetChannel);
+				immutable dist = levenshteinDistance(subservice.servicename,targetChannel);
 				if(dist < minDistance)
 				{
 					minDistance = dist;
@@ -260,7 +260,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentSleepTimer")
-	AlexaResult onIntentSleepTimer(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentSleepTimer(AlexaEvent event, AlexaContext)
 	{
 		auto minutes = to!int(event.request.intent.slots["minutes"].value);
 		AlexaResult result;
@@ -279,7 +279,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 				else
 				{
 					auto sleepTimerNew = apiClient.sleeptimer("set","standby", to!int(minutes), "True");
-					result.response.outputSpeech.ssml = "<speak>Es existiert bereits ein Sleep Timer mit <p>"~ to!string(sleepTimer.minutes) ~" verbleibenden Minuten. Timer wurde auf "~ to!string(sleepTimerNew.minutes) ~ " Minuten zurückgesetzt.</p></speak>";
+					result.response.outputSpeech.ssml =
+						.format("<speak>Es existiert bereits ein Sleep Timer mit <p>%s verbleibenden Minuten."~
+							"Timer wurde auf %s Minuten zurückgesetzt.</p></speak>",sleepTimer.minutes,sleepTimerNew.minutes);
 				}
 			}
 			else
@@ -291,7 +293,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 				else if (minutes >0)
 				{
 					sleepTimer = apiClient.sleeptimer("set", "standby", to!int(minutes), "True");
-					result.response.outputSpeech.ssml = "<speak>Ich habe den Sleep Timer auf <p>"~ to!string(sleepTimer.minutes) ~" Minuten eingestellt</p></speak>";
+					result.response.outputSpeech.ssml =
+						.format("<speak>Ich habe den Sleep Timer auf <p>%s Minuten eingestellt</p></speak>",sleepTimer.minutes);
 				}
 				else
 				{
@@ -309,13 +312,11 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentCurrent")
-	AlexaResult onIntentCurrent(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentCurrent(AlexaEvent, AlexaContext)
 	{
 		auto currentService = apiClient.getcurrent();
 
 		AlexaResult result;
-		auto nextTime = SysTime.fromUnixTime(currentService.next.begin_timestamp);
-
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info.name ~
 			"</p>Aktuell läuft:<p>" ~ currentService.now.title ~ "</p>";
