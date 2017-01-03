@@ -34,7 +34,9 @@ IntentVolumeDown Lautstärke runter
 IntentToggleStandby Standby umschalten
 IntentToggleStandby Standby einschalten
 IntentToggleStandby Standby ausschalten
-IntentToggleStandby Standby
+IntentToggleStandby ausschalten
+IntentToggleStandby einschalten
+IntentToggleStandby anschalten
 
 IntentRecordNow aufnehmen
 IntentRecordNow Aufnahme starten
