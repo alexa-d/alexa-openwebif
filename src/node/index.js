@@ -7,7 +7,8 @@ process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'
 process.env['LD_LIBRARY_PATH'] = process.env['LAMBDA_TASK_ROOT'] + '/';
 
 exports.handler = function(event, context) {
-	console.log("node js args: "+JSON.stringify(event));
+	console.log("node args event: "+JSON.stringify(event));
+	console.log("node args context: "+JSON.stringify(context));
 	var eventB64 = new Buffer(JSON.stringify(event)).toString('base64');
 	var contextB64 = new Buffer(JSON.stringify(context)).toString('base64');
 	var proc = child_process.exec('./alexa-openwebif false ' + eventB64 + " " + contextB64,function(code,stdout,stderr) {
