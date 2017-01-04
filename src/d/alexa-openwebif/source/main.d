@@ -259,7 +259,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
       if (targetChannel == "up" || targetChannel == "down")
       {
-        ulong j;
+        auto j=0;
         auto up = false;
         
         if (targetChannel=="up") 
