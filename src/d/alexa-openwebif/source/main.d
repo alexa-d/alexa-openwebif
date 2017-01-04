@@ -382,8 +382,18 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 ///
 struct TokenInfo
 {
-	///
+	/// this needs to be validated against our Client-Id
 	string aud;
+	///
+	long exp;
+	///
+	string iss;
+	///
+	string user_id;
+	///
+	string app_id;
+	///
+	long iat;
 }
 
 ///
@@ -406,7 +416,7 @@ interface AmazonLoginApi
 	import vibe.http.common:HTTPMethod;
 
 	///
-	@path("auth/o2/tokenInfo")
+	@path("auth/o2/tokeninfo")
 	@method(HTTPMethod.GET)
 	TokenInfo tokeninfo(string access_token);
 
