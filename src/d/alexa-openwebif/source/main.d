@@ -255,12 +255,14 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
     if(targetChannel.length > 0)
     {
       auto allservices = apiClient.getallservices();
+      immutable auto maxIndex = allservices.services[0].subservices.length;
 
       if (targetChannel == "up" || targetChannel == "down")
       {
 
         ulong j;
         auto up = false;
+        if (targetChannel=="up") up = true;
         auto currentservice = apiClient.getcurrent();
            
         bool pred(Subservice subs, CurrentService curr) 
@@ -268,8 +270,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
           return curr.info._ref == subs.servicereference;      
         }
 
-        auto i = countUntil!(pred)(allservices.services[0].subservices,currentservice);
-        
+        immutable auto i = countUntil!(pred)(allservices.services[0].subservices,currentservice);
+     
         if (targetChannel == "up") 
         {
           up = true;
@@ -277,16 +279,15 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
         }
         else
           j = i-1;
-         
 
         // handle end or beginning of servicelist 
-        if (j >= allservices.services[0].subservices.length)
+        if (j >= maxIndex)
           j=0;
         else if (j<=0)
-          j = allservices.services[0].subservices.length-1;
+          j = maxIndex-1;
         
-
         matchedServices = allservices.services[0].subservices[j];
+
         // handle bouquets headlines/titles
         while(matchedServices.servicereference.endsWith(matchedServices.servicename)) 
         {
@@ -294,9 +295,14 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
             j++;
           else
             j--;
+        
+          if (j >= maxIndex)
+            j=0;
+          else if (j<=0)
+            j = maxIndex-1;
 
           matchedServices = allservices.services[0].subservices[j];
-        }     
+        }      
       }  else
       {
         ulong minDistance = ulong.max;
