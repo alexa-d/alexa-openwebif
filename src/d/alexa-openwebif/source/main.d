@@ -6,6 +6,8 @@ import vibe.d;
 import ask.ask;
 import openwebif.api;
 
+import amazonlogin;
+
 int main(string[] args)
 {
 	import std.process:environment;
@@ -377,67 +379,4 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		return result;
 	}
-}
-
-///
-struct TokenInfo
-{
-	/// this needs to be validated against our Client-Id
-	string aud;
-	///
-	long exp;
-	///
-	string iss;
-	///
-	string user_id;
-	///
-	string app_id;
-	///
-	long iat;
-}
-
-///
-struct UserProfile
-{
-	///
-	@optional
-	string name;
-	///
-	@optional
-	string email;
-	///
-	string user_id;
-}
-
-///
-interface AmazonLoginApi
-{
-	import vibe.web.rest:method;
-	import vibe.http.common:HTTPMethod;
-
-	///
-	@path("auth/o2/tokeninfo")
-	@method(HTTPMethod.GET)
-	TokenInfo tokeninfo(string access_token);
-
-	///
-	@path("user/profile")
-	@method(HTTPMethod.GET)
-	UserProfile profile();
-}
-
-///
-static AmazonLoginApi createAmazonLoginApi(string access_token)
-{
-	auto res = new RestInterfaceClient!AmazonLoginApi("https://api.amazon.com/");
-
-	res.requestFilter = (HTTPClientRequest req){
-		import std.algorithm:endsWith;
-		if(req.requestURL.endsWith("user/profile"))
-		{
-			req.headers["Authorization"] = "bearer "~access_token;
-		}
-	};
-
-	return res;
 }
