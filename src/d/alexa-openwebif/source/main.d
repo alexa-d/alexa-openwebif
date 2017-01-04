@@ -53,7 +53,7 @@ int main(string[] args)
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 {
-	private RestInterfaceClient!OpenWebifApi apiClient;
+	private OpenWebifApi apiClient;
 
 	///
 	this(string baseUrl)
@@ -75,9 +75,33 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 		else
 		{
-			result.response.card.content = "Webif says hello";
+			//verify our client-app-id:
+			//https://api.amazon.com/auth/o2/tokeninfo?access_token=' . urlencode($_REQUEST['access_token']));
+
+			//grab user name using authToken
+			//'https://api.amazon.com/user/profile'
+			//curl_setopt($c, CURLOPT_HTTPHEADER, array('Authorization: bearer ' . $_REQUEST['access_token']));
+			//curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+
+			auto loginApi = createAmazonLoginApi(event.session.user.accessToken);
+
+			import std.stdio:stderr;
+
+			try{
+				immutable tokenInfo = loginApi.tokeninfo(event.session.user.accessToken);
+				stderr.writefln("tokenInfo: %s",tokenInfo);
+			}
+			catch(Exception e){
+				stderr.writefln("tokenInfo parsing error: %s",e);
+			}
+
+			immutable userProfile = loginApi.profile();
+			stderr.writefln("user: %s",userProfile);
+
+			result.response.card.content = "Webif says hello to: "~userProfile.name;
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-			result.response.outputSpeech.ssml = "<speak>Hallo, was kann ich für dich tun?</speak>";
+			result.response.outputSpeech.ssml =
+				.format("<speak>Hallo %s, danke fürs einloggen. Was kann ich für dich tun?</speak>",userProfile.name);
 		}
 
 		return result;
@@ -353,4 +377,57 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		return result;
 	}
+}
+
+///
+struct TokenInfo
+{
+	///
+	string aud;
+}
+
+///
+struct UserProfile
+{
+	///
+	@optional
+	string name;
+	///
+	@optional
+	string email;
+	///
+	string user_id;
+}
+
+///
+interface AmazonLoginApi
+{
+	import vibe.web.rest:method;
+	import vibe.http.common:HTTPMethod;
+
+	///
+	@path("auth/o2/tokenInfo")
+	@method(HTTPMethod.GET)
+	TokenInfo tokeninfo(string access_token);
+
+	///
+	@path("user/profile")
+	@method(HTTPMethod.GET)
+	UserProfile profile();
+}
+
+///
+static AmazonLoginApi createAmazonLoginApi(string access_token)
+{
+	auto res = new RestInterfaceClient!AmazonLoginApi("https://api.amazon.com/");
+
+	res.requestFilter = (HTTPClientRequest req){
+		import std.algorithm:endsWith;
+		if(req.requestURL.endsWith("user/profile"))
+		{
+			req.headers["Authorization"] = "bearer "~access_token;
+		}
+	};
+
+	return res;
 }
