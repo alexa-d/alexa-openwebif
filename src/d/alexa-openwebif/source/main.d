@@ -1,6 +1,7 @@
 import std.stdio;
 import std.xml;
 import std.string;
+import std.algorithm.searching;
 
 import vibe.d;
 import ask.ask;
@@ -250,57 +251,53 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
     auto targetChannel = event.request.intent.slots["targetChannel"].value;
     Subservice matchedServices; 
     auto switchedTo = "nichts";
-
+   
     if(targetChannel.length > 0)
     {
       auto allservices = apiClient.getallservices();
-      
+
       if (targetChannel == "up" || targetChannel == "down")
       {
 
         ulong j;
         auto up = false;
-        auto down = false;
         auto currentservice = apiClient.getcurrent();
-
-        foreach(i, subservice; allservices.services[0].subservices)
+           
+        bool pred(Subservice subs, CurrentService curr) 
         {
-          if (subservice.servicename.length <2)
-            continue;
+          return curr.info._ref == subs.servicereference;      
+        }
 
-          if (subservice.servicereference == currentservice.info._ref)
-          {
-            
-            if (targetChannel == "up") 
-            {
-              up = true;
-              j = i+1;
-            }
-            else
-            {
-              down = true; 
-              j = i - 1;
-            } 
+        auto i = countUntil!(pred)(allservices.services[0].subservices,currentservice);
+        
+        if (targetChannel == "up") 
+        {
+          up = true;
+          j = i+1;
+        }
+        else
+          j = i-1;
+         
 
-            // handle end or beginning of servicelist 
-            if (j >= allservices.services[0].subservices.length)
-              j=0;
-            else if (j==0)
-              j = allservices.services[0].subservices.length-1;
-            auto service = allservices.services[0].subservices[j];
-            while(service.servicereference.endsWith(service.servicename)) 
-            {
-              if (up)
-                j++;
-              else if (down)
-                j--;
-              service = allservices.services[0].subservices[j];
-            }
-          
-            matchedServices = allservices.services[0].subservices[j];
-            break;
-          }
-        }        
+        // handle end or beginning of servicelist 
+        if (j >= allservices.services[0].subservices.length)
+          j=0;
+        else if (j<=0)
+          j = allservices.services[0].subservices.length-1;
+        
+
+        matchedServices = allservices.services[0].subservices[j];
+        writeln(matchedServices);
+        // handle bouquets headlines/titles
+        while(matchedServices.servicereference.endsWith(matchedServices.servicename)) 
+        {
+          if (up)
+            j++;
+          else
+            j--;
+          writeln(to!string(j));
+          matchedServices = allservices.services[0].subservices[j];
+        }     
       }  else
       {
         ulong minDistance = ulong.max;
@@ -323,7 +320,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
         matchedServices = allservices.services[0].subservices[minIndex];
        }
     }
-
+    
     apiClient.zap(matchedServices.servicereference);
     switchedTo = matchedServices.servicename;
     AlexaResult result;
