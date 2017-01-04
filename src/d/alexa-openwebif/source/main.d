@@ -243,49 +243,95 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		return result;
 	}
 
-	///
-	@CustomIntent("IntentZap")
-	AlexaResult onIntentZap(AlexaEvent event, AlexaContext)
-	{
-		auto targetChannel = event.request.intent.slots["targetChannel"].value;
+ ///
+  @CustomIntent("IntentZap")
+  AlexaResult onIntentZap(AlexaEvent event, AlexaContext context)
+  {
+    auto targetChannel = event.request.intent.slots["targetChannel"].value;
+    Subservice matchedServices; 
+    auto switchedTo = "nichts";
 
-		auto switchedTo = "nichts";
+    if(targetChannel.length > 0)
+    {
+      auto allservices = apiClient.getallservices();
+      
+      if (targetChannel == "up" || targetChannel == "down")
+      {
 
-		if(targetChannel.length > 0)
-		{
-			auto allservices = apiClient.getallservices();
+        ulong j;
+        auto up = false;
+        auto down = false;
+        auto currentservice = apiClient.getcurrent();
 
-			ulong minDistance = ulong.max;
-			size_t minIndex;
+        foreach(i, subservice; allservices.services[0].subservices)
+        {
+          if (subservice.servicename.length <2)
+            continue;
 
-			foreach(i, subservice; allservices.services[0].subservices)
-			{
-				if(subservice.servicename.length < 2)
-					continue;
+          if (subservice.servicereference == currentservice.info._ref)
+          {
+            
+            if (targetChannel == "up") 
+            {
+              up = true;
+              j = i+1;
+            }
+            else
+            {
+              down = true; 
+              j = i - 1;
+            } 
 
-				import std.algorithm:levenshteinDistance;
+            // handle end or beginning of servicelist 
+            if (j >= allservices.services[0].subservices.length)
+              j=0;
+            else if (j==0)
+              j = allservices.services[0].subservices.length-1;
+            auto service = allservices.services[0].subservices[j];
+            while(service.servicereference.endsWith(service.servicename)) 
+            {
+              if (up)
+                j++;
+              else if (down)
+                j--;
+              service = allservices.services[0].subservices[j];
+            }
+          
+            matchedServices = allservices.services[0].subservices[j];
+            break;
+          }
+        }        
+      }  else
+      {
+        ulong minDistance = ulong.max;
+        size_t minIndex;
+        foreach(i, subservice; allservices.services[0].subservices)
+        {
+          if(subservice.servicename.length < 2)
+            continue;
 
-				immutable dist = levenshteinDistance(subservice.servicename,targetChannel);
-				if(dist < minDistance)
-				{
-					minDistance = dist;
-					minIndex = i;
-				}
-			}
+          import std.algorithm:levenshteinDistance;
+      
+          auto dist = levenshteinDistance(subservice.servicename,targetChannel);
+          if(dist < minDistance)
+          {
+            minDistance = dist;
+            minIndex = i;
+          }
+        
+        }
+        matchedServices = allservices.services[0].subservices[minIndex];
+       }
+    }
 
-			auto matchedServices = allservices.services[0].subservices[minIndex];
+    apiClient.zap(matchedServices.servicereference);
+    switchedTo = matchedServices.servicename;
+    AlexaResult result;
+    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+    result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
 
-			apiClient.zap(matchedServices.servicereference);
-
-			switchedTo = matchedServices.servicename;
-		}
-
-		AlexaResult result;
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
-
-		return result;
-	}
+    return result;
+  }
 
 	///
 	@CustomIntent("IntentSleepTimer")
@@ -347,7 +393,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		AlexaResult result;
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info.name ~
+		result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info._name ~
 			"</p>Aktuell läuft:<p>" ~ currentService.now.title ~ "</p>";
 
 		if(currentService.next.title.length > 0)
