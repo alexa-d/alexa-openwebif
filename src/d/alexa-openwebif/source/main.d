@@ -259,10 +259,12 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
       if (targetChannel == "up" || targetChannel == "down")
       {
-
         ulong j;
         auto up = false;
-        if (targetChannel=="up") up = true;
+        
+        if (targetChannel=="up") 
+          up = true;
+        
         auto currentservice = apiClient.getcurrent();
            
         bool pred(Subservice subs, CurrentService curr) 
