@@ -287,7 +287,6 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
         
 
         matchedServices = allservices.services[0].subservices[j];
-        writeln(matchedServices);
         // handle bouquets headlines/titles
         while(matchedServices.servicereference.endsWith(matchedServices.servicename)) 
         {
@@ -295,7 +294,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
             j++;
           else
             j--;
-          writeln(to!string(j));
+
           matchedServices = allservices.services[0].subservices[j];
         }     
       }  else
