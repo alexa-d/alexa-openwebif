@@ -1,6 +1,6 @@
 echo "#################################"
 echo "instal project dependencies"
-sudo yum install -y -d1 libevent-devel unzip
+sudo yum install -y -d1 libevent-devel unzip zip
 	
 echo "#################################"
 echo "download compiler"
@@ -20,4 +20,15 @@ echo "#################################"
 echo "set env"
 echo export OPENWEBIF_URL=$IN_OPENWEBIF_URL >> /home/vagrant/.bash_profile
 echo export AWS_LAMBDA_NAME=$IN_AWS_LAMBDA_NAME >> /home/vagrant/.bash_profile
-echo export AWS_REGION=$IN_AWS_REGION >> /home/vagrant/.bash_profile
+
+echo "#################################"
+echo "aws cli credentials"
+mkdir /home/vagrant/.aws
+echo "[default]" >> /home/vagrant/.aws/credentials
+echo aws_access_key_id=$AWS_KEY_ID >> /home/vagrant/.aws/credentials
+echo aws_secret_access_key=$AWS_KEY_SECRET >> /home/vagrant/.aws/credentials
+
+echo "#################################"
+echo "aws cli config"
+echo "[default]" >> /home/vagrant/.aws/config
+echo region=$AWS_REGION >> /home/vagrant/.aws/config

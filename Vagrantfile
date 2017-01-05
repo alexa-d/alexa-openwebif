@@ -14,6 +14,8 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "src/vagrant/install.sh", env: {
     "IN_OPENWEBIF_URL" => ENV['OPENWEBIF_URL'],
     "IN_AWS_LAMBDA_NAME" => ENV['AWS_LAMBDA_NAME'],
-    "IN_AWS_REGION" => ENV['AWS_REGION'],
+    "AWS_REGION" => ENV['AWS_REGION'],
+    "AWS_KEY_ID" => ENV['AWS_KEY_ID'],
+    "AWS_KEY_SECRET" => ENV['AWS_KEY_SECRET']
   }
 end
