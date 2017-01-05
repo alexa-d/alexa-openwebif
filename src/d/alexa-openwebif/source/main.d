@@ -302,7 +302,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("IntentZap")
-	AlexaResult onIntentZap(AlexaEvent event, AlexaContext context)
+	AlexaResult onIntentZap(AlexaEvent event, AlexaContext)
 	{
 		auto targetChannel = event.request.intent.slots["targetChannel"].value;
 		Subservice matchedServices;
