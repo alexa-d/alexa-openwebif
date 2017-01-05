@@ -1,7 +1,6 @@
 import std.stdio;
 import std.xml;
 import std.string;
-import std.algorithm.searching;
 
 import vibe.d;
 import ask.ask;
@@ -108,6 +107,61 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 
 		return result;
+	}
+
+	///
+	private Subservice zapUpDown(string _action, ServicesList _allservices)
+	{
+		int j=0;
+		auto up = false;
+		immutable int maxIndex = _allservices.services[0].subservices.length;
+
+		if (_action=="up")
+			up = true;
+
+		auto currentservice = apiClient.getcurrent();
+		import std.algorithm.searching:countUntil;
+		bool pred(Subservice subs, CurrentService curr)
+		{
+			return curr.info._ref == subs.servicereference;
+		}
+
+		immutable int i = countUntil!(pred)(_allservices.services[0].subservices,currentservice);
+
+		if (up)
+			j = i+1;
+		else
+			j = i-1;
+
+		// handle end or beginning of servicelist
+		if (j >= maxIndex)
+			j=0;
+		else if (j<0)
+			j = maxIndex -1;
+
+		return _allservices.services[0].subservices[j];
+	}
+
+	///
+	private Subservice zapTo (string _channel, ServicesList _allservices)
+	{
+		ulong minDistance = ulong.max;
+		size_t minIndex;
+		foreach(i, subservice; _allservices.services[0].subservices)
+		{
+			if(subservice.servicename.length < 2)
+			continue;
+
+			import std.algorithm:levenshteinDistance;
+
+			auto dist = levenshteinDistance(subservice.servicename,_channel);
+			if(dist < minDistance)
+			{
+				minDistance = dist;
+				minIndex = i;
+			}
+		}
+		return _allservices.services[0].subservices[minIndex];
 	}
 
 	///
@@ -244,98 +298,56 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		return result;
 	}
 
- ///
-  @CustomIntent("IntentZap")
-  AlexaResult onIntentZap(AlexaEvent event, AlexaContext context)
-  {
-    auto targetChannel = event.request.intent.slots["targetChannel"].value;
-    Subservice matchedServices; 
-    auto switchedTo = "nichts";
-   
-    if(targetChannel.length > 0)
-    {
-      auto allservices = apiClient.getallservices();
-      immutable auto maxIndex = allservices.services[0].subservices.length;
 
-      if (targetChannel == "up" || targetChannel == "down")
-      {
-        auto j=0;
-        auto up = false;
-        
-        if (targetChannel=="up") 
-          up = true;
-        
-        auto currentservice = apiClient.getcurrent();
-           
-        bool pred(Subservice subs, CurrentService curr) 
-        {
-          return curr.info._ref == subs.servicereference;      
-        }
 
-        immutable auto i = countUntil!(pred)(allservices.services[0].subservices,currentservice);
-     
-        if (targetChannel == "up") 
-        {
-          up = true;
-          j = i+1;
-        }
-        else
-          j = i-1;
+	///
+	@CustomIntent("IntentZap")
+	AlexaResult onIntentZap(AlexaEvent event, AlexaContext context)
+	{
+		auto targetChannel = event.request.intent.slots["targetChannel"].value;
+		Subservice matchedServices;
+		auto switchedTo = "nichts";
 
-        // handle end or beginning of servicelist 
-        if (j >= maxIndex)
-          j=0;
-        else if (j<=0)
-          j = maxIndex-1;
-        
-        matchedServices = allservices.services[0].subservices[j];
+		if(targetChannel.length > 0)
+		{
+			auto allservices = apiClient.getallservices();
 
-        // handle bouquets headlines/titles
-        while(matchedServices.servicereference.endsWith(matchedServices.servicename)) 
-        {
-          if (up)
-            j++;
-          else
-            j--;
-        
-          if (j >= maxIndex)
-            j=0;
-          else if (j<=0)
-            j = maxIndex-1;
+			ServicesList removeMarkers(ServicesList _list)
+			{
+				import std.algorithm.mutation:remove;
+				auto i = 0;
+				while(i < _list.services[0].subservices.length)
+				{
+					if(_list.services[0].subservices[i].servicereference.endsWith(_list.services[0].subservices[i].servicename))
+					{
+						_list.services[0].subservices = remove(_list.services[0].subservices,i);
+						continue;
+					}
+				i++;
+				}
+				return _list;
+			}
 
-          matchedServices = allservices.services[0].subservices[j];
-        }      
-      }  else
-      {
-        ulong minDistance = ulong.max;
-        size_t minIndex;
-        foreach(i, subservice; allservices.services[0].subservices)
-        {
-          if(subservice.servicename.length < 2)
-            continue;
+			allservices = removeMarkers(allservices);
 
-          import std.algorithm:levenshteinDistance;
-      
-          auto dist = levenshteinDistance(subservice.servicename,targetChannel);
-          if(dist < minDistance)
-          {
-            minDistance = dist;
-            minIndex = i;
-          }
-        
-        }
-        matchedServices = allservices.services[0].subservices[minIndex];
-       }
-    }
-    
-    apiClient.zap(matchedServices.servicereference);
-    switchedTo = matchedServices.servicename;
-    AlexaResult result;
-    result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-    result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
+			if (targetChannel == "up" || targetChannel == "down")
+			{
+				matchedServices = zapUpDown(targetChannel, allservices);
+			}
+			else
+			{
+				matchedServices = zapTo(targetChannel, allservices);
+			}
+		}
 
-    return result;
-  }
+		apiClient.zap(matchedServices.servicereference);
+		switchedTo = matchedServices.servicename;
+		AlexaResult result;
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
+
+		return result;
+	}
 
 	///
 	@CustomIntent("IntentSleepTimer")
