@@ -11,10 +11,15 @@ exports.handler = function(event, context) {
 	console.log("node args context: "+JSON.stringify(context));
 	var eventB64 = new Buffer(JSON.stringify(event)).toString('base64');
 	var contextB64 = new Buffer(JSON.stringify(context)).toString('base64');
-	var proc = child_process.exec('./alexa-openwebif false ' + eventB64 + " " + contextB64,function(code,stdout,stderr) {
+	
+	var options = {};
+
+	var callback = function(code,stdout,stderr) {
 		console.log("code: "+code);
 		console.log("err: "+stderr);
 	    console.log("out: "+stdout);
 	    context.succeed(JSON.parse(stdout));
-  	});
+  	};
+
+	var proc = child_process.exec('./alexa-openwebif false ' + eventB64 + " " + contextB64, options, callback);
 }
