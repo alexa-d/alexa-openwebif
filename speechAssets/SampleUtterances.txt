@@ -24,6 +24,8 @@ IntentZap zu {targetChannel} zu wechseln
 IntentZap wechsel zu {targetChannel}
 IntentZap zap zu {targetChannel}
 IntentZap schalte auf {targetChannel}
+IntentZap schalte {targetChannel}
+IntentZap wechsel {targetChannel}
 
 IntentVolumeUp erhöhe die Lautstärke
 IntentVolumeUp Lautstärke hoch
