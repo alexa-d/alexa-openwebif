@@ -112,26 +112,24 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	///
 	private Subservice zapUpDown(string _action, ServicesList _allservices)
 	{
-		int j=0;
-		auto up = false;
-		immutable int maxIndex = _allservices.services[0].subservices.length;
+		immutable currentservice = apiClient.getcurrent();
 
-		if (_action=="up")
-			up = true;
-
-		auto currentservice = apiClient.getcurrent();
 		import std.algorithm.searching:countUntil;
-		bool pred(Subservice subs, CurrentService curr)
+		static bool pred(Subservice subs, CurrentService curr)
 		{
 			return curr.info._ref == subs.servicereference;
 		}
 
-		immutable int i = countUntil!(pred)(_allservices.services[0].subservices,currentservice);
+		immutable index = cast(int)countUntil!(pred)(_allservices.services[0].subservices,currentservice);
 
+		immutable up = (_action=="up");
+		auto j=0;
 		if (up)
-			j = i+1;
+			j = index+1;
 		else
-			j = i-1;
+			j = index-1;
+
+		immutable maxIndex = cast(int)_allservices.services[0].subservices.length;
 
 		// handle end or beginning of servicelist
 		if (j >= maxIndex)
