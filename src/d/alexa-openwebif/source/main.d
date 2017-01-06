@@ -163,6 +163,24 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
+	@CustomIntent("IntentAbout")
+	AlexaResult onIntentAbout(AlexaEvent, AlexaContext)
+	{
+		AlexaResult result;
+		result.response.card.title = "Telly";
+		result.response.card.content = "Telly Info";
+
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = "<speak>"~
+			"Ich bin Telly, ein Alexa Skill geschrieben in D. " ~
+			"Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. " ~
+			"Finde mehr über mich heraus bei github." ~
+			"</speak>";
+
+		return result;
+	}
+
+	///
 	@CustomIntent("IntentServices")
 	AlexaResult onIntentServices(AlexaEvent, AlexaContext)
 	{

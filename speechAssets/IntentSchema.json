@@ -25,6 +25,9 @@
       "intent": "IntentRecordNow"
     },
     {
+      "intent": "IntentAbout"
+    },
+    {
       "intent": "IntentSetVolume",
       "slots": [{
         "name": "volume",

@@ -50,3 +50,8 @@ IntentSetVolume Lautstärke auf {volume}
 
 IntentSleepTimer einschlafen in {minutes}
 IntentSleepTimer ausschalten in {minutes}
+
+IntentAbout worin es geschrieben wurde
+IntentAbout wo es her kommt
+IntentAbout wer es gechrieben hat
+IntentAbout wer ist dein vater
