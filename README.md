@@ -29,3 +29,11 @@ $ vagrant ssh
 $ cd /vagrant/src
 $ ./run.sh
 ```
+
+## todo
+
+current major planned features:
+
+1. support english language #6
+2. support user database to allow publication #14
+3. support timeshift #5
