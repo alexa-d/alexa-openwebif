@@ -1,5 +1,7 @@
 # alexa-openwebif
-alexa skill to control your openwebif device
+alexa skill to control your openwebif device.
+
+development blog post: [Alexa in D](http://blog.extrawurst.org/programming/dlang/alexa/2017/01/06/alexa-in-d.html)
 
 dependencies:
 
