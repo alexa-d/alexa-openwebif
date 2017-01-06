@@ -1,6 +1,12 @@
 # alexa-openwebif
 alexa skill to control your openwebif device
 
+dependencies:
+
+* [alexa-skill-kit-d](https://github.com/Extrawurst/alexa-skill-kit-d)
+* [openwebif-client-d](https://github.com/Extrawurst/openwebif-client-d)
+* [vibe.d](https://github.com/rejectedsoftware/vibe.d)
+
 ## usage
 
 To host this skill in your own aws account:
