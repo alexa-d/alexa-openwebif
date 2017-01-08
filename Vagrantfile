@@ -8,6 +8,7 @@
 Vagrant.configure(2) do |config|
 
   config.vm.box = "centos72"
+  config.vm.box_url = "https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box"
 
   #config.vm.provision "shell", privileged: false, inline: "echo 'export OPENWEBIF_URL="+ ENV['OPENWEBIF_URL'] + "' >> ~/.bash_profile"
 
