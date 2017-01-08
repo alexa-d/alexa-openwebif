@@ -64,11 +64,13 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	private AlexaText[] texts;
 
 	///
-	this(string baseUrl, string local)
+	this(string baseUrl, string locale)
 	{
 		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-		if(local == "de-De")
+		import std.string:toLower;
+		locale = locale.toLower;
+		if(locale == "de-de")
 			texts = AlexaText_de;
 		else
 			texts = AlexaText_en;
