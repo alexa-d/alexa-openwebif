@@ -7,6 +7,10 @@ import ask.ask;
 import openwebif.api;
 
 import amazonlogin;
+import
+	lang.types,
+	lang.lang_en,
+	lang.lang_de;
 
 int main(string[] args)
 {
@@ -47,7 +51,7 @@ int main(string[] args)
 		stderr.writefln("could not deserialize context: %s",e);
 	}
 
-	auto skill = new OpenWebifSkill(baseUrl);
+	auto skill = new OpenWebifSkill(baseUrl, event.request.locale);
 
 	return skill.execute(event, context);
 }
@@ -56,35 +60,43 @@ int main(string[] args)
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 {
 	private OpenWebifApi apiClient;
+	//TODO: move into base class
+	private AlexaText[] texts;
 
 	///
-	this(string baseUrl)
+	this(string baseUrl, string local)
 	{
 		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+
+		if(local == "de-De")
+			texts = AlexaText_de;
+		else
+			texts = AlexaText_en;
 	}
 
+	///
+	//TODO: move into base class
+	string getText(int _key) const pure nothrow
+	{
+		assert(_key == texts[_key].key);
+		return texts[_key].text;
+	}
+
+	///
 	override AlexaResult onLaunch(AlexaEvent event, AlexaContext)
 	{
 		AlexaResult result;
-		result.response.card.title = "Webif";
+		result.response.card.title = getText(TextId.DefaultCardTitle);
 
 		if(event.session.user.accessToken.length == 0)
 		{
-			result.response.card.content = "Webif please login";
+			result.response.card.content = getText(TextId.PleaseLogin);
 			result.response.card.type = AlexaCard.Type.LinkAccount;
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-			result.response.outputSpeech.ssml = "<speak>Bitte log dich in deiner Alexa App ein</speak>";
+			result.response.outputSpeech.ssml = getText(TextId.PleaseLoginSSML);
 		}
 		else
 		{
-			//verify our client-app-id:
-			//https://api.amazon.com/auth/o2/tokeninfo?access_token=' . urlencode($_REQUEST['access_token']));
-
-			//grab user name using authToken
-			//'https://api.amazon.com/user/profile'
-			//curl_setopt($c, CURLOPT_HTTPHEADER, array('Authorization: bearer ' . $_REQUEST['access_token']));
-			//curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-
 			auto loginApi = createAmazonLoginApi(event.session.user.accessToken);
 
 			import std.stdio:stderr;
@@ -100,10 +112,10 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			immutable userProfile = loginApi.profile();
 			stderr.writefln("user: %s",userProfile);
 
-			result.response.card.content = "Webif says hello to: "~userProfile.name;
+			result.response.card.content = format(getText(TextId.HelloCardContent),userProfile.name);
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 			result.response.outputSpeech.ssml =
-				.format("<speak>Hallo %s, danke fürs einloggen. Was kann ich für dich tun?</speak>",userProfile.name);
+				.format(getText(TextId.HelloSSML),userProfile.name);
 		}
 
 		return result;
