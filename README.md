@@ -3,7 +3,7 @@ alexa skill to control your openwebif device.
 
 development blog post: [Alexa in D](http://blog.extrawurst.org/programming/dlang/alexa/2017/01/06/alexa-in-d.html)
 
-dependencies:
+dub dependencies:
 
 * [alexa-skill-kit-d](https://github.com/Extrawurst/alexa-skill-kit-d)
 * [openwebif-client-d](https://github.com/Extrawurst/openwebif-client-d)
@@ -12,6 +12,8 @@ dependencies:
 ## usage
 
 To host this skill in your own aws account:
+
+**note**: needs vagrant >= 1.8.0 
 
 ```
 # setup environments variables
