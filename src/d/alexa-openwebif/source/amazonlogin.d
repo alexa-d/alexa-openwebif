@@ -50,6 +50,8 @@ interface AmazonLoginApi
 }
 
 ///
+alias AmazonLoginApiFactory = AmazonLoginApi function(string);
+///
 static AmazonLoginApi createAmazonLoginApi(string access_token)
 {
 	import vibe.web.rest:RestInterfaceClient;
