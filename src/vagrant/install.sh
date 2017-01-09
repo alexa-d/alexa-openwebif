@@ -3,14 +3,6 @@ echo "instal project dependencies"
 sudo yum install -y -d1 libevent-devel unzip zip
 	
 echo "#################################"
-echo "download compiler"
-wget --quiet http://downloads.dlang.org/releases/2.x/2.072.2/dmd-2.072.2-0.fedora.x86_64.rpm
-
-echo "#################################"
-echo "install compiler"
-sudo yum -y -d1 install dmd-2.072.2-0.fedora.x86_64.rpm
-
-echo "#################################"
 echo "install aws cli"
 curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
 unzip awscli-bundle.zip
@@ -32,3 +24,12 @@ echo "#################################"
 echo "aws cli config"
 echo "[default]" >> /home/vagrant/.aws/config
 echo region=$AWS_REGION >> /home/vagrant/.aws/config
+
+echo "##################################"
+echo "setup compiler ldc2 & dmd"
+sudo su vagrant -c "curl -fsS https://dlang.org/install.sh | bash -s ldc"
+sudo su vagrant -c "curl -fsS https://dlang.org/install.sh | bash -s dmd"
+echo export PATH="/home/vagrant/dlang/dub:/home/vagrant/dlang/dmd-2.072.2/linux/bin64:/home/vagrant/dlang/ldc-1.0.0/bin:${PATH:-}" >> /home/vagrant/.bash_profile
+echo export LIBRARY_PATH="/home/vagrant/dlang/dmd-2.072.2/linux/lib64:/home/vagrant/dlang/ldc-1.0.0/lib:${LIBRARY_PATH:-}" >> /home/vagrant/.bash_profile
+echo export LD_LIBRARY_PATH="/home/vagrant/dlang/dmd-2.072.2/linux/lib64:/home/vagrant/dlang/ldc-1.0.0/lib:${LD_LIBRARY_PATH:-}" >> /home/vagrant/.bash_profile
+sudo su vagrant -c ". ~/.bash_profile"
