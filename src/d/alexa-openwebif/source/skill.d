@@ -229,6 +229,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		immutable res = apiClient.vol("mute");
 
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.MuteCardTitle);
+		result.response.card.content = getText(TextId.MuteCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Stummschalten fehlgeschlagen</speak>";
 
@@ -247,6 +249,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		immutable res = apiClient.powerstate(0);
 
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.StandbyCardTitle);
+		result.response.card.content = getText(TextId.StandbyCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Standby fehlgeschlagen</speak>";
 
@@ -279,6 +283,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		auto targetVolume = to!int(event.request.intent.slots["volume"].value);
 
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.SetVolumeCardTitle);
+		result.response.card.content = getText(TextId.SetVolumeCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
 
@@ -299,6 +305,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		immutable res = apiClient.recordnow();
 
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.RecordNowCardTitle);
+		result.response.card.content = getText(TextId.RecordNowCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Aufnahme starten fehlgeschlagen</speak>";
 		if (res.result)
@@ -352,6 +360,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		apiClient.zap(matchedServices.servicereference);
 		switchedTo = matchedServices.servicename;
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.ZapCardTitle);
+		result.response.card.content = getText(TextId.ZapCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Ich habe umgeschaltet zu: <p>"~ switchedTo ~"</p></speak>";
 
@@ -364,6 +374,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	{
 		auto minutes = to!int(event.request.intent.slots["minutes"].value);
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.SleepTimerCardTitle);
+		result.response.card.content = getText(TextId.SleepTimerCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
 		if(minutes >= 0 && minutes < 999)
@@ -417,6 +429,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		auto currentService = apiClient.getcurrent();
 
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.CurrentCardTitle);
+		result.response.card.content = getText(TextId.CurrentCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Du guckst gerade: <p>" ~ currentService.info._name ~
 			"</p>Aktuell läuft:<p>" ~ currentService.now.title ~ "</p>";
@@ -443,6 +457,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		auto res = apiClient.vol(action);
 
 		AlexaResult result;
+		result.response.card.title =  getText(TextId.SetVolumeCardTitle);
+		result.response.card.content = getText(TextId.SetVolumeCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = "<speak>Lautstärke anpassen fehlgeschlagen</speak>";
 		if (res.result)
