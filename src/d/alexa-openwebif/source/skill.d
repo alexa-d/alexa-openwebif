@@ -156,6 +156,23 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
+	private ServicesList removeMarkers(ServicesList _list)
+	{
+		import std.algorithm.mutation:remove;
+		auto i = 0;
+		while(i < _list.services[0].subservices.length)
+		{
+			if(_list.services[0].subservices[i].servicereference.endsWith(_list.services[0].subservices[i].servicename))
+			{
+				_list.services[0].subservices = remove(_list.services[0].subservices,i);
+				continue;
+			}
+			i++;
+		}
+		return _list;
+	}
+
+	///
 	@CustomIntent("IntentAbout")
 	AlexaResult onIntentAbout(AlexaEvent, AlexaContext)
 	{
@@ -173,7 +190,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	@CustomIntent("IntentServices")
 	AlexaResult onIntentServices(AlexaEvent, AlexaContext)
 	{
-		auto serviceList = apiClient.getallservices();
+		auto serviceList = removeMarkers(apiClient.getallservices());
 
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ChannelsCardTitle);
@@ -323,25 +340,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		if(targetChannel.length > 0)
 		{
-			auto allservices = apiClient.getallservices();
-
-			ServicesList removeMarkers(ServicesList _list)
-			{
-				import std.algorithm.mutation:remove;
-				auto i = 0;
-				while(i < _list.services[0].subservices.length)
-				{
-					if(_list.services[0].subservices[i].servicereference.endsWith(_list.services[0].subservices[i].servicename))
-					{
-						_list.services[0].subservices = remove(_list.services[0].subservices,i);
-						continue;
-					}
-				i++;
-				}
-				return _list;
-			}
-
-			allservices = removeMarkers(allservices);
+			auto allservices = removeMarkers(apiClient.getallservices());
 
 			if (targetChannel == "up" || targetChannel == "down")
 			{
