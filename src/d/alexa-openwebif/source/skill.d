@@ -103,7 +103,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	private Subservice zapUpDown(string _action, ServicesList _allservices)
+	private Subservice zapUpDown(bool up, ServicesList _allservices)
 	{
 		immutable currentservice = apiClient.getcurrent();
 
@@ -114,9 +114,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 
 		immutable index = cast(int)countUntil!(pred)(_allservices.services[0].subservices,currentservice);
-
-		immutable up = (_action==getText(TextId.ZapUp));
+		
 		auto j=0;
+		
 		if (up)
 			j = index+1;
 		else
@@ -513,16 +513,11 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	///
 	private AlexaResult doZapIntent(bool up)
 	{
-		auto action = getText(TextId.ZapDown);
-
-		if(up)
-			action = getText(TextId.ZapUp);
-
 		Subservice matchedServices;
 
 		auto switchedTo = getText(TextId.ZapFailedSSML);
 		auto allservices = removeMarkers(apiClient.getallservices());
-		matchedServices = zapUpDown(action, allservices);
+		matchedServices = zapUpDown(up, allservices);
 		if(matchedServices.servicereference.length > 0)
 		{
 			apiClient.zap(matchedServices.servicereference);
