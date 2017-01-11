@@ -1,0 +1,56 @@
+PleaseLogin,            Bitte log dich ein
+PleaseLoginSSML,        <speak>Bitte log dich in deiner Alexa App ein</speak>
+DefaultCardTitle,       Telly
+HelloCardContent,       Telly sagt hallo zu %s
+HelloSSML,              <speak>Hallo %s, danke fürs einloggen. Was kann ich für dich tun?</speak>
+ChannelsCardTitle,      Kanäle
+ChannelsCardContent,    Kanäle
+ChannelsSSML,           <speak>Du hast die folgenden Kanäle %s</speak>
+AboutCardTitle,         Telly Info
+AboutCardContent,       Telly Info
+AboutSSML,              <speak>Ich bin Telly, ein Alexa Skill geschrieben in D. Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. Finde mehr über mich heraus bei github.</speak>
+MoviesCardTitle,        Filmliste
+MoviesCardContent,      Filmliste
+MoviesSSML,             <speak>Du hast die folgenden Filme %s</speak>
+MuteCardTitle,          Stummschalten
+MuteCardContent,        Stummschalten
+MutedSSML,              <speak>Stumm geschaltet</speak>
+MuteFailedSSML,         <speak>Stummschalten fehlgeschlagen</speak>
+UnMutedSSML,            <speak>Stummschalten abgeschaltet</speak>
+StandbyCardTitle,       Standby
+StandbyCardContent,     Standby
+StandbyFailedSSML,      <speak>In Standby wechseln ist fehlgeschlagen</speak>
+StandbySSML,            <speak>Box in Standby geschaltet</speak>
+BoxStartedSSML,         <speak>Box gestartet</speak>
+SetVolumeCardTitle,     Lautstärke anpassen
+SetVolumeCardContent,   Lautstärke anpassen
+SetVolumeFailedSSML,    <speak>Lautstärke anpassen fehlgeschlagen</speak>
+SetVolumeSSML,          <speak>Lautstärke auf %s gesetzt</speak>
+RecordNowCardTitle,     Aufnahme starten
+RecordNowCardContent,   Aufnahme starten
+RecordNowFailedSSML,    <speak>Aufnhame starten fehlgeschlagen</speak>
+RecordNowSSML,          <speak>Aufnhame gestartet</speak>
+ZapToCardTitle,         Umschalten
+ZapToCardContent,       Umschalten
+ZapUpCardTitle,         Hoch schalten
+ZapUpCardContent,       Hoch schalten
+ZapDownCardTitle,       Runter schalten
+ZapDownCardContent,     Runter schalten
+ZapRandomCardTitle,     Zufälliges umschalten
+ZapRandomCardContent,   Zufälliges umschalten
+ZapFailedSSML,          nichts
+ZapSSML,                <speak>Ich habe umgeschaltet zu: <p>%s</p></speak>
+ZapUp,                  hoch
+ZapDown,                runter
+ZapToRandom,            zufall
+SleepTimerCardTitle,    Sleep Timer
+SleepTimerCardContent,  Sleep Timer
+SleepTimerOffSSML,      <speak>Sleep Timer wurde deaktiviert</speak>
+SleepTimerResetSSML,    <speak>Es existiert bereits ein Sleep Timer mit <p>%s verbleibenden Minuten. Timer wurde auf %s Minuten zurückgesetzt.</p></speak>
+SleepTimerSetSSML,      <speak>Ich habe den Sleep Timer auf <p>%s Minuten eingestellt</p></speak>
+SleepTimerFailedSSML,   <speak>Der Timer konnte nicht gesetzt werden.</speak>
+SleepTimerNoTimerSSML,  <speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>
+CurrentCardTitle,       Es läuft
+CurrentCardContent,     Es läuft
+CurrentSSML,            <speak>Du guckst gerade: <p>%s</p>Aktuell läuft:<p>%s</p></speak>
+CurrentNextSSML,        %s anschliessend läuft: <p>%s</p></speak>

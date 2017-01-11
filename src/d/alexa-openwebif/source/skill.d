@@ -5,10 +5,7 @@ import ask.ask;
 import openwebif.api;
 
 import amazonlogin;
-import
-	lang.types,
-	lang.lang_en,
-	lang.lang_de;
+import lang.types;
 
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
@@ -205,7 +202,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			}
 		}
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = 
+		result.response.outputSpeech.ssml =
 			.format(getText(TextId.ChannelsSSML),channels);
 
 		return result;
@@ -229,7 +226,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = 
+		result.response.outputSpeech.ssml =
 			.format(getText(TextId.MoviesSSML),moviesList);
 
 		return result;
