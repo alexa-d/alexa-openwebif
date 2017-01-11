@@ -40,8 +40,14 @@ enum AlexaText[] AlexaText_de = [
 	AlexaText(TextId.RecordNowCardContent,"Aufnahme starten"),
 	AlexaText(TextId.RecordNowFailedSSML,"<speak>Aufnhame starten fehlgeschlagen</speak>"),
 	AlexaText(TextId.RecordNowSSML,"<speak>Aufnhame gestartet</speak>"),
-	AlexaText(TextId.ZapCardTitle,"Umschalten"),
-	AlexaText(TextId.ZapCardContent,"Umschalten"),
+	AlexaText(TextId.ZapToCardTitle,"Umschalten"),
+	AlexaText(TextId.ZapToCardContent,"Umschalten"),
+	AlexaText(TextId.ZapUpCardTitle,"Hoch schalten"),
+	AlexaText(TextId.ZapUpCardContent,"Hoch schalten"),
+	AlexaText(TextId.ZapDownCardTitle,"Runter schalten"),
+	AlexaText(TextId.ZapDownCardContent,"Runter schalten"),
+	AlexaText(TextId.ZapRandomCardTitle,"Zufälliges umschalten"),
+	AlexaText(TextId.ZapRandomCardContent,"Zufälliges umschalten"),	
 	AlexaText(TextId.ZapFailedSSML,"nichts"),
 	AlexaText(TextId.ZapSSML,"<speak>Ich habe umgeschaltet zu: <p>%s</p></speak>"),
 	AlexaText(TextId.ZapUp,"hoch"),
@@ -59,7 +65,5 @@ enum AlexaText[] AlexaText_de = [
 	AlexaText(TextId.CurrentCardContent,"Es läuft"),
 	AlexaText(TextId.CurrentSSML,"<speak>Du guckst gerade: <p>%s" ~
 			"</p>Aktuell läuft:<p>%s</p></speak>"),
-	AlexaText(TextId.CurrentNextSSML,"%s anschliessend läuft: <p>%s</p></speak>"),
-	AlexaText(TextId.ZapRandomCardTitle,"Zufälliges umschalten"),
-	AlexaText(TextId.ZapRandomCardContent,"Zufälliges umschalten")	
+	AlexaText(TextId.CurrentNextSSML,"%s anschliessend läuft: <p>%s</p></speak>")
 ];

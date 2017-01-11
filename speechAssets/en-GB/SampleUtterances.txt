@@ -13,12 +13,12 @@ IntentToggleMute to unmute
 IntentToggleMute mute
 IntentToggleMute unmute
 
-IntentZap to switch to {targetChannel}
-IntentZap switch to {targetChannel}
-IntentZap change to {targetChannel}
-IntentZap to change to {targetChannel}
-IntentZap to zap to {targetChannel}
-IntentZap zap to {targetChannel}
+IntentZapTo to switch to {targetChannel}
+IntentZapTo switch to {targetChannel}
+IntentZapTo change to {targetChannel}
+IntentZapTo to change to {targetChannel}
+IntentZapTo to zap to {targetChannel}
+IntentZapTo zap to {targetChannel}
 
 IntentVolumeUp to turn louder
 IntentVolumeUp volume up
@@ -47,3 +47,9 @@ IntentAbout who is your father
 
 IntentZapRandom zap randomly 
 IntentZapRandom switch randomly
+
+IntentZapUp zap up
+IntentZapUp switch up
+
+IntentZapDown zap down
+IntentZapDown switch down

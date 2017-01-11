@@ -1,6 +1,3 @@
 CNN
 BBC
 RTL
-up
-down
-random

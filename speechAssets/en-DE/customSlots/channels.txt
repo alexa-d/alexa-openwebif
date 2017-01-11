@@ -15,6 +15,3 @@ tagesschau
 3sat
 one
 arte
-hoch
-runter
-zufall

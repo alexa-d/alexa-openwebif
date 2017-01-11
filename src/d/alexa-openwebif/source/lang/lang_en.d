@@ -40,8 +40,14 @@ enum AlexaText[] AlexaText_en = [
 	AlexaText(TextId.RecordNowCardContent,"Record now"),
 	AlexaText(TextId.RecordNowFailedSSML,"<speak>Starting record failed</speak>"),
 	AlexaText(TextId.RecordNowSSML,"<speak>Record started</speak>"),
-	AlexaText(TextId.ZapCardTitle,"Switch channel"),
-	AlexaText(TextId.ZapCardContent,"Switch channel"),
+	AlexaText(TextId.ZapToCardTitle,"Switch channel"),
+	AlexaText(TextId.ZapToCardContent,"Switch channel"),
+	AlexaText(TextId.ZapUpCardTitle,"Zap up"),
+	AlexaText(TextId.ZapUpCardContent,"Zap up"),
+	AlexaText(TextId.ZapDownCardTitle,"Zap down"),
+	AlexaText(TextId.ZapDownCardContent,"Zap down"),
+	AlexaText(TextId.ZapRandomCardTitle,"Switch to random channel"),
+	AlexaText(TextId.ZapRandomCardContent,"Switch to random channel"),
 	AlexaText(TextId.ZapFailedSSML,"none"),
 	AlexaText(TextId.ZapSSML,"<speak>I've switched channel to <p>%s</p></speak>"),
 	AlexaText(TextId.ZapUp,"up"),
@@ -60,6 +66,5 @@ enum AlexaText[] AlexaText_en = [
 	AlexaText(TextId.CurrentSSML,"<speak>You are on: <p>%s" ~
 			"</p>and watching:<p>%s</p></speak>"),
 	AlexaText(TextId.CurrentNextSSML,"%s <p>%s</p> comes up next</speak>"),
-	AlexaText(TextId.ZapRandomCardTitle,"Switch to random channel"),
-	AlexaText(TextId.ZapRandomCardContent,"Switch to random channel")
+
 ];

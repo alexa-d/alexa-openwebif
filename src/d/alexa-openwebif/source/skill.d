@@ -103,7 +103,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	private Subservice zapUpDown(string _action, ServicesList _allservices)
+	private Subservice zapUpDown(bool up, ServicesList _allservices)
 	{
 		immutable currentservice = apiClient.getcurrent();
 
@@ -114,9 +114,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 
 		immutable index = cast(int)countUntil!(pred)(_allservices.services[0].subservices,currentservice);
-
-		immutable up = (_action=="up");
+		
 		auto j=0;
+		
 		if (up)
 			j = index+1;
 		else
@@ -343,8 +343,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	@CustomIntent("IntentZap")
-	AlexaResult onIntentZap(AlexaEvent event, AlexaContext)
+	@CustomIntent("IntentZapTo")
+	AlexaResult onIntentZapTo(AlexaEvent event, AlexaContext)
 	{
 		auto targetChannel = event.request.intent.slots["targetChannel"].value;
 		Subservice matchedServices;
@@ -353,19 +353,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		if(targetChannel.length > 0)
 		{
 			auto allservices = removeMarkers(apiClient.getallservices());
-
-			if (targetChannel == getText(TextId.ZapUp) || targetChannel == getText(TextId.ZapDown))
-			{
-				matchedServices = zapUpDown(targetChannel, allservices);
-			}
-			else if (targetChannel == getText(TextId.ZapToRandom))
-			{
-				matchedServices = zapRandom(allservices);
-			}
-			else
-			{
-				matchedServices = zapTo(targetChannel, allservices);
-			}
+			matchedServices = zapTo(targetChannel, allservices);		
 		}
 		
 		if(matchedServices.servicereference.length > 0)
@@ -374,8 +362,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			switchedTo = matchedServices.servicename;
 		}
 		AlexaResult result;
-		result.response.card.title =  getText(TextId.ZapCardTitle);
-		result.response.card.content = getText(TextId.ZapCardContent);
+		result.response.card.title =  getText(TextId.ZapToCardTitle);
+		result.response.card.content = getText(TextId.ZapToCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
 
@@ -403,6 +391,28 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
 
 		return result;
+	}
+
+	///
+	@CustomIntent("IntentZapUp")
+	AlexaResult onIntentZapUp(AlexaEvent, AlexaContext)
+	{
+		auto result = doZapIntent(true);
+		result.response.card.title =  getText(TextId.ZapUpCardTitle);
+		result.response.card.content = getText(TextId.ZapUpCardContent);
+
+		return result;
+	}
+
+	///
+	@CustomIntent("IntentZapDown")
+	AlexaResult onIntentZapDown(AlexaEvent, AlexaContext)
+	{
+		auto result = doZapIntent(false);
+		result.response.card.title =  getText(TextId.ZapDownCardTitle);
+		result.response.card.content = getText(TextId.ZapDownCardContent);
+
+		return result;		
 	}
 
 	///
@@ -496,6 +506,27 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		result.response.outputSpeech.ssml = getText(TextId.SetVolumeFailedSSML);
 		if (res.result)
 			result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeSSML),res.current);
+
+		return result;
+	}
+	
+	///
+	private AlexaResult doZapIntent(bool up)
+	{
+		Subservice matchedServices;
+
+		auto switchedTo = getText(TextId.ZapFailedSSML);
+		auto allservices = removeMarkers(apiClient.getallservices());
+		matchedServices = zapUpDown(up, allservices);
+		if(matchedServices.servicereference.length > 0)
+		{
+			apiClient.zap(matchedServices.servicereference);
+			switchedTo = matchedServices.servicename;
+		}
+		AlexaResult result;
+
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
 
 		return result;
 	}

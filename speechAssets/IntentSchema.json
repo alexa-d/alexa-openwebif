@@ -42,7 +42,7 @@
       }]
     },
     {
-      "intent": "IntentZap",
+      "intent": "IntentZapTo",
       "slots": [{
         "name": "targetChannel",
         "type": "CHANNEL"
@@ -50,6 +50,12 @@
     },
     {
       "intent": "IntentZapRandom"
+    },
+    {
+      "intent": "IntentZapUp"
+    },
+    {
+      "intent": "IntentZapDown"
     },
     {
       "intent": "AMAZON.HelpIntent"
