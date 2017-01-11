@@ -383,6 +383,29 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
+	@CustomIntent("IntentZapRandom")
+	AlexaResult onIntentZapRandom(AlexaEvent, AlexaContext)
+	{
+		Subservice matchedServices;
+
+		auto switchedTo = getText(TextId.ZapFailedSSML);
+		auto allservices = removeMarkers(apiClient.getallservices());
+		matchedServices = zapRandom(allservices);
+		if(matchedServices.servicereference.length > 0)
+		{
+			apiClient.zap(matchedServices.servicereference);
+			switchedTo = matchedServices.servicename;
+		}
+		AlexaResult result;
+		result.response.card.title =  getText(TextId.ZapRandomCardTitle);
+		result.response.card.content = getText(TextId.ZapRandomCardContent);
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
+
+		return result;
+	}
+
+	///
 	@CustomIntent("IntentSleepTimer")
 	AlexaResult onIntentSleepTimer(AlexaEvent event, AlexaContext)
 	{
