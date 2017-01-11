@@ -5,15 +5,13 @@ import ask.ask;
 import openwebif.api;
 
 import amazonlogin;
-import lang.types;
+import texts;
 
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 {
 	private OpenWebifApi apiClient;
 	private AmazonLoginApiFactory amazonLoginApiFactory = &createAmazonLoginApi;
-	//TODO: move into base class
-	private AlexaText[] texts;
 
 	///
 	this(string baseUrl, string locale)
@@ -22,18 +20,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		import std.string:toLower;
 		locale = locale.toLower;
-		if(locale == "de-de")
-			texts = AlexaText_de;
-		else
-			texts = AlexaText_en;
-	}
+		immutable isLangDe = locale == "de-de";
 
-	///
-	//TODO: move into base class
-	string getText(int _key) const pure nothrow
-	{
-		assert(_key == texts[_key].key);
-		return texts[_key].text;
+		super(isLangDe ? AlexaText_de : AlexaText_en);
 	}
 
 	///
@@ -111,9 +100,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 
 		immutable index = cast(int)countUntil!(pred)(_allservices.services[0].subservices,currentservice);
-		
+
 		auto j=0;
-		
+
 		if (up)
 			j = index+1;
 		else
@@ -131,7 +120,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	private Subservice zapTo (string _channel, ServicesList _allservices)
+	private Subservice zapTo(string _channel, ServicesList _allservices)
 	{
 		ulong minDistance = ulong.max;
 		size_t minIndex;
@@ -350,9 +339,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		if(targetChannel.length > 0)
 		{
 			auto allservices = removeMarkers(apiClient.getallservices());
-			matchedServices = zapTo(targetChannel, allservices);		
+			matchedServices = zapTo(targetChannel, allservices);
 		}
-		
+
 		if(matchedServices.servicereference.length > 0)
 		{
 			apiClient.zap(matchedServices.servicereference);
@@ -409,7 +398,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		result.response.card.title =  getText(TextId.ZapDownCardTitle);
 		result.response.card.content = getText(TextId.ZapDownCardContent);
 
-		return result;		
+		return result;
 	}
 
 	///
@@ -506,7 +495,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		return result;
 	}
-	
+
 	///
 	private AlexaResult doZapIntent(bool up)
 	{
