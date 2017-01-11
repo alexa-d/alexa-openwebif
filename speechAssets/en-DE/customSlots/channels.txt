@@ -15,11 +15,6 @@ tagesschau
 3sat
 one
 arte
-up
-down
 hoch
 runter
-random
-randomly
 zufall
-zufällig

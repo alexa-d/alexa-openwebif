@@ -44,3 +44,6 @@ IntentAbout what it is written in
 IntentAbout where it is coming from
 IntentAbout who created it
 IntentAbout who is your father
+
+IntentZapRandom zap randomly 
+IntentZapRandom switch randomly
