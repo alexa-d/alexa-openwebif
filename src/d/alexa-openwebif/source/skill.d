@@ -328,7 +328,19 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		return result;
 	}
 
+	///
+	private Subservice zapRandom(ServicesList _allservices)
+	{
+		import std.random:uniform;
+		if (_allservices.services[0].subservices.length > 0)
+		{
+			auto i = uniform(0,_allservices.services[0].subservices.length-1);
+			return _allservices.services[0].subservices[i];
+		}
+		Subservice _ret;
+		return _ret;
 
+	}
 
 	///
 	@CustomIntent("IntentZap")
@@ -348,12 +360,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			}
 			else if (targetChannel == "random")
 			{
-				import std.random:uniform;
-				if (allservices.services[0].subservices.length>0)
-				{
-					auto i = uniform(0,allservices.services[0].subservices.length-1);
-					matchedServices = allservices.services[0].subservices[i];
-				}
+				matchedServices = zapRandom(allservices);
 			}
 			else
 			{
