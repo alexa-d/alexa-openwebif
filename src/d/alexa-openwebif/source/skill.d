@@ -354,11 +354,11 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		{
 			auto allservices = removeMarkers(apiClient.getallservices());
 
-			if (targetChannel == "up" || targetChannel == "down")
+			if (targetChannel == getText(TextId.ZapUp) || targetChannel == getText(TextId.ZapDown))
 			{
 				matchedServices = zapUpDown(targetChannel, allservices);
 			}
-			else if (targetChannel == "random")
+			else if (targetChannel == getText(TextId.ZapToRandom))
 			{
 				matchedServices = zapRandom(allservices);
 			}

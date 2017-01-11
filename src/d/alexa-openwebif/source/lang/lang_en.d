@@ -44,6 +44,9 @@ enum AlexaText[] AlexaText_en = [
 	AlexaText(TextId.ZapCardContent,"Switch channel"),
 	AlexaText(TextId.ZapFailedSSML,"none"),
 	AlexaText(TextId.ZapSSML,"<speak>I've switched channel to <p>%s</p></speak>"),
+	AlexaText(TextId.ZapUp,"up"),
+	AlexaText(TextId.ZapDown,"down"),
+	AlexaText(TextId.ZapToRandom,"random"),
 	AlexaText(TextId.SleepTimerCardTitle,"Sleep Timer"),
 	AlexaText(TextId.SleepTimerCardContent,"Sleep Timer"),
 	AlexaText(TextId.SleepTimerOffSSML,"<speak>Sleep Timer switched off</speak>"),
@@ -56,5 +59,7 @@ enum AlexaText[] AlexaText_en = [
 	AlexaText(TextId.CurrentCardContent,"You're watching"),
 	AlexaText(TextId.CurrentSSML,"<speak>You are on: <p>%s" ~
 			"</p>and watching:<p>%s</p></speak>"),
-	AlexaText(TextId.CurrentNextSSML,"%s <p>%s</p> comes up next</speak>")
+	AlexaText(TextId.CurrentNextSSML,"%s <p>%s</p> comes up next</speak>"),
+	AlexaText(TextId.ZapRandomCardTitle,"Switch to random channel"),
+	AlexaText(TextId.ZapRandomCardContent,"Switch to random channel")
 ];
