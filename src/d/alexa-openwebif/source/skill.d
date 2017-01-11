@@ -115,7 +115,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		immutable index = cast(int)countUntil!(pred)(_allservices.services[0].subservices,currentservice);
 
-		immutable up = (_action=="up");
+		immutable up = (_action==getText(TextId.ZapUp));
 		auto j=0;
 		if (up)
 			j = index+1;
