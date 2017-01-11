@@ -55,3 +55,6 @@ IntentAbout worin es geschrieben wurde
 IntentAbout wo es her kommt
 IntentAbout wer es gechrieben hat
 IntentAbout wer ist dein vater
+
+IntentZapRandom schalte zufällig um 
+IntentZapRandom zufällig umschalten
