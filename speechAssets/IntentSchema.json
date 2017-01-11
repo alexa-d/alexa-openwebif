@@ -49,6 +49,9 @@
       }]
     },
     {
+      "intent": "IntentZapRandom"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]
