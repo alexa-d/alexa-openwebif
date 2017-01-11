@@ -51,5 +51,5 @@ IntentZapRandom switch randomly
 IntentZapUp zap up
 IntentZapUp switch up
 
-IntentZapUp zap down
-IntentZapUp switch down
+IntentZapDown zap down
+IntentZapDown switch down

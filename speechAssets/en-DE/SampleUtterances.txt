@@ -59,8 +59,8 @@ IntentAbout wer ist dein vater
 IntentZapRandom schalte zufällig um 
 IntentZapRandom zufällig umschalten
 
-IntentZapUp schalte runter
-IntentZapUp runter schalten
+IntentZapDown schalte runter
+IntentZapDown runter schalten
 
 IntentZapUp schalte hoch
 IntentZapUp hoch schalten
