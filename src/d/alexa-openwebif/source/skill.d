@@ -346,6 +346,15 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			{
 				matchedServices = zapUpDown(targetChannel, allservices);
 			}
+			else if (targetChannel == "random")
+			{
+				import std.random:uniform;
+				if (allservices.services[0].subservices.length>0)
+				{
+					auto i = uniform(0,allservices.services[0].subservices.length-1);
+					matchedServices = allservices.services[0].subservices[i];
+				}
+			}
 			else
 			{
 				matchedServices = zapTo(targetChannel, allservices);
