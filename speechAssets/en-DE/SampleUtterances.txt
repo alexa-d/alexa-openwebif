@@ -15,17 +15,17 @@ IntentToggleMute Ton auszumachen
 IntentToggleMute Ton an
 IntentToggleMute Ton aus
 
-IntentZap und schalte auf {targetChannel}
-IntentZap auf {targetChannel} zu schalten
-IntentZap auf {targetChannel} zu wechseln
-IntentZap den Sender {targetChannel} einzuschalten
-IntentZap zu {targetChannel} zu schalten
-IntentZap zu {targetChannel} zu wechseln
-IntentZap wechsel zu {targetChannel}
-IntentZap zap zu {targetChannel}
-IntentZap schalte auf {targetChannel}
-IntentZap schalte {targetChannel}
-IntentZap wechsel {targetChannel}
+IntentZapTo und schalte auf {targetChannel}
+IntentZapTo auf {targetChannel} zu schalten
+IntentZapTo auf {targetChannel} zu wechseln
+IntentZapTo den Sender {targetChannel} einzuschalten
+IntentZapTo zu {targetChannel} zu schalten
+IntentZapTo zu {targetChannel} zu wechseln
+IntentZapTo wechsel zu {targetChannel}
+IntentZapTo zap zu {targetChannel}
+IntentZapTo schalte auf {targetChannel}
+IntentZapTo schalte {targetChannel}
+IntentZapTo wechsel {targetChannel}
 
 IntentVolumeUp erhöhe die Lautstärke
 IntentVolumeUp Lautstärke hoch
@@ -58,3 +58,9 @@ IntentAbout wer ist dein vater
 
 IntentZapRandom schalte zufällig um 
 IntentZapRandom zufällig umschalten
+
+IntentZapUp schalte runter
+IntentZapUp runter schalten
+
+IntentZapUp schalte hoch
+IntentZapUp hoch schalten

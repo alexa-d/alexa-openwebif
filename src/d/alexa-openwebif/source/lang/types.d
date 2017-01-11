@@ -35,8 +35,14 @@ enum TextId
 	RecordNowCardContent,
 	RecordNowFailedSSML,
 	RecordNowSSML,
-	ZapCardTitle,
-	ZapCardContent,
+	ZapToCardTitle,
+	ZapToCardContent,
+	ZapUpCardTitle,
+	ZapUpCardContent,
+	ZapDownCardTitle,
+	ZapDownCardContent,
+	ZapRandomCardTitle,
+	ZapRandomCardContent,
 	ZapFailedSSML,
 	ZapSSML,
 	ZapUp,
@@ -52,9 +58,7 @@ enum TextId
 	CurrentCardTitle,
 	CurrentCardContent,
 	CurrentSSML,
-	CurrentNextSSML,
-	ZapRandomCardTitle,
-	ZapRandomCardContent
+	CurrentNextSSML
 }
 
 ///
