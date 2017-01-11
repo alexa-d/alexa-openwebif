@@ -1,0 +1,46 @@
+IntentCurrent whats is currently running
+IntentCurrent what's running
+IntentCurrent what is showing
+IntentCurrent what is shown
+
+IntentServices for my channels
+
+IntentMovies for my recordings
+IntentMovies to list my recordings
+
+IntentToggleMute to mute
+IntentToggleMute to unmute
+IntentToggleMute mute
+IntentToggleMute unmute
+
+IntentZap to switch to {targetChannel}
+IntentZap switch to {targetChannel}
+IntentZap change to {targetChannel}
+IntentZap to change to {targetChannel}
+IntentZap to zap to {targetChannel}
+IntentZap zap to {targetChannel}
+
+IntentVolumeUp to turn louder
+IntentVolumeUp volume up
+
+IntentVolumeDown to turn less loud
+IntentVolumeDown volume down
+
+IntentToggleStandby to toggle standby
+IntentToggleStandby to turn on
+IntentToggleStandby to turn off
+
+IntentRecordNow record
+IntentRecordNow start recording
+IntentRecordNow record now
+
+IntentSetVolume to set volume {volume}
+IntentSetVolume turn volume to {volume} 
+
+IntentSleepTimer to sleep in {minutes}
+IntentSleepTimer sleep in {minutes}
+
+IntentAbout what it is written in
+IntentAbout where it is coming from
+IntentAbout who created it
+IntentAbout who is your father
