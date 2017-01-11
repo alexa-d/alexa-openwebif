@@ -167,7 +167,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 				_list.services[0].subservices = remove(_list.services[0].subservices,i);
 				continue;
 			}
-		i++;
+			i++;
 		}
 		return _list;
 	}
