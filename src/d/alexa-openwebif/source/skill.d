@@ -328,7 +328,19 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		return result;
 	}
 
+	///
+	private Subservice zapRandom(ServicesList _allservices)
+	{
+		import std.random:uniform;
+		if (_allservices.services[0].subservices.length > 0)
+		{
+			auto i = uniform(0,_allservices.services[0].subservices.length-1);
+			return _allservices.services[0].subservices[i];
+		}
+		Subservice _ret;
+		return _ret;
 
+	}
 
 	///
 	@CustomIntent("IntentZap")
@@ -342,21 +354,51 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		{
 			auto allservices = removeMarkers(apiClient.getallservices());
 
-			if (targetChannel == "up" || targetChannel == "down")
+			if (targetChannel == getText(TextId.ZapUp) || targetChannel == getText(TextId.ZapDown))
 			{
 				matchedServices = zapUpDown(targetChannel, allservices);
+			}
+			else if (targetChannel == getText(TextId.ZapToRandom))
+			{
+				matchedServices = zapRandom(allservices);
 			}
 			else
 			{
 				matchedServices = zapTo(targetChannel, allservices);
 			}
 		}
-
-		apiClient.zap(matchedServices.servicereference);
-		switchedTo = matchedServices.servicename;
+		
+		if(matchedServices.servicereference.length > 0)
+		{
+			apiClient.zap(matchedServices.servicereference);
+			switchedTo = matchedServices.servicename;
+		}
 		AlexaResult result;
 		result.response.card.title =  getText(TextId.ZapCardTitle);
 		result.response.card.content = getText(TextId.ZapCardContent);
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
+
+		return result;
+	}
+
+	///
+	@CustomIntent("IntentZapRandom")
+	AlexaResult onIntentZapRandom(AlexaEvent, AlexaContext)
+	{
+		Subservice matchedServices;
+
+		auto switchedTo = getText(TextId.ZapFailedSSML);
+		auto allservices = removeMarkers(apiClient.getallservices());
+		matchedServices = zapRandom(allservices);
+		if(matchedServices.servicereference.length > 0)
+		{
+			apiClient.zap(matchedServices.servicereference);
+			switchedTo = matchedServices.servicename;
+		}
+		AlexaResult result;
+		result.response.card.title =  getText(TextId.ZapRandomCardTitle);
+		result.response.card.content = getText(TextId.ZapRandomCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
 

@@ -39,6 +39,9 @@ enum TextId
 	ZapCardContent,
 	ZapFailedSSML,
 	ZapSSML,
+	ZapUp,
+	ZapDown,
+	ZapToRandom,
 	SleepTimerCardTitle,
 	SleepTimerCardContent,
 	SleepTimerOffSSML,
@@ -49,7 +52,9 @@ enum TextId
 	CurrentCardTitle,
 	CurrentCardContent,
 	CurrentSSML,
-	CurrentNextSSML
+	CurrentNextSSML,
+	ZapRandomCardTitle,
+	ZapRandomCardContent
 }
 
 ///
