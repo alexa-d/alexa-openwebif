@@ -367,9 +367,12 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 				matchedServices = zapTo(targetChannel, allservices);
 			}
 		}
-
-		apiClient.zap(matchedServices.servicereference);
-		switchedTo = matchedServices.servicename;
+		
+		if(matchedServices.servicereference.length > 0)
+		{
+			apiClient.zap(matchedServices.servicereference);
+			switchedTo = matchedServices.servicename;
+		}
 		AlexaResult result;
 		result.response.card.title =  getText(TextId.ZapCardTitle);
 		result.response.card.content = getText(TextId.ZapCardContent);
