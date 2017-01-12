@@ -7,13 +7,17 @@ import ask.ask;
 
 import skill;
 
+///
 int main(string[] args)
 {
 	import std.process:environment;
 	immutable baseUrl = environment["OPENWEBIF_URL"];
 
 	if(args.length != 4)
+	{
+		stderr.writefln("expected 4 params, found: %s", args.length);
 		return -1;
+	}
 
 	immutable testingMode = args[1] == "true";
 
@@ -48,5 +52,5 @@ int main(string[] args)
 
 	auto skill = new OpenWebifSkill(baseUrl, event.request.locale);
 
-	return skill.execute(event, context);
+	return skill.runInEventLoop(event, context);
 }

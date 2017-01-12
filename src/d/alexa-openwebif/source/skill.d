@@ -6,6 +6,9 @@ import openwebif.api;
 
 import amazonlogin;
 import texts;
+import
+	intents.about,
+	intents.services;
 
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
@@ -23,6 +26,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		immutable isLangDe = locale == "de-de";
 
 		super(isLangDe ? AlexaText_de : AlexaText_en);
+
+		this.addIntent(new IntentAbout());
+		this.addIntent(new IntentServices(apiClient));
 	}
 
 	///
@@ -139,62 +145,6 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			}
 		}
 		return _allservices.services[0].subservices[minIndex];
-	}
-
-	///
-	private ServicesList removeMarkers(ServicesList _list)
-	{
-		import std.algorithm.mutation:remove;
-		auto i = 0;
-		while(i < _list.services[0].subservices.length)
-		{
-			if(_list.services[0].subservices[i].servicereference.endsWith(_list.services[0].subservices[i].servicename))
-			{
-				_list.services[0].subservices = remove(_list.services[0].subservices,i);
-				continue;
-			}
-			i++;
-		}
-		return _list;
-	}
-
-	///
-	@CustomIntent("IntentAbout")
-	AlexaResult onIntentAbout(AlexaEvent, AlexaContext)
-	{
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.AboutCardTitle);
-		result.response.card.content = getText(TextId.AboutCardContent);
-
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = getText(TextId.AboutSSML);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentServices")
-	AlexaResult onIntentServices(AlexaEvent, AlexaContext)
-	{
-		auto serviceList = removeMarkers(apiClient.getallservices());
-
-		AlexaResult result;
-		result.response.card.title = getText(TextId.ChannelsCardTitle);
-		result.response.card.content = getText(TextId.ChannelsCardContent);
-
-		string channels;
-
-		foreach(service; serviceList.services)
-		{
-			foreach(subservice; service.subservices) {
-				channels ~= "<p>" ~ subservice.servicename ~ "</p>";
-			}
-		}
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml =
-			.format(getText(TextId.ChannelsSSML),channels);
-
-		return result;
 	}
 
 	///
@@ -518,17 +468,28 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 }
 
+///
+static ServicesList removeMarkers(ServicesList _list)
+{
+	import std.algorithm.mutation:remove;
+	auto i = 0;
+	while(i < _list.services[0].subservices.length)
+	{
+		if(_list.services[0].subservices[i].servicereference.endsWith(_list.services[0].subservices[i].servicename))
+		{
+			_list.services[0].subservices = remove(_list.services[0].subservices,i);
+			continue;
+		}
+		i++;
+	}
+	return _list;
+}
+
+//TODO: move to baselib
 unittest
 {
 	auto skill = new OpenWebifSkill ("","de-DE");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_de[TextId.PleaseLogin].text);
 	skill = new OpenWebifSkill ("","en-US");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_en[TextId.PleaseLogin].text);
-}
-
-unittest
-{
-	// check indices of language keys
-	foreach(i,text; AlexaText_de){assert(text.key == i);}
-	foreach(i,text; AlexaText_en){assert(text.key == i);}
 }
