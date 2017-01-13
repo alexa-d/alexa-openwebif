@@ -1,6 +1,6 @@
 printf "\nbuild d app\n"
 cd d/alexa-openwebif
-dub build
+dub build --compiler=ldc2
 
 printf "\nbuild zip\n"
 zip -j arch.zip ../../node/index.js libssl.so.10 libevent-2.0.so.5 libcrypto.so.10 libevent_pthreads-2.0.so.5 alexa-openwebif
