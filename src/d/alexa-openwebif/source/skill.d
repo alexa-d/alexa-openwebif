@@ -8,7 +8,15 @@ import amazonlogin;
 import texts;
 import
 	intents.about,
-	intents.services;
+	intents.current,
+	intents.movies,
+	intents.recordnow,
+	intents.services,
+	intents.sleeptimer,
+	intents.togglemute,
+	intents.togglestandby,
+	intents.volume,
+	intents.zap;
 
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
@@ -28,7 +36,20 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		super(isLangDe ? AlexaText_de : AlexaText_en);
 
 		this.addIntent(new IntentAbout());
+		this.addIntent(new IntentCurrent(apiClient));
+		this.addIntent(new IntentMovies(apiClient));
+		this.addIntent(new IntentRecordNow(apiClient));
 		this.addIntent(new IntentServices(apiClient));
+		this.addIntent(new IntentSleepTimer(apiClient));
+		this.addIntent(new IntentToggleMute(apiClient));
+		this.addIntent(new IntentToggleStandby(apiClient));
+		this.addIntent(new IntentVolumeUp(apiClient));
+		this.addIntent(new IntentVolumeDown(apiClient));
+		this.addIntent(new IntentSetVolume(apiClient));
+		this.addIntent(new IntentZapTo(apiClient));
+		this.addIntent(new IntentZapUp(apiClient));
+		this.addIntent(new IntentZapDown(apiClient));
+		this.addIntent(new IntentZapRandom(apiClient));
 	}
 
 	///
@@ -92,379 +113,6 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		resp = skill.onLaunch(ev,AlexaContext.init);
 		assert(resp.response.card.type != AlexaCard.Type.LinkAccount);
 		assert(canFind(resp.response.card.content, "foobar123"));
-	}
-
-	///
-	private Subservice zapUpDown(bool up, ServicesList _allservices)
-	{
-		immutable currentservice = apiClient.getcurrent();
-
-		import std.algorithm.searching:countUntil;
-		static bool pred(Subservice subs, CurrentService curr)
-		{
-			return curr.info._ref == subs.servicereference;
-		}
-
-		immutable index = cast(int)countUntil!(pred)(_allservices.services[0].subservices,currentservice);
-
-		auto j=0;
-
-		if (up)
-			j = index+1;
-		else
-			j = index-1;
-
-		immutable maxIndex = cast(int)_allservices.services[0].subservices.length;
-
-		// handle end or beginning of servicelist
-		if (j >= maxIndex)
-			j=0;
-		else if (j<0)
-			j = maxIndex -1;
-
-		return _allservices.services[0].subservices[j];
-	}
-
-	///
-	private Subservice zapTo(string _channel, ServicesList _allservices)
-	{
-		ulong minDistance = ulong.max;
-		size_t minIndex;
-		foreach(i, subservice; _allservices.services[0].subservices)
-		{
-			if(subservice.servicename.length < 2)
-			continue;
-
-			import std.algorithm:levenshteinDistance;
-
-			auto dist = levenshteinDistance(subservice.servicename,_channel);
-			if(dist < minDistance)
-			{
-				minDistance = dist;
-				minIndex = i;
-			}
-		}
-		return _allservices.services[0].subservices[minIndex];
-	}
-
-	///
-	@CustomIntent("IntentMovies")
-	AlexaResult onIntentMovies(AlexaEvent, AlexaContext)
-	{
-		auto movies = apiClient.movielist();
-
-		AlexaResult result;
-		result.response.card.title = getText(TextId.MoviesCardTitle);
-		result.response.card.content = getText(TextId.MoviesCardContent);
-
-		string moviesList;
-
-		foreach(movie; movies.movies)
-		{
-			moviesList ~= "<p>" ~ movie.eventname ~ "</p>";
-		}
-
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml =
-			.format(getText(TextId.MoviesSSML),moviesList);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentToggleMute")
-	AlexaResult onIntentToggleMute(AlexaEvent, AlexaContext)
-	{
-		immutable res = apiClient.vol("mute");
-
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.MuteCardTitle);
-		result.response.card.content = getText(TextId.MuteCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = getText(TextId.MuteFailedSSML);
-
-		if(res.result && res.ismute)
-			result.response.outputSpeech.ssml = getText(TextId.MutedSSML);
-		else if(res.result && !res.ismute)
-			result.response.outputSpeech.ssml = getText(TextId.UnMutedSSML);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentToggleStandby")
-	AlexaResult onIntentToggleStandby(AlexaEvent, AlexaContext)
-	{
-		immutable res = apiClient.powerstate(0);
-
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.StandbyCardTitle);
-		result.response.card.content = getText(TextId.StandbyCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = getText(TextId.StandbyFailedSSML);
-
-		if(res.result && res.instandby)
-			result.response.outputSpeech.ssml = getText(TextId.BoxStartedSSML);
-		else if(res.result && !res.instandby)
-			result.response.outputSpeech.ssml = getText(TextId.StandbySSML);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentVolumeDown")
-	AlexaResult onIntentVolumeDown(AlexaEvent, AlexaContext)
-	{
-		return doVolumeIntent(false);
-	}
-
-	///
-	@CustomIntent("IntentVolumeUp")
-	AlexaResult onIntentVolumeUp(AlexaEvent, AlexaContext)
-	{
-		return doVolumeIntent(true);
-	}
-
-	///
-	@CustomIntent("IntentSetVolume")
-	AlexaResult onIntentSetVolume(AlexaEvent event, AlexaContext)
-	{
-		auto targetVolume = to!int(event.request.intent.slots["volume"].value);
-
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.SetVolumeCardTitle);
-		result.response.card.content = getText(TextId.SetVolumeCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = getText(TextId.SetVolumeFailedSSML);
-
-		if (targetVolume >=0 && targetVolume < 100)
-		{
-			auto res = apiClient.vol("set"~to!string(targetVolume));
-			if (res.result)
-				result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeSSML),res.current);
-		}
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentRecordNow")
-	AlexaResult onIntentRecordNow(AlexaEvent, AlexaContext)
-	{
-		immutable res = apiClient.recordnow();
-
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.RecordNowCardTitle);
-		result.response.card.content = getText(TextId.RecordNowCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = getText(TextId.RecordNowFailedSSML);
-		if (res.result)
-			result.response.outputSpeech.ssml = getText(TextId.RecordNowSSML);
-
-		return result;
-	}
-
-	///
-	private Subservice zapRandom(ServicesList _allservices)
-	{
-		import std.random:uniform;
-		if (_allservices.services[0].subservices.length > 0)
-		{
-			auto i = uniform(0,_allservices.services[0].subservices.length-1);
-			return _allservices.services[0].subservices[i];
-		}
-		Subservice _ret;
-		return _ret;
-
-	}
-
-	///
-	@CustomIntent("IntentZapTo")
-	AlexaResult onIntentZapTo(AlexaEvent event, AlexaContext)
-	{
-		auto targetChannel = event.request.intent.slots["targetChannel"].value;
-		Subservice matchedServices;
-		auto switchedTo = getText(TextId.ZapFailedSSML);
-
-		if(targetChannel.length > 0)
-		{
-			auto allservices = removeMarkers(apiClient.getallservices());
-			matchedServices = zapTo(targetChannel, allservices);
-		}
-
-		if(matchedServices.servicereference.length > 0)
-		{
-			apiClient.zap(matchedServices.servicereference);
-			switchedTo = matchedServices.servicename;
-		}
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.ZapToCardTitle);
-		result.response.card.content = getText(TextId.ZapToCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentZapRandom")
-	AlexaResult onIntentZapRandom(AlexaEvent, AlexaContext)
-	{
-		Subservice matchedServices;
-
-		auto switchedTo = getText(TextId.ZapFailedSSML);
-		auto allservices = removeMarkers(apiClient.getallservices());
-		matchedServices = zapRandom(allservices);
-		if(matchedServices.servicereference.length > 0)
-		{
-			apiClient.zap(matchedServices.servicereference);
-			switchedTo = matchedServices.servicename;
-		}
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.ZapRandomCardTitle);
-		result.response.card.content = getText(TextId.ZapRandomCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentZapUp")
-	AlexaResult onIntentZapUp(AlexaEvent, AlexaContext)
-	{
-		auto result = doZapIntent(true);
-		result.response.card.title =  getText(TextId.ZapUpCardTitle);
-		result.response.card.content = getText(TextId.ZapUpCardContent);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentZapDown")
-	AlexaResult onIntentZapDown(AlexaEvent, AlexaContext)
-	{
-		auto result = doZapIntent(false);
-		result.response.card.title =  getText(TextId.ZapDownCardTitle);
-		result.response.card.content = getText(TextId.ZapDownCardContent);
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentSleepTimer")
-	AlexaResult onIntentSleepTimer(AlexaEvent event, AlexaContext)
-	{
-		auto minutes = to!int(event.request.intent.slots["minutes"].value);
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.SleepTimerCardTitle);
-		result.response.card.content = getText(TextId.SleepTimerCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-
-		if(minutes >= 0 && minutes < 999)
-		{
-			auto sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
-			if (sleepTimer.enabled)
-			{
-				if (minutes == 0)
-				{
-					sleepTimer = apiClient.sleeptimer("set","",0, "False");
-					result.response.outputSpeech.ssml = getText(TextId.SleepTimerOffSSML);
-				}
-				else
-				{
-					auto sleepTimerNew = apiClient.sleeptimer("set","standby", to!int(minutes), "True");
-					result.response.outputSpeech.ssml =
-						.format(getText(TextId.SleepTimerResetSSML),sleepTimer.minutes,sleepTimerNew.minutes);
-				}
-			}
-			else
-			{
-				if (minutes == 0)
-				{
-					result.response.outputSpeech.ssml = getText(TextId.SleepTimerNoTimerSSML);
-				}
-				else if (minutes >0)
-				{
-					sleepTimer = apiClient.sleeptimer("set", "standby", to!int(minutes), "True");
-					result.response.outputSpeech.ssml =
-						.format(getText(TextId.SleepTimerSetSSML),sleepTimer.minutes);
-				}
-				else
-				{
-					result.response.outputSpeech.ssml = getText(TextId.SleepTimerFailedSSML);
-				}
-			}
-		}
-		else
-		{
-			result.response.outputSpeech.ssml = getText(TextId.SleepTimerFailedSSML);
-		}
-
-		return result;
-	}
-
-	///
-	@CustomIntent("IntentCurrent")
-	AlexaResult onIntentCurrent(AlexaEvent, AlexaContext)
-	{
-		auto currentService = apiClient.getcurrent();
-
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.CurrentCardTitle);
-		result.response.card.content = getText(TextId.CurrentCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = format(getText(TextId.CurrentSSML),currentService.info._name,currentService.now.title);
-
-		if(currentService.next.title.length > 0)
-		{
-			result.response.outputSpeech.ssml =
-				format(getText(TextId.CurrentNextSSML),result.response.outputSpeech.ssml.replace("</speak>","") ,currentService.next.title);
-		}
-
-		return result;
-	}
-
-	///
-	private AlexaResult doVolumeIntent(bool increase)
-	{
-		auto action = "down";
-
-		if(increase)
-			action = "up";
-
-		auto res = apiClient.vol(action);
-
-		AlexaResult result;
-		result.response.card.title =  getText(TextId.SetVolumeCardTitle);
-		result.response.card.content = getText(TextId.SetVolumeCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = getText(TextId.SetVolumeFailedSSML);
-		if (res.result)
-			result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeSSML),res.current);
-
-		return result;
-	}
-
-	///
-	private AlexaResult doZapIntent(bool up)
-	{
-		Subservice matchedServices;
-
-		auto switchedTo = getText(TextId.ZapFailedSSML);
-		auto allservices = removeMarkers(apiClient.getallservices());
-		matchedServices = zapUpDown(up, allservices);
-		if(matchedServices.servicereference.length > 0)
-		{
-			apiClient.zap(matchedServices.servicereference);
-			switchedTo = matchedServices.servicename;
-		}
-		AlexaResult result;
-
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML),switchedTo);
-
-		return result;
 	}
 }
 
