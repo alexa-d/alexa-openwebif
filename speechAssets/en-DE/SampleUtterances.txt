@@ -29,9 +29,11 @@ IntentZapTo wechsel {targetChannel}
 
 IntentVolumeUp erhöhe die Lautstärke
 IntentVolumeUp Lautstärke hoch
+IntentVolumeUp lauter
 
 IntentVolumeDown verringer die Lautstärke
 IntentVolumeDown Lautstärke runter
+IntentVolumeDown leiser
 
 IntentToggleStandby Standby umschalten
 IntentToggleStandby Standby einschalten
