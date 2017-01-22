@@ -52,5 +52,5 @@ SleepTimerFailedSSML,   <speak>Der Timer konnte nicht gesetzt werden.</speak>
 SleepTimerNoTimerSSML,  <speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>
 CurrentCardTitle,       Es läuft
 CurrentCardContent,     Es läuft
-CurrentSSML,            <speak>Du guckst gerade: <p>%s</p>Aktuell läuft:<p>%s</p></speak>
-CurrentNextSSML,        %s anschliessend läuft: <p>%s</p></speak>
+CurrentSSML,            <speak>Du guckst gerade: <p>%s</p>. Aktuell läuft: %s</speak>
+CurrentNextSSML,        <speak>Du guckst gerade: <p>%s</p>. Aktuell läuft: %s. anschliessend läuft: %s</speak>
