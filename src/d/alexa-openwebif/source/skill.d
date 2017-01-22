@@ -6,17 +6,9 @@ import openwebif.api;
 
 import amazonlogin;
 import texts;
-import
-	intents.about,
-	intents.current,
-	intents.movies,
-	intents.recordnow,
-	intents.services,
-	intents.sleeptimer,
-	intents.togglemute,
-	intents.togglestandby,
-	intents.volume,
-	intents.zap;
+import intents.about, intents.current, intents.movies, intents.recordnow,
+	intents.services, intents.sleeptimer, intents.togglemute,
+	intents.togglestandby, intents.volume, intents.zap;
 
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
@@ -29,7 +21,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	{
 		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
-		import std.string:toLower;
+		import std.string : toLower;
+
 		locale = locale.toLower;
 		immutable isLangDe = locale == "de-de";
 
@@ -58,7 +51,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		AlexaResult result;
 		result.response.card.title = getText(TextId.DefaultCardTitle);
 
-		if(event.session.user.accessToken.length == 0)
+		if (event.session.user.accessToken.length == 0)
 		{
 			result.response.card.content = getText(TextId.PleaseLogin);
 			result.response.card.type = AlexaCard.Type.LinkAccount;
@@ -69,23 +62,26 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		{
 			auto loginApi = amazonLoginApiFactory(event.session.user.accessToken);
 
-			import std.stdio:stderr;
+			import std.stdio : stderr;
 
-			try{
+			try
+			{
 				immutable tokenInfo = loginApi.tokeninfo(event.session.user.accessToken);
-				stderr.writefln("tokenInfo: %s",tokenInfo);
+				stderr.writefln("tokenInfo: %s", tokenInfo);
 			}
-			catch(Exception e){
-				stderr.writefln("tokenInfo parsing error: %s",e);
+			catch (Exception e)
+			{
+				stderr.writefln("tokenInfo parsing error: %s", e);
 			}
 
 			immutable userProfile = loginApi.profile();
-			stderr.writefln("user: %s",userProfile);
+			stderr.writefln("user: %s", userProfile);
 
-			result.response.card.content = format(getText(TextId.HelloCardContent),userProfile.name);
+			result.response.card.content = format(getText(TextId.HelloCardContent),
+					userProfile.name);
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-			result.response.outputSpeech.ssml =
-				.format(getText(TextId.HelloSSML),userProfile.name);
+			result.response.outputSpeech.ssml = .format(getText(TextId.HelloSSML),
+					userProfile.name);
 		}
 
 		return result;
@@ -94,23 +90,30 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	///
 	unittest
 	{
-		import std.algorithm.searching:canFind;
-		auto skill = new OpenWebifSkill("","de-DE");
+		import std.algorithm.searching : canFind;
+
+		auto skill = new OpenWebifSkill("", "de-DE");
 		AlexaEvent ev;
-		auto resp = skill.onLaunch(ev,AlexaContext.init);
+		auto resp = skill.onLaunch(ev, AlexaContext.init);
 		assert(resp.response.card.type == AlexaCard.Type.LinkAccount);
 
-		skill.amazonLoginApiFactory = cast(AmazonLoginApiFactory)()
-		{
+		skill.amazonLoginApiFactory = cast(AmazonLoginApiFactory)() {
 			return new class AmazonLoginApi
 			{
-				TokenInfo tokeninfo(string){return TokenInfo();}
-				UserProfile profile(){return UserProfile("foobar123");}
+				TokenInfo tokeninfo(string)
+				{
+					return TokenInfo();
+				}
+
+				UserProfile profile()
+				{
+					return UserProfile("foobar123");
+				}
 			};
 		};
 
 		ev.session.user.accessToken = "nonempty";
-		resp = skill.onLaunch(ev,AlexaContext.init);
+		resp = skill.onLaunch(ev, AlexaContext.init);
 		assert(resp.response.card.type != AlexaCard.Type.LinkAccount);
 		assert(canFind(resp.response.card.content, "foobar123"));
 	}
@@ -119,13 +122,15 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 ///
 static ServicesList removeMarkers(ServicesList _list)
 {
-	import std.algorithm.mutation:remove;
+	import std.algorithm.mutation : remove;
+
 	auto i = 0;
-	while(i < _list.services[0].subservices.length)
+	while (i < _list.services[0].subservices.length)
 	{
-		if(_list.services[0].subservices[i].servicereference.endsWith(_list.services[0].subservices[i].servicename))
+		if (_list.services[0].subservices[i].servicereference.endsWith(
+				_list.services[0].subservices[i].servicename))
 		{
-			_list.services[0].subservices = remove(_list.services[0].subservices,i);
+			_list.services[0].subservices = remove(_list.services[0].subservices, i);
 			continue;
 		}
 		i++;
@@ -136,8 +141,8 @@ static ServicesList removeMarkers(ServicesList _list)
 //TODO: move to baselib
 unittest
 {
-	auto skill = new OpenWebifSkill ("","de-DE");
+	auto skill = new OpenWebifSkill("", "de-DE");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_de[TextId.PleaseLogin].text);
-	skill = new OpenWebifSkill ("","en-US");
+	skill = new OpenWebifSkill("", "en-US");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_en[TextId.PleaseLogin].text);
 }
