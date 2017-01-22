@@ -52,5 +52,5 @@ SleepTimerFailedSSML,   <speak>Set sleep timer failed</speak>
 SleepTimerNoTimerSSML,  <speak>No sleep timer found</speak>
 CurrentCardTitle,       You're watching
 CurrentCardContent,     You're watching
-CurrentSSML,            <speak>You are on: <p>%s</p>and watching:<p>%s</p></speak>
-CurrentNextSSML,        %s <p>%s</p> comes up next</speak>
+CurrentSSML,            <speak>You are on: %s. it is playing: %s</speak>
+CurrentNextSSML,        <speak>You are on: %s. it is playing: %s. up next is: %s</speak>
