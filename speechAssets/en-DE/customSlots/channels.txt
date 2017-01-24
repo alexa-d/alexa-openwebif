@@ -1,6 +1,8 @@
 ZDF
+ZDF HD
 ARD
 das erste
+das erste HD
 erste
 RTL
 pro7
@@ -10,8 +12,10 @@ vox
 phönix
 phoenix
 WDR
+WDR HD
 NDR
 tagesschau
 3sat
 one
 arte
+ZDF neo

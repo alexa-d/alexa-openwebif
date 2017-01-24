@@ -167,25 +167,113 @@ static Subservice zapRandom(ServicesList _allservices)
 }
 
 ///
+struct ServiceAlias
+{
+	///
+	string serviceName;
+	///
+	string aliasName;
+}
+
+//TODO: support english aliases
+///
+static immutable ServiceAliases = [
+	ServiceAlias("Das Erste HD", "ard"), ServiceAlias("Das Erste HD", "das erste"), ServiceAlias("Das Erste HD",
+		"a. r. d."), ServiceAlias("WDR HD", "w. d. r."), ServiceAlias("WDR HD", "wdr"),
+	ServiceAlias("ZDF HD", "z. d. f."), ServiceAlias("ZDF HD", "zdf"),
+	ServiceAlias("zdf_neo", "z. d. f. neo"), ServiceAlias("PHOENIX HD", "phönix"),
+];
+
+///
 static Subservice zapTo(string _channel, ServicesList _allservices)
 {
-	ulong minDistance = ulong.max;
-	size_t minIndex;
-	foreach (i, subservice; _allservices.services[0].subservices)
+	ulong distAlias, distService;
+	size_t idxAlias, idxService;
+
+	matchAlias(_channel, ServiceAliases, idxAlias, distAlias);
+	matchServiceName(_channel, _allservices.services[0].subservices, idxService, distService);
+
+	if (distAlias < distService)
+	{
+		matchServiceName(ServiceAliases[idxAlias].serviceName,
+				_allservices.services[0].subservices, idxService, distService);
+	}
+
+	return _allservices.services[0].subservices[idxService];
+}
+
+//TODO: unify this with matchAlias
+///
+static void matchServiceName(string name, in Subservice[] services, ref size_t idx,
+		ref ulong distance)
+{
+	import std.algorithm.searching : startsWith;
+
+	distance = ulong.max;
+	idx = 0;
+
+	foreach (i, subservice; services)
 	{
 		if (subservice.servicename.length < 2)
 			continue;
 
+		if (subservice.servicename.startsWith(name) || name.startsWith(subservice.servicename))
+		{
+			distance = 0;
+			idx = i;
+			continue;
+		}
+
 		import std.algorithm : levenshteinDistance;
 
-		auto dist = levenshteinDistance(subservice.servicename, _channel);
-		if (dist < minDistance)
+		immutable dist = levenshteinDistance(subservice.servicename, name);
+		if (dist < distance)
 		{
-			minDistance = dist;
-			minIndex = i;
+			distance = dist;
+			idx = i;
 		}
 	}
-	return _allservices.services[0].subservices[minIndex];
+}
+
+///
+private static void matchAlias(string name, in ServiceAlias[] aliases,
+		ref size_t idx, ref ulong distance)
+{
+	distance = ulong.max;
+	idx = 0;
+
+	foreach (i, thisalias; aliases)
+	{
+		import std.algorithm : levenshteinDistance;
+
+		immutable dist = levenshteinDistance(thisalias.aliasName, name);
+		if (dist < distance)
+		{
+			distance = dist;
+			idx = i;
+		}
+	}
+}
+
+///
+unittest
+{
+	size_t idx;
+	ulong dist;
+
+	static immutable aliases = [
+		ServiceAlias("foo", "bar"), ServiceAlias("das erste", "ARD"),
+		ServiceAlias("das erste hd", "das erste"),
+	];
+
+	matchAlias("ARD", aliases, idx, dist);
+	assert(idx == 1);
+
+	matchAlias("bar", aliases, idx, dist);
+	assert(idx == 0);
+
+	matchAlias("erste", aliases, idx, dist);
+	assert(idx == 2);
 }
 
 ///
