@@ -3,9 +3,9 @@ module texts;
 import ask.locale;
 
 ///
-enum AlexaText_de = mixin(LocaParser!(TextId,import("lang_de.csv")));
+static immutable AlexaText_de = mixin(LocaParser!(TextId, import("lang_de.csv")));
 ///
-enum AlexaText_en = mixin(LocaParser!(TextId,import("lang_en.csv")));
+static immutable AlexaText_en = mixin(LocaParser!(TextId, import("lang_en.csv")));
 
 ///
 enum TextId
