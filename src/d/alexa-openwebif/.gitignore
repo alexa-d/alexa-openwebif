@@ -6,4 +6,5 @@ __dummy.html
 __test__*__
 dub.selections.json
 alexa-openwebif
+alexa-openwebif-test-library
 arch.zip
