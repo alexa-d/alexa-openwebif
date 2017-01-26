@@ -11,7 +11,20 @@ import skill;
 int main(string[] args)
 {
 	import std.process:environment;
-	immutable baseUrl = environment["OPENWEBIF_URL"];
+	import vibe.aws.aws;
+	import vibe.aws.dynamodb;
+	import std.conv:to;
+	
+	auto accessKey = environment["ACCESS_KEY"];
+	auto secretKey = environment["SECRET_KEY"];
+    auto awsRegion = environment["AWS_DYNAMODB_REGION"]; 
+    auto owifTableName = environment["OPENWEBIF_TABLENAME"]; 
+    auto creds = new StaticAWSCredentials(accessKey, secretKey); 
+    auto ddb = new DynamoDB(awsRegion, creds); 
+    auto table = ddb.table(owifTableName);
+	
+	
+	
 
 	if(args.length != 4)
 	{
@@ -41,7 +54,27 @@ int main(string[] args)
 	catch(Exception e){
 		stderr.writefln("could not deserialize event: %s",e);
 	}
+	string baseUrl;
+	try {
+		auto password = "";
+		auto user = "";
+		auto item = table.get("accessToken", event.session.user.accessToken);
+		if(("password" in item) !is null)
+			password = to!string(item["password"]);	
+		if(("username" in item) !is null)	
+			user = to!string(item["username"]);			
+		immutable url= to!string(item["url"]);
+		auto urlSplit = url.split("://");
+		auto protocol = urlSplit[0];
+		auto host = urlSplit[1];
 
+		baseUrl = format("%s://%s:%s@%s",protocol, user, password, host);
+
+	} catch(Exception e)
+	{
+		stderr.writefln("%s has no entry in db: %s", event.session.user.accessToken, e);
+	}
+	
 	AlexaContext context;
 	try{
 		context = deserializeJson!AlexaContext(contextJson);
