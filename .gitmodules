@@ -1,0 +1,3 @@
+[submodule "src/d/vibe-aws"]
+	path = src/d/vibe-aws
+	url = https://github.com/vibe-aws/vibe-aws.git
