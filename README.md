@@ -8,6 +8,7 @@ dub dependencies:
 * [alexa-skill-kit-d](https://github.com/Extrawurst/alexa-skill-kit-d)
 * [openwebif-client-d](https://github.com/Extrawurst/openwebif-client-d)
 * [vibe.d](https://github.com/rejectedsoftware/vibe.d)
+* [vibe-aws](https://github.com/vibe-aws/vibe-aws)
 
 ## usage
 
@@ -17,12 +18,18 @@ To host this skill in your own aws account:
 
 ```
 # setup environments variables
-OPENWEBIF_URL=http://my.web.domain
 AWS_REGION=AWS region you are hosting the lambda function in
 AWS_LAMBDA_NAME=AWS lambda function name
 AWS_KEY_ID=IAM key id
 AWS_KEY_SECRET=IAM key secret
+AWS_DYNAMODB_REGION=AWS region where dynamodb tables are running
+OPENWEBIF_TABLENAME=DynamoDB tablename for openwebif database
+OPENWEBIF_TABLENAME_PORTAL=DynamoDB tablename for account linking database
 ```
+
+There are two dynamoDB tables which are required to host this skill on your own:
+Table1 : ENV OPENWEBIF_TABLENAME (as defined before in env vars) with primary partition key "accessToken" of type string
+Table2 : ENV OPENWEBIF_TABLENAME_PORTAL with primary partition key "userId" of type string
 
 As you can see before we can upload our code to aws lambda we have to create the lambda function (and give it a name that we can put in the env vars). To do this please follow this documentation: https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function
 
@@ -40,10 +47,14 @@ $ cd /vagrant/src
 $ ./run.sh
 ```
 
+After that you need to build the alexa-portal to host the user interface for account linking based on Login-with-Amazon (ssl certificate need - server.key and server.crt).
+Provide your url with https protocol, port (default 8080) and path /login in your alexa skill as authorization URL in account linking options. Please choose Implicit grant. 
+
+
 ## todo
 
 current major planned features:
 
 1. ~~support english language ([#6](https://github.com/Extrawurst/alexa-openwebif/issues/6))~~
-2. support user database to allow publication ([#14](https://github.com/Extrawurst/alexa-openwebif/issues/14))
+2. ~~support user database to allow publication ([#14](https://github.com/Extrawurst/alexa-openwebif/issues/14))
 3. support timeshift ([#5](https://github.com/Extrawurst/alexa-openwebif/issues/5))
