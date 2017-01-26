@@ -179,9 +179,30 @@ struct ServiceAlias
 ///
 static immutable ServiceAliases = [
 	ServiceAlias("Das Erste HD", "ard"), ServiceAlias("Das Erste HD", "das erste"), ServiceAlias("Das Erste HD",
-		"a. r. d."), ServiceAlias("WDR HD", "w. d. r."), ServiceAlias("WDR HD", "wdr"),
+		"a. r. d."), 
+	ServiceAlias("WDR HD", "w. d. r."), ServiceAlias("WDR HD", "wdr"), 
+	ServiceAlias("WDR Essen", "w. d. r. essen"), ServiceAlias("WDR Essen", "wdr essen"),
+	ServiceAlias("WDR Duisburg", "w. d. r. duisburg"), ServiceAlias("WDR Duisburg", "wdr duisburg"),  
+	ServiceAlias("WDR Bonn", "w. d. r. bonn"), ServiceAlias("WDR Bonn", "wdr bonn"),  
+	ServiceAlias("WDR Bielefeld", "w. d. r. bielefeld"), ServiceAlias("WDR bielefeld", "wdr bielefeld"),  
+	ServiceAlias("WDR Münster", "w. d. r. münster"), ServiceAlias("WDR Münster", "wdr münster"), 
+	ServiceAlias("WDR Düsseldorf", "w. d. r. düsseldorf"), ServiceAlias("WDR Düsseldorf", "wdr düsseldorf"),    
+	ServiceAlias("WDR Aachen", "w. d. r. aachen"), ServiceAlias("WDR Aachen", "wdr aachen"),  
+	ServiceAlias("WDR Siegen", "w. d. r. Siegen"), ServiceAlias("WDR Siegen", "wdr siegen"),  
+	ServiceAlias("WDR wuppertal", "w. d. r. wuppertal"), ServiceAlias("WDR Wuppertal", "wdr wuppertal"),  
+	ServiceAlias("WDR Köln", "w. d. r. köln"), ServiceAlias("WDR Köln", "wdr köln"),  
+		ServiceAlias("WDR Köln HD", "w. d. r. köln hd"), ServiceAlias("WDR Köln HD", "wdr Köln HD"),
+	ServiceAlias("n-tv", "n. t. v."), ServiceAlias("n-tv", "ntv"),
+	ServiceAlias("RTL television", "r. t. l."), ServiceAlias("RTL Television", "rtl"),
+	ServiceAlias("Super RTL", "super r. t. l."),       
+	ServiceAlias("NDR", "n. d. r."),
+	ServiceAlias("N24", "n. 24"),
+	ServiceAlias("MTV", "m. t. v."),
+	ServiceAlias("MGM", "m. g. m."),
+	ServiceAlias("ARD Alpha", "a. r. d. alpha"), ServiceAlias("ARD Alpha", "ard alpha"),  
 	ServiceAlias("ZDF HD", "z. d. f."), ServiceAlias("ZDF HD", "zdf"),
 	ServiceAlias("zdf_neo", "z. d. f. neo"), ServiceAlias("PHOENIX HD", "phönix"),
+	ServiceAlias("QVC", "q. v. c."), 
 ];
 
 ///

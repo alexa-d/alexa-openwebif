@@ -1,21 +1,231 @@
 ZDF
 ZDF HD
 ARD
+ARD HD
 das erste
 das erste HD
 erste
+tagesschau
+tagesschau24
+RTL HD
 RTL
-pro7
+RTL Television
+pro7 
+pro7 HD
 pro 7
+pro 7 HD
 prosieben
+prosieben HD
+pro sieben HD
+pro sieben
 vox
+vox HD
 phönix
+phönix HD
 phoenix
+phoenix HD
 WDR
 WDR HD
+WDR Essen 
+WDR Essen HD
+WDR Köln 
+WDR Köln HD
+WDR Koeln
+WDR Koeln HD
+WDR Wuppertal 
+WDR Wuppertal HD
+WDR Duisburg 
+WDR Duisburg HD
+WDR Siegen 
+WDR Siegen HD
+WDR Münster 
+WDR Münster HD
+WDR Muenster 
+WDR Muenster HD
+WDR Düsseldorf 
+WDR Düsseldorf HD
+WDR Duesseldorf 
+WDR Duesseldorf HD
+WDR Aachen
+WDR Aachen HD
+WDR Bielefeld
+WDR Bielefeld HD
+WDR Bonn
+WDR Bonn HD
+WDR Dortmund 
+WDR Dortmund HD
 NDR
-tagesschau
+NDR HD
 3sat
-one
+3sat HD
 arte
+arte HD
 ZDF neo
+one
+one HD
+N24
+N24 HD
+Einsplus 
+Einsplus HD
+13th street
+13th street HD
+discovery 
+discovery HD
+discovery channel
+discovery channel HD
+TNT Serie
+TNT Serie HD
+RTL Passion
+MGM
+Fox
+Fox HD
+Sky Cinema
+Sky Cinema HD
+Sky Cinema Action
+Sky Cinema Action HD
+NatGeo 
+NatGeo HD
+National Geographic
+National Geographic HD
+Sky Atlantic HD
+Sky Atlantic
+Sky Cinema Comedy
+Sky Cinema Comedy HD
+Sky Cinema +1
+Sky Cinema +24
+Sky Cinema Hits
+Sky Cinema Hits HD
+Sky Krimi
+Prosieben Maxx 
+Prosieben Maxx HD
+pro 7 maxx 
+pro 7 maxx HD
+sky cinema emotion
+sky cinema emotion HD
+sky sport bundesliga 1
+sky sport bundesliga 1 HD
+sky sport bundesliga 2
+sky sport bundesliga 2 HD
+sky sport bundesliga 3
+sky sport bundesliga 3 HD
+sky sport bundesliga 4
+sky sport bundesliga 4 HD
+sky sport bundesliga 5
+sky sport bundesliga 5 HD
+sky sport bundesliga 6
+sky sport bundesliga 6 HD
+sky sport bundesliga 7
+sky sport bundesliga 7 HD
+sky sport bundesliga 8
+sky sport bundesliga 8 HD
+sky sport bundesliga 9
+sky sport bundesliga 9 HD
+sky sport bundesliga 10
+sky sport bundesliga 10 HD
+sky sport 1
+sky sport 1 HD
+sky sport 2
+sky sport 2 HD
+sky sport 3
+sky sport 3 HD
+sky sport 4
+sky sport 4 HD
+sky sport 5
+sky sport 5 HD
+sky sport 6
+sky sport 6 HD
+sky sport 7
+sky sport 7 HD
+sky sport 8
+sky sport 8 HD
+sky sport 9
+sky sport 9 HD
+sky sport 10
+sky sport 10 HD
+sky sport 11
+sky sport 11 HD
+1 2 3 tv
+1.2.3 tv
+1-2-3 tv
+Al Jazeera
+Al Jazeera International
+Animal Planet
+Animal Planet HD
+ARD-Alpha
+auto motor und sport channel
+auto motor und sport tv HD
+axn HD
+babytv
+baby tv
+bibel tv
+bibel tv HD
+bloomberg
+blue movie
+BR fernsehen nord
+br fernsehen süd
+disney cinemagic
+disney cinemagic HD
+disney HD
+disney SD
+disney junior
+disney XD
+DMAX
+DMAX HD
+Eurosport 1
+Eurosport 1 HD
+Eurosport 2
+Goldstar tv
+Gute Laune tv
+Heimatkanal
+History 
+History HD
+hr-fernsehen
+hr-fernsehen HD
+HSE24
+HSE24 HD
+home shopping europe 24
+home shopping 24
+junior
+Kabel Eins 
+Kabel eins HD
+Kabel 1
+Kabel 1 HD
+Kabel eins classics
+Kika
+Kika HD
+Kinderkanal
+Kinderkanal HD
+MTV 
+MTV HD
+ntv HD
+ntv
+n-tv
+n-tv HD
+Prosieben Fun 
+Prosieben Fun HD
+pro 7 Fun
+pro 7 fun HD
+QVC
+QVC HD
+QVC Beauty
+RTL Crime
+RTL Crime HD
+RTL 2 
+RTL 2 HD
+RTL Zwei
+RTL Zwei HD
+sixx
+sixx HD
+sky 1 
+sky 1 HD
+sky eins 
+sky eins HD
+sky cinema family
+sport 1
+sport 1 HD
+super RTL
+super rtl HD
+SWR BW HD
+SWR Fernsehen BW
+SWR Fernsehen RP
+SWR RP HD
