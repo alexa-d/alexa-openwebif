@@ -24,12 +24,10 @@ AWS_KEY_ID=IAM key id
 AWS_KEY_SECRET=IAM key secret
 AWS_DYNAMODB_REGION=AWS region where dynamodb tables are running
 OPENWEBIF_TABLENAME=DynamoDB tablename for openwebif database
-OPENWEBIF_TABLENAME_PORTAL=DynamoDB tablename for account linking database
 ```
 
-There are two dynamoDB tables which are required to host this skill on your own:
-Table1 : ENV OPENWEBIF_TABLENAME (as defined before in env vars) with primary partition key "accessToken" of type string
-Table2 : ENV OPENWEBIF_TABLENAME_PORTAL with primary partition key "userId" of type string
+You need to setup one DynamoDB Table
+ENV OPENWEBIF_TABLENAME (as defined before in env vars) with primary partition key "accessToken" of type string
 
 As you can see before we can upload our code to aws lambda we have to create the lambda function (and give it a name that we can put in the env vars). To do this please follow this documentation: https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/developing-an-alexa-skill-as-a-lambda-function
 

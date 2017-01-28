@@ -21,10 +21,7 @@ int main(string[] args)
     auto owifTableName = environment["OPENWEBIF_TABLENAME"]; 
     auto creds = new StaticAWSCredentials(accessKey, secretKey); 
     auto ddb = new DynamoDB(awsRegion, creds); 
-    auto table = ddb.table(owifTableName);
-	
-	
-	
+    auto table = ddb.table(owifTableName);	
 
 	if(args.length != 4)
 	{
