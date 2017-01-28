@@ -9,7 +9,7 @@ html
                 p& index.welcome
             #headerright 
                 p #{settings.profile.name} (#{settings.profile.email}) 
-                a(href="", id="Logout") Logout
+                a(href='#', id="Logout") Logout
         #content
             p& updateform.text
             #amazon-root
@@ -26,7 +26,7 @@ html
             script.
                 document.getElementById('Logout').onclick = function() { 
                     amazon.Login.logout();
-                    window.location = "/logout";
+                    window.location.href = "/logout";
                 }; 
             form(action="settings", method="POST")
                 table

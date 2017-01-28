@@ -6,7 +6,7 @@ import vibe.web.web;
 import vibe.aws.aws;
 import vibe.aws.dynamodb;
 import vibe.stream.tls;
-import vibe.d;
+
 import amazonlogin;
 
 ///
@@ -18,6 +18,7 @@ struct OpenWebIfDBEntry
 	string url;
 }
 
+///
 struct UserSettings {
 	bool loggedIn = false;
 	UserProfile profile;
@@ -34,23 +35,19 @@ class OpenWebIfDB
 	OpenWebIfDBEntry owifItem;
 	DynamoDB ddb;
 	Table openwebifTable;
-	Table portalTable;
 
 	this(){
 		import std.process:environment;
-		auto accessKey = environment["AWS_ACCESS_KEY"];
-		auto secretKey = environment["AWS_SECRET_KEY"];
-		auto awsRegion = environment["AWS_DYNAMODB_REGION"];
-		auto owifTableName = environment["OPENWEBIF_TABLENAME"];
-		auto portalTableName = environment["OPENWEBIF_PORTAL_TABLENAME"];
+		immutable accessKey = environment["AWS_ACCESS_KEY"];
+		immutable secretKey = environment["AWS_SECRET_KEY"];
+		immutable awsRegion = environment["AWS_DYNAMODB_REGION"];
+		immutable owifTableName = environment["OPENWEBIF_TABLENAME"];
 		auto creds = new StaticAWSCredentials(accessKey, secretKey);
 		ddb = new DynamoDB(awsRegion, creds);
 		openwebifTable = ddb.table(owifTableName);
-		portalTable = ddb.table(portalTableName);
 	}
 
-
-
+	///
 	void writeEntry(string _url, string _username, string _password, string _auth, string _token)
 	{
 		auto openwebifItem = Item().set("accessToken", _token);
@@ -59,18 +56,20 @@ class OpenWebIfDB
 			openwebifItem.set("password", _password);
 		if(_username.length)
 			openwebifItem.set("username", _username);
-		auto portalItem = Item().set("userId", _auth);
-		portalItem.set("accessToken", _token);
+		openwebifItem.set("amazonId", _auth);
 		openwebifTable.put(openwebifItem);
-		portalTable.put(portalItem);
 	}
 
+	///
 	OpenWebIfDBEntry getEntry(string amazonId)
 	{
 		import std.conv:to;
+		import std.digest.sha:sha256Of;
+		import std.digest.digest:toHexString;
+		
 		try {
-			auto portalItem = portalTable.get("userId", amazonId);
-			auto openwebifItem = openwebifTable.get("accessToken", portalItem["accessToken"] );
+			immutable accessToken = cast(string)(sha256Of(amazonId).toHexString());
+			auto openwebifItem = openwebifTable.get("accessToken", accessToken);
 			if(("password" in openwebifItem) !is null)
 				owifItem.password = to!string(openwebifItem["password"]);	
 			if(("username" in openwebifItem) !is null)	
@@ -88,7 +87,7 @@ class OpenWebIfDB
 ///
 shared static this()
 {
-	import vibe.http.fileserver;
+	import vibe.http.fileserver:serveStaticFiles;
 
 	URLRouter router = new URLRouter;
 	router.registerWebInterface(new WebInterface);
@@ -153,7 +152,6 @@ class WebInterface {
 			catch(Exception e){
 				stderr.writefln("tokenInfo parsing error: %s",e);
 			}
-			
 			immutable userProfile = loginApi.profile();
 			settings.profile = userProfile;
 			settings.loggedIn = true;
@@ -187,13 +185,12 @@ class WebInterface {
 	@auth @errorDisplay!getSettings
 	void postSettings(string owifurl, string owifusername, string owifpassword, string _authUser)
 	{
-
 		assert(m_userSettings.loggedIn);
-
-		import std.digest.sha:sha256Of;
 		import std.conv:to;	
-		import std.datetime;
-		
+		import std.digest.digest:toHexString;
+		import std.digest.sha:sha256Of;
+		import std.string:format;
+
 		OpenWebIfDB owif = new OpenWebIfDB();
 		OpenWebIfDBEntry owifItem;
 		owifItem.url = owifurl;
@@ -223,7 +220,7 @@ class WebInterface {
 
 	private enum auth = before!ensureAuth("_authUser");
 
-	////	
+	///
 	private string ensureAuth(scope HTTPServerRequest req, scope HTTPServerResponse res)
 	{
 		if (!WebInterface.m_userSettings.loggedIn) redirect("/login");
