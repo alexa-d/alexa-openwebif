@@ -17,11 +17,45 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	private AmazonLoginApiFactory amazonLoginApiFactory = &createAmazonLoginApi;
 
 	///
-	this(string baseUrl, string locale)
+	this(string accessToken, string locale)
 	{
-		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
-
+		import std.conv : to;
+		import std.process : environment;
+		import std.stdio : stderr;
 		import std.string : toLower;
+		import vibe.aws.aws : StaticAWSCredentials;
+		import vibe.aws.dynamodb : DynamoDB;
+		
+		immutable accessKey = environment["ACCESS_KEY"];
+		immutable secretKey = environment["SECRET_KEY"];
+		immutable awsRegion = environment["AWS_DYNAMODB_REGION"]; 
+		immutable owifTableName = environment["OPENWEBIF_TABLENAME"]; 
+		auto creds = new StaticAWSCredentials(accessKey, secretKey); 
+		auto ddb = new DynamoDB(awsRegion, creds); 
+		auto table = ddb.table(owifTableName);
+
+		string baseUrl;
+		try {
+			string password;
+			string user;
+			auto item = table.get("accessToken", accessToken);
+			if("password" in item)
+				password = to!string(item["password"]);
+			if("username" in item)	
+				user = to!string(item["username"]);
+			immutable url= to!string(item["url"]);
+			auto urlSplit = url.split("://");
+			auto protocol = urlSplit[0];
+			auto host = urlSplit[1];
+
+			baseUrl = format("%s://%s:%s@%s",protocol, user, password, host);
+
+		} catch(Exception e)
+		{
+			stderr.writefln("%s has no entry in db: %s", accessToken, e);
+		}
+
+		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
 
 		locale = locale.toLower;
 		immutable isLangDe = locale == "de-de";

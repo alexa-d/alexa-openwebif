@@ -9,7 +9,7 @@ printf "\nupload zip\n"
 aws lambda update-function-code --function-name $AWS_LAMBDA_NAME --zip-file fileb://./arch.zip
 
 printf "\nset environment\n"
-aws lambda update-function-configuration --function-name $AWS_LAMBDA_NAME --environment "Variables={OPENWEBIF_URL=$OPENWEBIF_URL}"
+aws lambda update-function-configuration --function-name $AWS_LAMBDA_NAME --environment "Variables={ACCESS_KEY=$AWS_ACCESS_KEY, SECRET_KEY=$AWS_SECRET_KEY, AWS_DYNAMODB_REGION=$AWS_DYNAMODB_REGION, OPENWEBIF_TABLENAME=$OPENWEBIF_TABLENAME}"
 
 printf "\ntest invoke\n"
 cd ../../

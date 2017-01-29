@@ -10,9 +10,6 @@ import skill;
 ///
 int main(string[] args)
 {
-	import std.process:environment;
-	immutable baseUrl = environment["OPENWEBIF_URL"];
-
 	if(args.length != 4)
 	{
 		stderr.writefln("expected 4 params, found: %s", args.length);
@@ -50,7 +47,7 @@ int main(string[] args)
 		stderr.writefln("could not deserialize context: %s",e);
 	}
 
-	auto skill = new OpenWebifSkill(baseUrl, event.request.locale);
+	auto skill = new OpenWebifSkill(event.session.user.accessToken, event.request.locale);
 
 	return skill.runInEventLoop(event, context);
 }
