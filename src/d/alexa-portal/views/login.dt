@@ -1,0 +1,40 @@
+doctype html
+html
+	head
+		link(rel="stylesheet", href="styles/portal.css")
+		title& openwebif.title
+	body
+		#header
+			h2& index.welcome
+		#content
+			p& index.welcome-text
+			#amazon-root
+			script.
+				window.onAmazonLoginReady = function() {
+					amazon.Login.setClientId('amzn1.application-oa2-client.b67385a2f32440cba272eb0796bb3b34');
+				};
+				(function(d) {
+					var a = d.createElement('script'); a.type = 'text/javascript';
+					a.async = true; a.id = 'amazon-login-sdk';
+					a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
+					d.getElementById('amazon-root').appendChild(a);
+				})(document);
+			#amazonpic
+				a(href="", id="LoginWithAmazon")
+					img(src="https://images-na.ssl-images-amazon.com/images/G/01/lwa/btnLWA_gold_156x32.png", width="156", height="32", border="0", alt="Login with amazon")
+			script.
+				document.getElementById('LoginWithAmazon').onclick = function() {
+				options = { scope : 'profile', popup : false, redirect_uri : "https://#{req.host}/login" };
+				amazon.Login.authorize(options,
+				'https://#{req.host}/login');
+				return false;
+				};
+			script.
+				if (window.location.hash)
+				{
+					var host = window.location.href
+					var host2 = host.replace("#","?") 
+					window.location.href = host2
+				}	
+		#copyright
+			p& index.copyright

@@ -1,0 +1,58 @@
+doctype 5
+html
+    head
+        link(rel="stylesheet", href="styles/portal.css")
+        title & openwebif.title
+    body
+        #header
+            #headerleft
+                p& index.welcome
+            #headerright 
+                p #{settings.profile.name} (#{settings.profile.email}) 
+                a(href='#', id="Logout") Logout
+        #content
+            p& updateform.text
+            #amazon-root
+            script.
+                window.onAmazonLoginReady = function() {
+                    amazon.Login.setClientId('amzn1.application-oa2-client.b67385a2f32440cba272eb0796bb3b34');
+                };
+                (function(d) {
+                    var a = d.createElement('script'); a.type = 'text/javascript';
+                    a.async = true; a.id = 'amazon-login-sdk';
+                    a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
+                    d.getElementById('amazon-root').appendChild(a);
+                })(document);
+            script.
+                document.getElementById('Logout').onclick = function() { 
+                    amazon.Login.logout();
+                    window.location.href = "/logout";
+                }; 
+            form(action="settings", method="POST")
+                table
+                    tr
+                        td 
+                            p& updateform.urltowebif
+                        td 
+                            input(type="text", name="owifurl", value="#{settings.owifSettings.url}", size="40", required)
+                    tr 
+                        td
+                            p& updateform.username
+                        td
+                            input(type="text", name="owifusername", value="#{settings.owifSettings.username}", size="40")
+                    tr
+                        td
+                            p& updateform.password
+                        td
+                            input(type="password", name="owifpassword", size="40")
+                    tr
+                        td
+                            button(type="submit")& updateform.update
+            - if (error.length && error != "Success")
+                p.error = error
+            - else if (error == "Success")
+                p& index.updated
+        #copyright
+            p& index.copyright
+
+
