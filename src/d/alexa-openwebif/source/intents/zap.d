@@ -129,6 +129,64 @@ final class IntentZapRandom : BaseIntent
 }
 
 ///
+final class IntentZapToEvent : BaseIntent
+{
+	private OpenWebifApi apiClient;
+
+	///
+	this(OpenWebifApi api)
+	{
+		apiClient = api;
+	}
+
+	///
+	override AlexaResult onIntent(AlexaEvent event, AlexaContext)
+	{
+		import std.format : format;
+		import std.stdio : writeln;
+
+		auto targetEvent = event.request.intent.slots["targetEvent"].value;
+		auto switchedTo = getText(TextId.ZapFailedSSML);
+		auto eventList = apiClient.epgsearch(targetEvent);
+
+		import std.algorithm : sort;
+		import std.datetime : Clock;
+		import core.stdc.time: time, time_t;
+		
+		time_t now = time(null);
+		auto sortedEventList = eventList.events.sort!((a, b) => a.begin_timestamp < b.begin_timestamp);
+		auto idx = 0;
+		auto idxnext = -1;
+		foreach( thisEvent; sortedEventList)
+		{
+			if ((thisEvent.begin_timestamp > now) && idxnext == -1 )
+				idxnext = idx;
+			if (thisEvent.begin_timestamp <= now && (thisEvent.begin_timestamp + thisEvent.duration_sec) > now)
+				break;
+			idx++;
+		}
+		
+		AlexaResult result;
+		result.response.card.title = getText(TextId.ZapToEventCardTitle);
+		result.response.card.content = getText(TextId.ZapToEventCardContent);
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		if(idx < sortedEventList.length)
+		{
+			apiClient.zap(sortedEventList[idx].sref);
+			switchedTo = sortedEventList[idx].sname;
+			result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML), switchedTo);
+		} 
+		else
+		{
+			auto ev = sortedEventList[idxnext];
+			result.response.outputSpeech.ssml = format(getText(TextId.ZapToEventFailedSSML), ev.title, ev.begin, ev.sname);
+		}
+		
+		return result;
+	}
+}
+
+///
 static AlexaResult doZapIntent(bool up, OpenWebifApi apiClient, ITextManager texts)
 {
 	import std.format : format;

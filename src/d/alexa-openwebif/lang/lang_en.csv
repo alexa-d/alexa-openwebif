@@ -38,6 +38,9 @@ ZapDownCardTitle,       Zap down
 ZapDownCardContent,     Zap down
 ZapRandomCardTitle,     Switch to random channel
 ZapRandomCardContent,   Switch to random channel
+ZapToEventCardTitle,    Switch to program
+ZapToEventCardContent,  Switch to program
+ZapToEventFailedSSML,   <speak>The program is not broadcasted right now. The next programm <p>%s</p> will be at <p>%s</p> on <p>%s</p></speak>
 ZapFailedSSML,          none
 ZapSSML,                <speak>I've switched channel to <p>%s</p></speak>
 ZapUp,                  up
