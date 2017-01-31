@@ -77,6 +77,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		this.addIntent(new IntentZapUp(apiClient));
 		this.addIntent(new IntentZapDown(apiClient));
 		this.addIntent(new IntentZapRandom(apiClient));
+		this.addIntent(new IntentZapToEvent(apiClient));
 	}
 
 	///

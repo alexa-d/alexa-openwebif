@@ -20,6 +20,9 @@ IntentZapTo to change to {targetChannel}
 IntentZapTo to zap to {targetChannel}
 IntentZapTo zap to {targetChannel}
 
+IntentZapToEvent for program {targetEvent}
+IntentZapToEvent if {targetEvent} is on
+
 IntentVolumeUp to turn louder
 IntentVolumeUp volume up
 

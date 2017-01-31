@@ -27,6 +27,12 @@ IntentZapTo schalte auf {targetChannel}
 IntentZapTo schalte {targetChannel}
 IntentZapTo wechsel {targetChannel}
 
+IntentZapToEvent ob die Sendung {targetEvent} läuft
+IntentZapToEvent ob Sendung {targetEvent} läuft
+IntentZapToEvent ob {targetEvent} läuft
+IntentZapToEvent nach der Sendung {targetEvent}
+IntentZapToEvent nach Sendung {targetEvent} 
+
 IntentVolumeUp erhöhe die Lautstärke
 IntentVolumeUp Lautstärke hoch
 IntentVolumeUp lauter

@@ -58,6 +58,13 @@
       "intent": "IntentZapDown"
     },
     {
+      "intent": "IntentZapToEvent",
+      "slots": [{
+        "name": "targetEvent",
+        "type": "EVENT"
+      }]     
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]
