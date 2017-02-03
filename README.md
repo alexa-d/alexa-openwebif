@@ -54,5 +54,5 @@ Provide your url with https protocol, port (default 8080) and path /login in you
 current major planned features:
 
 1. ~~support english language ([#6](https://github.com/Extrawurst/alexa-openwebif/issues/6))~~
-2. ~~support user database to allow publication ([#14](https://github.com/Extrawurst/alexa-openwebif/issues/14))
+2. ~~support user database to allow publication~~ ([#14](https://github.com/Extrawurst/alexa-openwebif/issues/14))
 3. support timeshift ([#5](https://github.com/Extrawurst/alexa-openwebif/issues/5))
