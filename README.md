@@ -48,11 +48,18 @@ $ ./run.sh
 After that you need to build the alexa-portal to host the user interface for account linking based on Login-with-Amazon (ssl certificate need - server.key and server.crt).
 Provide your url with https protocol, port (default 8080) and path /login in your alexa skill as authorization URL in account linking options. Please choose Implicit grant. 
 
+## main featueres
+
+* timeshift
+* epg search
+* zapping (to channel or show)
+* program info
+* turn on/off
+* volume control
+* recording
 
 ## todo
 
 current major planned features:
 
-1. ~~support english language ([#6](https://github.com/Extrawurst/alexa-openwebif/issues/6))~~
-2. ~~support user database to allow publication ([#14](https://github.com/Extrawurst/alexa-openwebif/issues/14))~~
-3. support timeshift ([#5](https://github.com/Extrawurst/alexa-openwebif/issues/5))
+1. conversation mode
