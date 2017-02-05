@@ -57,3 +57,13 @@ CurrentCardTitle,       You're watching
 CurrentCardContent,     You're watching
 CurrentSSML,            <speak>You are on: %s. it is playing: %s</speak>
 CurrentNextSSML,        <speak>You are on: %s. it is playing: %s. up next is: %s</speak>
+RCPlayPauseCardTitle,   Play/Pause 
+RCPlayPauseCardContent, Play/Pause
+RCOKSSML,               <speak>OK</speak>
+RCFailedSSML,           <speak>Failed</speak>
+RCStopCardTitle,        Stop pause
+RCStopCardContent,      Stop pause 
+NotSupportedSSML,       <speak>This function is not supported for your box. Please open a ticket at github</speak>
+RCPreviousCardTitle,    Previous channel
+RCPreviousCardContent,  Previous channel
+}

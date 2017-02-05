@@ -72,3 +72,14 @@ IntentZapDown runter schalten
 
 IntentZapUp schalte hoch
 IntentZapUp hoch schalten
+
+IntentRCPlayPause pausieren
+IntentRCPlayPause pause
+IntentRCPlayPause fortsetzen
+
+IntentRCStop stop
+
+IntentRCPrevious vorheriger Kanal
+IntentRCPrevious vorheriger Sender
+IntentRCPrevious letzter Kanal
+IntentRCPrevious letzter Sender
