@@ -1,0 +1,1 @@
+Enigma2 Control ermöglicht es dir per Sprachsteuerung deinen TV Receiver zu kontrollieren. Schalte Sender um, starte Aufnahmen und vieles mehr.

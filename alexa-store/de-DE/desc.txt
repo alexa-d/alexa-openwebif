@@ -1,0 +1,9 @@
+Mit Enigma2 Control musst du nie wieder deine Fernbedienung suchen. Sag deinem Fernseher einfach was du willst. 
+
+Was kannst du mit Enigma2 Control alles machen ?
+	* Schalte auf einen bestimmten Sender.
+	* Zappe zu einer Sendung die gerade läuft.
+	* Schalte in Standby und zurück.
+	* und vieles mehr...
+
+Um Enigma2 Control nutzen zu können benötigst du einen OpenWebIf-fähigen TV Receiver.  Per Account Linking kannst du dem Skill mitteilen wie er deinen Receiver aus dem Internet erreicht.
