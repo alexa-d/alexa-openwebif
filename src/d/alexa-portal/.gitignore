@@ -7,3 +7,4 @@ __test__*__
 alexa-portal
 dub.selections.json
 server.*
+run.sh
