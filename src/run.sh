@@ -1,5 +1,6 @@
 printf "\nbuild d app\n"
 cd d/alexa-openwebif
+rm dub.selections.json
 dub build --compiler=ldc2
 
 printf "\nbuild zip\n"
