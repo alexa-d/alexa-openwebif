@@ -68,5 +68,14 @@ enum TextId
 	CurrentCardTitle,
 	CurrentCardContent,
 	CurrentSSML,
-	CurrentNextSSML
+	CurrentNextSSML,
+	RCPlayPauseCardTitle,
+	RCPlayPauseCardContent,
+	RCOKSSML,
+	RCFailedSSML,
+	RCStopCardTitle,
+	RCStopCardContent,
+	NotSupportedSSML,
+	RCPreviousCardTitle,
+	RCPreviousCardContent
 }

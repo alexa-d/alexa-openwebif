@@ -57,3 +57,12 @@ CurrentCardTitle,       Es läuft
 CurrentCardContent,     Es läuft
 CurrentSSML,            <speak>Du guckst gerade: <p>%s</p>. Aktuell läuft: %s</speak>
 CurrentNextSSML,        <speak>Du guckst gerade: <p>%s</p>. Aktuell läuft: %s. anschliessend läuft: %s</speak>
+RCPlayPauseCardTitle,   Program pausieren/abspielen
+RCPlayPauseCardContent, Program pausieren/abspielen
+RCOKSSML,               <speak>OK</speak>
+RCFailedSSML,  <speak>Fehlgeschlagen</speak>
+RCStopCardTitle,        Program pausieren abbrechen
+RCStopCardContent,      Program pausieren abbrechen
+NotSupportedSSML,       <speak>Diese Funktion ist für deine Box noch nicht verfügbar. Bitte besuche uns auf github und eröffne ein Ticket</speak>
+RCPreviousCardTitle,    Vorheriger Kanal
+RCPreviousCardContent,  Vorheriger Kanal

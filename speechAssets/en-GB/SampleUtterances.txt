@@ -56,3 +56,11 @@ IntentZapUp switch up
 
 IntentZapDown zap down
 IntentZapDown switch down
+
+IntentRCPlayPause to pause
+IntentRCPlayPause to resume
+
+IntentRCStop to stop pause mode
+
+IntentRCPrevious previous channel
+IntentRCPrevious last channel

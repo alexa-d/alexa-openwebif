@@ -65,6 +65,15 @@
       }]     
     },
     {
+      "intent": "IntentRCPlayPause"
+    },
+    {
+      "intent": "IntentRCStop"
+    },
+    {
+      "intent": "IntentRCPrevious"
+    },
+    {
       "intent": "AMAZON.HelpIntent"
     }
   ]

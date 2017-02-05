@@ -8,7 +8,7 @@ import amazonlogin;
 import texts;
 import intents.about, intents.current, intents.movies, intents.recordnow,
 	intents.services, intents.sleeptimer, intents.togglemute,
-	intents.togglestandby, intents.volume, intents.zap;
+	intents.togglestandby, intents.volume, intents.zap, intents.remotecontrol;
 
 ///
 final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
@@ -78,6 +78,9 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		this.addIntent(new IntentZapDown(apiClient));
 		this.addIntent(new IntentZapRandom(apiClient));
 		this.addIntent(new IntentZapToEvent(apiClient));
+		this.addIntent(new IntentRCPlayPause(apiClient));
+		this.addIntent(new IntentRCStop(apiClient));	
+		this.addIntent(new IntentRCPrevious(apiClient));	
 	}
 
 	///
