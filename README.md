@@ -1,4 +1,4 @@
-[![Donate](https://paypal.me/Wallentowitz)
+[![Donate](https://paypal.me/Wallentowitz)]
 # alexa-openwebif
 alexa skill to control your openwebif device.
 
