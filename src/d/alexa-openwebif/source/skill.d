@@ -25,32 +25,38 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		import std.string : toLower;
 		import vibe.aws.aws : StaticAWSCredentials;
 		import vibe.aws.dynamodb : DynamoDB;
-		
+
 		immutable accessKey = environment["ACCESS_KEY"];
 		immutable secretKey = environment["SECRET_KEY"];
-		immutable awsRegion = environment["AWS_DYNAMODB_REGION"]; 
-		immutable owifTableName = environment["OPENWEBIF_TABLENAME"]; 
-		auto creds = new StaticAWSCredentials(accessKey, secretKey); 
-		auto ddb = new DynamoDB(awsRegion, creds); 
+		immutable awsRegion = environment["AWS_DYNAMODB_REGION"];
+		immutable owifTableName = environment["OPENWEBIF_TABLENAME"];
+		auto creds = new StaticAWSCredentials(accessKey, secretKey);
+		auto ddb = new DynamoDB(awsRegion, creds);
 		auto table = ddb.table(owifTableName);
 
 		string baseUrl;
-		try {
+		try
+		{
 			string password;
 			string user;
 			auto item = table.get("accessToken", accessToken);
-			if("password" in item)
+			if ("password" in item)
 				password = to!string(item["password"]);
-			if("username" in item)	
+			if ("username" in item)
 				user = to!string(item["username"]);
-			immutable url= to!string(item["url"]);
+			immutable url = to!string(item["url"]);
 			auto urlSplit = url.split("://");
 			auto protocol = urlSplit[0];
 			auto host = urlSplit[1];
 
-			baseUrl = format("%s://%s:%s@%s",protocol, user, password, host);
-
-		} catch(Exception e)
+			if (user.length > 0 && password.length > 0)
+				baseUrl = format("%s://%s:%s@%s", protocol, user, password, host);
+			else if (user.length > 0 && password.length == 0)
+				baseUrl = format("%s://%s@%s", protocol, user, host);
+			else if (user.length == 0 && password.length == 0)
+				baseUrl = format("%s://%s", protocol, host);
+		}
+		catch (Exception e)
 		{
 			stderr.writefln("%s has no entry in db: %s", accessToken, e);
 		}
@@ -79,8 +85,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		this.addIntent(new IntentZapRandom(apiClient));
 		this.addIntent(new IntentZapToEvent(apiClient));
 		this.addIntent(new IntentRCPlayPause(apiClient));
-		this.addIntent(new IntentRCStop(apiClient));	
-		this.addIntent(new IntentRCPrevious(apiClient));	
+		this.addIntent(new IntentRCStop(apiClient));
+		this.addIntent(new IntentRCPrevious(apiClient));
 	}
 
 	///
