@@ -9,6 +9,7 @@ IntentServices nach meinen services
 
 IntentMovies nach meinen aufnahmen
 IntentMovies nach meinen filmen
+IntentMovies welche aufnahmen habe ich
 
 IntentToggleMute nach Stumm
 IntentToggleMute Ton auszumachen
@@ -83,3 +84,6 @@ IntentRCPrevious vorheriger Kanal
 IntentRCPrevious vorheriger Sender
 IntentRCPrevious letzter Kanal
 IntentRCPrevious letzter Sender
+IntentRCPrevious zurückschalten
+IntentRCPrevious zurück schalten
+IntentRCPrevious zurück
