@@ -2,7 +2,7 @@ doctype 5
 html
     head
         link(rel="stylesheet", href="styles/portal.css")
-        title & openwebif.title
+        title& openwebif.title
     body
         #header
             #headerleft
@@ -35,19 +35,29 @@ html
                             p& updateform.urltowebif
                         td 
                             input(type="text", name="owifurl", value="#{settings.owifSettings.url}", size="40", required)
+                        td
+                            p& updateform.urltowebifhelp
                     tr 
                         td
                             p& updateform.username
                         td
                             input(type="text", name="owifusername", value="#{settings.owifSettings.username}", size="40")
+                        td
+                            p& updateform.usernamehelp
                     tr
                         td
                             p& updateform.password
                         td
                             input(type="password", name="owifpassword", size="40")
+                        td 
+                            p& updateform.passwordhelp
                     tr
-                        td
+                        td(colspan=3)
                             button(type="submit")& updateform.update
+                    tr  
+                        td(colspan=3)
+                            p& updateform.hint
+                            a(href='https://github.com/Extrawurst/alexa-openwebif/issues', target='_blank') Github Ticket 
             - if (error.length && error != "Success")
                 p.error = error
             - else if (error == "Success")
