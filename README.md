@@ -1,3 +1,4 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/StephanDilly)
 # alexa-openwebif
 alexa skill to control your openwebif device.
 
