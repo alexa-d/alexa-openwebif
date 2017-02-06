@@ -12,9 +12,8 @@ rm -f awscli-bundle.zip
 echo "#################################"
 echo "set env"
 echo export AWS_LAMBDA_NAME=$IN_AWS_LAMBDA_NAME >> /home/vagrant/.bash_profile
-echo export AWS_REGION=$IN_AWS_REGION >> /home/vagrant/.bash_profile
-echo export AWS_KEY_ID=$IN_AWS_KEY_ID >> /home/vagrant/.bash_profile
-echo export AWS_KEY_SECRET=$IN_AWS_KEY_SECRET >> /home/vagrant/.bash_profile
+echo export AWS_DYNAMODB_KEY_ID=$IN_AWS_DYNAMODB_KEY_ID >> /home/vagrant/.bash_profile
+echo export AWS_DYNAMODB_KEY_SECRET=$IN_AWS_DYNAMODB_KEY_SECRET >> /home/vagrant/.bash_profile
 echo export AWS_DYNAMODB_REGION=$IN_AWS_DYNAMODB_REGION >> /home/vagrant/.bash_profile
 echo export OPENWEBIF_TABLENAME=$IN_OPENWEBIF_TABLENAME >> /home/vagrant/.bash_profile
 

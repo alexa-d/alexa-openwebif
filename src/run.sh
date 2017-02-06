@@ -1,6 +1,6 @@
 printf "\nbuild d app\n"
 cd d/alexa-openwebif
-rm dub.selections.json
+dub upgrade
 dub build --compiler=ldc2
 
 printf "\nbuild zip\n"
@@ -10,7 +10,7 @@ printf "\nupload zip\n"
 aws lambda update-function-code --function-name $AWS_LAMBDA_NAME --zip-file fileb://./arch.zip
 
 printf "\nset environment\n"
-aws lambda update-function-configuration --function-name $AWS_LAMBDA_NAME --environment "Variables={ACCESS_KEY=$AWS_ACCESS_KEY, SECRET_KEY=$AWS_SECRET_KEY, AWS_DYNAMODB_REGION=$AWS_DYNAMODB_REGION, OPENWEBIF_TABLENAME=$OPENWEBIF_TABLENAME}"
+aws lambda update-function-configuration --function-name $AWS_LAMBDA_NAME --environment "Variables={ACCESS_KEY=$AWS_DYNAMODB_KEY_ID, SECRET_KEY=$AWS_DYNAMODB_KEY_SECRET, AWS_DYNAMODB_REGION=$AWS_DYNAMODB_REGION, OPENWEBIF_TABLENAME=$OPENWEBIF_TABLENAME}"
 
 printf "\ntest invoke\n"
 cd ../../
