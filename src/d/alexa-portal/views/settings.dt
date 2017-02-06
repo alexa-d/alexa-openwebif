@@ -1,68 +1,42 @@
 doctype 5
 html
     head
-        link(rel="stylesheet", href="styles/portal.css")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
+        link(rel="stylesheet", href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css")
+        script(src="https://code.jquery.com/jquery-1.11.1.min.js")
+        script(src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js")
+        script.
+            function logout() { 
+                amazon.Login.logout();
+                window.location.href = "/logout";
+            }; 
         title& openwebif.title
-    body
-        #header
-            #headerleft
-                p& index.welcome
-            #headerright 
-                p #{settings.profile.name} (#{settings.profile.email}) 
-                a(href='#', id="Logout") Logout
-        #content
-            p& updateform.text
-            #amazon-root
-            script.
-                window.onAmazonLoginReady = function() {
-                    amazon.Login.setClientId('amzn1.application-oa2-client.b67385a2f32440cba272eb0796bb3b34');
-                };
-                (function(d) {
-                    var a = d.createElement('script'); a.type = 'text/javascript';
-                    a.async = true; a.id = 'amazon-login-sdk';
-                    a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
-                    d.getElementById('amazon-root').appendChild(a);
-                })(document);
-            script.
-                document.getElementById('Logout').onclick = function() { 
-                    amazon.Login.logout();
-                    window.location.href = "/logout";
-                }; 
-            form(action="settings", method="POST")
-                table
-                    tr
-                        td 
-                            p& updateform.urltowebif
-                        td 
-                            input(type="text", name="owifurl", value="#{settings.owifSettings.url}", size="40", required)
-                        td
-                            p& updateform.urltowebifhelp
-                    tr 
-                        td
-                            p& updateform.username
-                        td
-                            input(type="text", name="owifusername", value="#{settings.owifSettings.username}", size="40")
-                        td
-                            p& updateform.usernamehelp
-                    tr
-                        td
-                            p& updateform.password
-                        td
-                            input(type="password", name="owifpassword", size="40")
-                        td 
-                            p& updateform.passwordhelp
-                    tr
-                        td(colspan=3)
-                            button(type="submit")& updateform.update
-                    tr  
-                        td(colspan=3)
-                            p& updateform.hint
-                            a(href='https://github.com/Extrawurst/alexa-openwebif/issues', target='_blank') Github Ticket 
-            - if (error.length && error != "Success")
-                p.error = error
-            - else if (error == "Success")
-                p& index.updated
-        #copyright
-            p& index.copyright
-
-
+    body(style='text-align: center')
+        #amazon-root
+        script.
+            window.onAmazonLoginReady = function() {
+                amazon.Login.setClientId('amzn1.application-oa2-client.b67385a2f32440cba272eb0796bb3b34');
+            };
+            (function(d) {
+                var a = d.createElement('script'); a.type = 'text/javascript';
+                a.async = true; a.id = 'amazon-login-sdk';
+                a.src = 'https://api-cdn.amazon.com/sdk/login1.js';
+                d.getElementById('amazon-root').appendChild(a);
+            })(document);
+        img(src='icon-108.png', alt='Openwebif')
+        p& updateform.text
+        form(action="settings", method="POST")
+            div(class="ui-field-contain")
+                input(type="text", name="owifurl", id="owifurl", placeholder="External URL to openwebif", value="#{settings.owifSettings.url}", size="40", required)
+                input(type="text", name="owifusername", id="owifusername", placeholder="Openwebif User", value="#{settings.owifSettings.username}")
+                input(type="password", name="owifpassword", id="owifpassword", placeholder="Openwebif password", value="")
+                button(type="submit", class="ui-btn ui-icon-check ui-btn-icon-left")& updateform.update
+        - if (error.length && error != "Success")
+            p.error = error
+        - else if (error == "Success")
+            p& index.updated
+        p& updateform.hint
+        a(href='https://github.com/Extrawurst/alexa-openwebif/issues', target='_blank') Github Ticket 
+        button(class="ui-btn ui-icon-user ui-btn-icon-left") #{settings.profile.name} (#{settings.profile.email}) 
+        button(id="Logout", class="ui-btn ui-icon-power ui-btn-icon-left", onClick="logout();")& updateform.logout
+        p& index.copyright
