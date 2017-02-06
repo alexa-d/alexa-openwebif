@@ -1,11 +1,14 @@
 doctype html
 html
 	head
-		link(rel="stylesheet", href="styles/portal.css")
+		meta(name="viewport", content="width=device-width, initial-scale=1")
+		link(rel="stylesheet", href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css")
+		script(src="https://code.jquery.com/jquery-1.11.1.min.js")
+		script(src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js")
 		title& openwebif.title
-	body
+	body(style='text-align: center')
 		#header
-			h2& index.welcome
+			img(src='icon-108.png', alt='Openwebif')
 		#content
 			p& index.welcome-text
 			#amazon-root
@@ -35,6 +38,5 @@ html
 					var host = window.location.href
 					var host2 = host.replace("#","?") 
 					window.location.href = host2
-				}	
-		#copyright
-			p& index.copyright
+				};	
+		p& index.copyright
