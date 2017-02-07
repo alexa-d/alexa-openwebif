@@ -25,7 +25,7 @@ html
             })(document);
         img(src='icon-108.png', alt='Openwebif')
         p& updateform.text
-        form(action="settings", method="POST")
+        form(action="settings", method="POST", data-ajax="false")
             div(class="ui-field-contain")
                 input(type="text", name="owifurl", id="owifurl", placeholder="External URL to openwebif", value="#{settings.owifSettings.url}", size="40", required)
                 input(type="text", name="owifusername", id="owifusername", placeholder="Openwebif User", value="#{settings.owifSettings.username}")
