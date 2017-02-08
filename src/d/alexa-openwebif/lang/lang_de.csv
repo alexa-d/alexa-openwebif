@@ -1,14 +1,14 @@
 PleaseLogin,            Bitte log dich ein
 PleaseLoginSSML,        <speak>Bitte log dich in deiner Alexa App ein</speak>
-DefaultCardTitle,       Telly
-HelloCardContent,       Telly sagt hallo zu %s
+DefaultCardTitle,       Enigma Control
+HelloCardContent,       Enigma Control sagt hallo zu %s
 HelloSSML,              <speak>Hallo %s, danke fürs einloggen. Was kann ich für dich tun?</speak>
 ChannelsCardTitle,      Kanäle
 ChannelsCardContent,    Kanäle
 ChannelsSSML,           <speak>Du hast die folgenden Kanäle %s</speak>
-AboutCardTitle,         Telly Info
-AboutCardContent,       Telly Info
-AboutSSML,              <speak>Ich bin Telly, ein Alexa Skill geschrieben in D. Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. Finde mehr über mich heraus bei github.</speak>
+AboutCardTitle,         Enigma Control Info
+AboutCardContent,       Enigma Control Info
+AboutSSML,              <speak>Ich bin Enigma Control, ein Alexa Skill geschrieben in D. Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. Finde mehr über mich heraus bei github.</speak>
 MoviesCardTitle,        Filmliste
 MoviesCardContent,      Filmliste
 MoviesSSML,             <speak>Du hast die folgenden Filme %s</speak>
