@@ -24,7 +24,7 @@ final class IntentSleepTimer : BaseIntent
 	{
 		import std.conv:to;
 		import std.format:format;
-		auto minutes = to!int(event.request.intent.slots["minutes"].value);
+		auto minutes = to!int(event.request.intent.slots["targetMinutes"].value);
 		AlexaResult result;
 		result.response.card.title =  getText(TextId.SleepTimerCardTitle);
 		result.response.card.content = getText(TextId.SleepTimerCardContent);

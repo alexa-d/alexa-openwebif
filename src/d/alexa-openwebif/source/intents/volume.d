@@ -60,7 +60,7 @@ final class IntentSetVolume : BaseIntent
 	{
 		import std.format:format;
 		import std.conv:to;
-		auto targetVolume = to!int(event.request.intent.slots["volume"].value);
+		auto targetVolume = to!int(event.request.intent.slots["targetVolume"].value);
 
 		AlexaResult result;
 		result.response.card.title =  getText(TextId.SetVolumeCardTitle);

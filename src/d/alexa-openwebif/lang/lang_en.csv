@@ -69,3 +69,4 @@ RCPreviousCardContent,  Previous channel
 ErrorCardTitle,         An error has occured
 ErrorCardContent,       Please check if you have provided the correct parameters at https://funok.de:8080 . If you think we missed something please open a ticket with reference %s on https://github.com/alexa-d/alexa-openwebif/issues
 ErrorSSML,              <speak>An error has occured. Please have a look in the alexa app for further information</speak>
+SetVolumeRangeErrorSSML,<speak>Value %s not possible. Pleas provide volume between 0 and 100</speak>
