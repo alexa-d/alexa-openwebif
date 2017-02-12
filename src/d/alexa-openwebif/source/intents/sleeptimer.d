@@ -5,6 +5,9 @@ import openwebif.api;
 import ask.ask;
 
 import texts;
+
+import skill;
+
 ///
 final class IntentSleepTimer : BaseIntent
 {
@@ -29,7 +32,16 @@ final class IntentSleepTimer : BaseIntent
 
 		if(minutes >= 0 && minutes < 999)
 		{
-			auto sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
+			SleepTimer sleepTimer;
+			try
+			{
+				sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
+			}
+			catch (Exception e)
+			{
+				result = returnError(this);
+				return result;
+			}
 			if (sleepTimer.enabled)
 			{
 				if (minutes == 0)

@@ -15,6 +15,8 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 {
 	private OpenWebifApi apiClient;
 	private AmazonLoginApiFactory amazonLoginApiFactory = &createAmazonLoginApi;
+	private AmazonLoginApi amazonLoginApi;
+	private UserProfile amazonProfile;
 
 	///
 	this(string accessToken, string locale)
@@ -33,41 +35,53 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		auto creds = new StaticAWSCredentials(accessKey, secretKey);
 		auto ddb = new DynamoDB(awsRegion, creds);
 		auto table = ddb.table(owifTableName);
-
 		string baseUrl;
-		try
-		{
-			string password;
-			string user;
-			auto item = table.get("accessToken", accessToken);
-			if ("password" in item)
-				password = to!string(item["password"]);
-			if ("username" in item)
-				user = to!string(item["username"]);
-			immutable url = to!string(item["url"]);
-			auto urlSplit = url.split("://");
-			auto protocol = urlSplit[0];
-			auto host = urlSplit[1];
+		string dbAccessToken;
 
-			if (user.length > 0 && password.length > 0)
-				baseUrl = format("%s://%s:%s@%s", protocol, user, password, host);
-			else if (user.length > 0 && password.length == 0)
-				baseUrl = format("%s://%s@%s", protocol, user, host);
-			else if (user.length == 0 && password.length == 0)
-				baseUrl = format("%s://%s", protocol, host);
-		}
-		catch (Exception e)
+		if(runAmazonLogin(accessToken))
 		{
-			stderr.writefln("%s has no entry in db: %s", accessToken, e);
-		}
+			try
+			{
+				string password;
+				string user;
+				import std.digest.sha : sha256Of;
+				import std.digest.digest : toHexString;
+				dbAccessToken = (sha256Of(amazonProfile.user_id)).toHexString();
+				auto item = table.get("accessToken", dbAccessToken);
+				if ("password" in item)
+					password = to!string(item["password"]);
+				if ("username" in item)
+					user = to!string(item["username"]);
+				immutable url = to!string(item["url"]);
+				auto urlSplit = url.split("://");
+				auto protocol = urlSplit[0];
+				auto host = urlSplit[1];
 
-		apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+				if (user.length > 0 && password.length > 0)
+					baseUrl = format("%s://%s:%s@%s", protocol, user, password, host);
+				else if (user.length > 0 && password.length == 0)
+					baseUrl = format("%s://%s@%s", protocol, user, host);
+				else if (user.length == 0 && password.length == 0)
+					baseUrl = format("%s://%s", protocol, host);
+			}
+			catch (Exception e)
+			{
+				stderr.writefln("Username: %s with user id: %s and token %s has no entry in db: %s", amazonProfile.name, amazonProfile.user_id, dbAccessToken, e);
+			}
+			try 
+			{
+				apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+			}
+			catch(Exception e)
+			{
+				stderr.writefln("Error with URL: %s", baseUrl~"/api/");
+			}
+		}
 
 		locale = locale.toLower;
 		immutable isLangDe = locale == "de-de";
 
 		super(isLangDe ? AlexaText_de : AlexaText_en);
-
 		this.addIntent(new IntentAbout());
 		this.addIntent(new IntentCurrent(apiClient));
 		this.addIntent(new IntentMovies(apiClient));
@@ -92,10 +106,11 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	///
 	override AlexaResult onLaunch(AlexaEvent event, AlexaContext)
 	{
+		import std.stdio : stderr;
 		AlexaResult result;
 		result.response.card.title = getText(TextId.DefaultCardTitle);
 
-		if (event.session.user.accessToken.length == 0)
+		if (!(runAmazonLogin(event.session.user.accessToken)))
 		{
 			result.response.card.content = getText(TextId.PleaseLogin);
 			result.response.card.type = AlexaCard.Type.LinkAccount;
@@ -104,28 +119,13 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 		else
 		{
-			auto loginApi = amazonLoginApiFactory(event.session.user.accessToken);
-
-			import std.stdio : stderr;
-
-			try
-			{
-				immutable tokenInfo = loginApi.tokeninfo(event.session.user.accessToken);
-				stderr.writefln("tokenInfo: %s", tokenInfo);
-			}
-			catch (Exception e)
-			{
-				stderr.writefln("tokenInfo parsing error: %s", e);
-			}
-
-			immutable userProfile = loginApi.profile();
-			stderr.writefln("user: %s", userProfile);
+			stderr.writefln("user: %s", amazonProfile);
 
 			result.response.card.content = format(getText(TextId.HelloCardContent),
-					userProfile.name);
+					amazonProfile.name);
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 			result.response.outputSpeech.ssml = .format(getText(TextId.HelloSSML),
-					userProfile.name);
+					amazonProfile.name);
 		}
 
 		return result;
@@ -161,6 +161,29 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		assert(resp.response.card.type != AlexaCard.Type.LinkAccount);
 		assert(canFind(resp.response.card.content, "foobar123"));
 	}
+
+	///
+	bool runAmazonLogin(string _accessToken)
+	{
+	if (_accessToken.length == 0)
+		{
+			return false;
+		}
+		else
+		{
+			amazonLoginApi = amazonLoginApiFactory(_accessToken);
+
+			import std.stdio : stderr;
+
+			try
+				immutable tokenInfo = amazonLoginApi.tokeninfo(_accessToken);
+			catch (Exception e)
+				stderr.writefln("tokenInfo parsing error: %s", e);
+
+			amazonProfile = amazonLoginApi.profile();
+		}
+		return true;
+	}
 }
 
 ///
@@ -189,4 +212,19 @@ unittest
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_de[TextId.PleaseLogin].text);
 	skill = new OpenWebifSkill("", "en-US");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_en[TextId.PleaseLogin].text);
+}
+
+AlexaResult returnError(ITextManager texts)
+{
+	import std.format : format;
+	import std.random : uniform;
+	import std.conv : to;
+
+	AlexaResult result;
+	auto errorId = uniform!uint();
+	result.response.card.title = texts.getText(TextId.ErrorCardTitle);
+	result.response.card.content = format(texts.getText(TextId.ErrorCardContent),to!string(errorId));
+	result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+	result.response.outputSpeech.ssml = texts.getText(TextId.ErrorSSML);
+	return result;
 }

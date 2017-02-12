@@ -5,6 +5,7 @@ import openwebif.api;
 import ask.ask;
 
 import texts;
+
 import skill;
 
 ///
@@ -21,9 +22,10 @@ final class IntentRCPlayPause : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		auto result = doRCIntent("PlayPause",apiClient,this);	
+		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPlayPauseCardTitle);
 		result.response.card.content = getText(TextId.RCPlayPauseCardContent);
+		result = doRCIntent("PlayPause",apiClient,this);	
 		return result;
 	}
 }
@@ -42,9 +44,10 @@ final class IntentRCStop : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		auto result = doRCIntent("Stop",apiClient,this);	
+		AlexaResult result;
 		result.response.card.title = getText(TextId.RCStopCardTitle);
 		result.response.card.content = getText(TextId.RCStopCardContent);
+		result = doRCIntent("Stop",apiClient,this);	
 		return result;
 	}
 }
@@ -63,9 +66,10 @@ final class IntentRCPrevious : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		auto result = doRCIntent("Previous",apiClient,this);	
+		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPreviousCardTitle);
 		result.response.card.content = getText(TextId.RCPreviousCardContent);
+		result = doRCIntent("Previous",apiClient,this);	
 		return result;
 	}
 }
@@ -75,16 +79,34 @@ final class IntentRCPrevious : BaseIntent
 static AlexaResult doRCIntent(string action, OpenWebifApi apiClient, ITextManager texts)
 {
 		import std.format : format;
-		auto boxinfo = apiClient.about();
-		int code;
-
 		AlexaResult result;
+		About boxinfo;
+		try 
+		{
+			boxinfo = apiClient.about();
+		}
+		catch (Exception e)
+		{
+			result = returnError(texts);
+			return result;
+		}
+		int code;
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
 		if (checkBox(boxinfo.info.imagedistro,action,code))
 		{
-			auto rc = apiClient.remotecontrol(code);
+			Remotecontrol rc;
+			// is needed because an call on about doesn't need authorization - this one does - so catch auth errors
+			try 
+			{
+				rc = apiClient.remotecontrol(code);
+			}
+			catch(Exception e)
+			{
+				result = returnError(texts);
+				return result;
+			}
 
 			if(rc.result)
 			{

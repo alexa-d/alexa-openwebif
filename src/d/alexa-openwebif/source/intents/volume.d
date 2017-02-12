@@ -5,6 +5,7 @@ import openwebif.api;
 import ask.ask;
 
 import texts;
+
 import skill;
 
 ///
@@ -67,11 +68,24 @@ final class IntentSetVolume : BaseIntent
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.SetVolumeFailedSSML);
 
-		if (targetVolume >=0 && targetVolume < 100)
+		if (targetVolume >=0 && targetVolume <= 100)
 		{
-			auto res = apiClient.vol("set"~to!string(targetVolume));
+			Vol res;
+			try 
+			{
+				res = apiClient.vol("set"~to!string(targetVolume));
+			} 
+			catch (Exception e)
+			{
+				result = returnError(this);
+				return result;
+			}
 			if (res.result)
 				result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeSSML),res.current);
+		}
+		else 
+		{
+			result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeRangeErrorSSML),to!string(targetVolume));
 		}
 
 		return result;
@@ -87,9 +101,18 @@ static AlexaResult doVolumeIntent(bool increase, OpenWebifApi apiClient, ITextMa
 	if(increase)
 		action = "up";
 
-	auto res = apiClient.vol(action);
-
 	AlexaResult result;
+	Vol res;
+	try
+	{
+		res = apiClient.vol(action);
+	}
+	catch (Exception e)
+	{
+		result = returnError(texts);
+		return result;
+	}
+	
 	result.response.card.title =  texts.getText(TextId.SetVolumeCardTitle);
 	result.response.card.content = texts.getText(TextId.SetVolumeCardContent);
 	result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;

@@ -6,6 +6,8 @@ import ask.ask;
 
 import texts;
 
+import skill;
+
 ///
 final class IntentToggleMute : BaseIntent
 {
@@ -20,9 +22,18 @@ final class IntentToggleMute : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		immutable res = apiClient.vol("mute");
-
 		AlexaResult result;
+		Vol res;
+		try
+		{
+			res = apiClient.vol("mute");
+		}
+		catch (Exception e)
+		{
+			result = returnError(this);
+			return result;
+		}
+
 		result.response.card.title =  getText(TextId.MuteCardTitle);
 		result.response.card.content = getText(TextId.MuteCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;

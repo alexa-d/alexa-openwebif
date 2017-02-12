@@ -6,6 +6,8 @@ import ask.ask;
 
 import texts;
 
+import skill;
+
 ///
 final class IntentToggleStandby : BaseIntent
 {
@@ -20,9 +22,18 @@ final class IntentToggleStandby : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		immutable res = apiClient.powerstate(0);
-
 		AlexaResult result;
+		PowerState res;
+		try
+		{
+			res = apiClient.powerstate(0);
+		}
+		catch (Exception e)
+		{
+			result = returnError(this);
+			return result;
+		}
+		
 		result.response.card.title =  getText(TextId.StandbyCardTitle);
 		result.response.card.content = getText(TextId.StandbyCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
