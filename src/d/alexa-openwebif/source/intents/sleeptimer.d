@@ -5,6 +5,9 @@ import openwebif.api;
 import ask.ask;
 
 import texts;
+
+import skill;
+
 ///
 final class IntentSleepTimer : BaseIntent
 {
@@ -21,7 +24,7 @@ final class IntentSleepTimer : BaseIntent
 	{
 		import std.conv:to;
 		import std.format:format;
-		auto minutes = to!int(event.request.intent.slots["minutes"].value);
+		auto minutes = to!int(event.request.intent.slots["targetMinutes"].value);
 		AlexaResult result;
 		result.response.card.title =  getText(TextId.SleepTimerCardTitle);
 		result.response.card.content = getText(TextId.SleepTimerCardContent);
@@ -29,7 +32,16 @@ final class IntentSleepTimer : BaseIntent
 
 		if(minutes >= 0 && minutes < 999)
 		{
-			auto sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
+			SleepTimer sleepTimer;
+			try
+			{
+				sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
+			}
+			catch (Exception e)
+			{
+				result = returnError(this);
+				return result;
+			}
 			if (sleepTimer.enabled)
 			{
 				if (minutes == 0)

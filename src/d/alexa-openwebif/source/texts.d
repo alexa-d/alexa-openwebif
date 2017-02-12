@@ -77,5 +77,9 @@ enum TextId
 	RCStopCardContent,
 	NotSupportedSSML,
 	RCPreviousCardTitle,
-	RCPreviousCardContent
+	RCPreviousCardContent,
+	ErrorCardTitle,
+	ErrorCardContent,
+	ErrorSSML,
+	SetVolumeRangeErrorSSML
 }

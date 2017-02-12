@@ -6,6 +6,8 @@ import ask.ask;
 
 import texts;
 
+import skill;
+
 ///
 final class IntentCurrent : BaseIntent
 {
@@ -22,10 +24,18 @@ final class IntentCurrent : BaseIntent
 	{
 		import std.format : format;
 		import std.string : replace;
-
-		auto currentService = apiClient.getcurrent();
-
+		CurrentService currentService;
 		AlexaResult result;
+		try 
+		{
+			currentService = apiClient.getcurrent();
+		}
+		catch (Exception e)
+		{
+			result = returnError(this);
+			return result;
+		}		
+		
 		result.response.card.title = getText(TextId.CurrentCardTitle);
 		result.response.card.content = getText(TextId.CurrentCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;

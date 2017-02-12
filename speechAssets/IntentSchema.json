@@ -30,14 +30,14 @@
     {
       "intent": "IntentSetVolume",
       "slots": [{
-        "name": "volume",
+        "name": "targetVolume",
         "type": "AMAZON.NUMBER"
       }]
     },
     {
       "intent": "IntentSleepTimer",
       "slots": [{
-        "name": "minutes",
+        "name": "targetMinutes",
         "type": "AMAZON.DURATION"
       }]
     },

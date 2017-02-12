@@ -5,6 +5,7 @@ import openwebif.api;
 import ask.ask;
 
 import texts;
+
 import skill;
 
 ///
@@ -22,10 +23,17 @@ final class IntentServices : BaseIntent
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
 		import std.format:format;
-
-		auto serviceList = removeMarkers(apiClient.getallservices());
-
+		ServicesList serviceList;
 		AlexaResult result;
+		try
+		{
+			serviceList = removeMarkers(apiClient.getallservices());
+		}
+		catch (Exception e)
+		{
+			result = returnError(this);
+			return result;
+		}
 		result.response.card.title = getText(TextId.ChannelsCardTitle);
 		result.response.card.content = getText(TextId.ChannelsCardContent);
 
