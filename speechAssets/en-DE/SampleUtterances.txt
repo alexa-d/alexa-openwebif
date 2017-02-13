@@ -1,17 +1,28 @@
 IntentCurrent was gerade läuft
+IntentCurrent was ich gerade gucke
 IntentCurrent was aktuell läuft
 IntentCurrent was ist das
 IntentCurrent aktuell
+IntentCurrent was läuft gerade
+IntentCurrent was gucke ich gerade
 
 IntentServices nach meinen kanälen
 IntentServices nach meinen sendern
 IntentServices nach meinen services
+IntentServices meine Kanäle
+IntentServices meine Sender
+IntentServices meine Services 
 
 IntentMovies nach meinen aufnahmen
 IntentMovies nach meinen filmen
 IntentMovies welche aufnahmen habe ich
+IntentMovies meine aufnahmen
 
-IntentToggleMute nach Stumm
+IntentToggleMute Ton ausschalten
+IntentToggleMute mute
+IntentToggleMute nach Ton ausschalten
+IntentToggleMute nach stumm schalten
+IntentToggleMute Stumm schalten
 IntentToggleMute Ton auszumachen
 IntentToggleMute Ton an
 IntentToggleMute Ton aus
@@ -58,9 +69,13 @@ IntentRecordNow jetzt aufnehmen
 IntentSetVolume die Lautstärke auf {targetVolume} setzen
 IntentSetVolume die Lautstärke auf {targetVolume} zu setzen
 IntentSetVolume Lautstärke auf {targetVolume}
+IntentSetVolume Lautstärke auf {targetVolume} erhöhen
+IntentSetVolume Lautstärke auf {targetVolume} verringern
 
-IntentSleepTimer einschlafen in {targetMinutes}
-IntentSleepTimer ausschalten in {targetMinutes}
+IntentSleepTimer nach sleep timer in {targetMinutes}
+IntentSleepTimer nach einschlafen in {targetMinutes}
+IntentSleepTimer nach ausschalten in {targetMinutes}
+IntentSleepTimer sleep timer in {targetMinutes}
 
 IntentAbout worin es geschrieben wurde
 IntentAbout wo es her kommt
