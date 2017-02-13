@@ -33,6 +33,8 @@ IntentZapToEvent ob Sendung {targetEvent} läuft
 IntentZapToEvent ob {targetEvent} läuft
 IntentZapToEvent nach der Sendung {targetEvent}
 IntentZapToEvent nach Sendung {targetEvent} 
+IntentZapToEvent such nach Sendung {targetEvent} 
+IntentZapToEvent Sendung {targetEvent} 
 
 IntentVolumeUp erhöhe die Lautstärke
 IntentVolumeUp Lautstärke hoch
