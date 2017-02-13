@@ -33,15 +33,12 @@ final class IntentSleepTimer : BaseIntent
 		if(minutes >= 0 && minutes < 999)
 		{
 			SleepTimer sleepTimer;
+
 			try
-			{
 				sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
-			}
 			catch (Exception e)
-			{
-				result = returnError(this);
-				return result;
-			}
+				return returnError(this, e);
+
 			if (sleepTimer.enabled)
 			{
 				if (minutes == 0)

@@ -26,14 +26,10 @@ final class IntentServices : BaseIntent
 		ServicesList serviceList;
 		AlexaResult result;
 		try
-		{
 			serviceList = removeMarkers(apiClient.getallservices());
-		}
 		catch (Exception e)
-		{
-			result = returnError(this);
-			return result;
-		}
+			return returnError(this, e);
+
 		result.response.card.title = getText(TextId.ChannelsCardTitle);
 		result.response.card.content = getText(TextId.ChannelsCardContent);
 

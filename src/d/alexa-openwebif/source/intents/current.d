@@ -26,15 +26,11 @@ final class IntentCurrent : BaseIntent
 		import std.string : replace;
 		CurrentService currentService;
 		AlexaResult result;
-		try 
-		{
+		
+		try
 			currentService = apiClient.getcurrent();
-		}
 		catch (Exception e)
-		{
-			result = returnError(this);
-			return result;
-		}		
+			return returnError(this, e);
 		
 		result.response.card.title = getText(TextId.CurrentCardTitle);
 		result.response.card.content = getText(TextId.CurrentCardContent);

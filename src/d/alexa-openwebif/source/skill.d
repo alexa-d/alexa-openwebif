@@ -218,16 +218,20 @@ unittest
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_en[TextId.PleaseLogin].text);
 }
 
-AlexaResult returnError(ITextManager texts)
+AlexaResult returnError(ITextManager texts, Exception e)
 {
 	import std.format : format;
 	import std.random : uniform;
 	import std.conv : to;
+	import std.digest.crc : hexDigest, CRC32;
+	import std.stdio : stderr;
 
 	AlexaResult result;
 	auto errorId = uniform!uint();
+	auto errorHash = hexDigest!CRC32(to!string(errorId));
+	stderr.writefln("Error: %s - Exception: %s", errorHash, e);
 	result.response.card.title = texts.getText(TextId.ErrorCardTitle);
-	result.response.card.content = format(texts.getText(TextId.ErrorCardContent),to!string(errorId));
+	result.response.card.content = format(texts.getText(TextId.ErrorCardContent),errorHash);
 	result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 	result.response.outputSpeech.ssml = texts.getText(TextId.ErrorSSML);
 	return result;

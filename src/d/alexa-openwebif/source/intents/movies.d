@@ -26,15 +26,9 @@ final class IntentMovies : BaseIntent
 		MovieList movies;
 		AlexaResult result;
 		try
-		{
 			movies = apiClient.movielist();
-		}
 		catch (Exception e)
-		{
-			result = returnError(this);
-			return result;
-		}
-
+			return returnError(this, e);
 
 		result.response.card.title = getText(TextId.MoviesCardTitle);
 		result.response.card.content = getText(TextId.MoviesCardContent);

@@ -71,19 +71,15 @@ final class IntentSetVolume : BaseIntent
 		if (targetVolume >=0 && targetVolume <= 100)
 		{
 			Vol res;
-			try 
-			{
+			try
 				res = apiClient.vol("set"~to!string(targetVolume));
-			} 
 			catch (Exception e)
-			{
-				result = returnError(this);
-				return result;
-			}
+				return returnError(this, e);
+
 			if (res.result)
 				result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeSSML),res.current);
 		}
-		else 
+		else
 		{
 			result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeRangeErrorSSML),to!string(targetVolume));
 		}
@@ -104,15 +100,10 @@ static AlexaResult doVolumeIntent(bool increase, OpenWebifApi apiClient, ITextMa
 	AlexaResult result;
 	Vol res;
 	try
-	{
 		res = apiClient.vol(action);
-	}
 	catch (Exception e)
-	{
-		result = returnError(texts);
-		return result;
-	}
-	
+		return returnError(texts, e);
+
 	result.response.card.title =  texts.getText(TextId.SetVolumeCardTitle);
 	result.response.card.content = texts.getText(TextId.SetVolumeCardContent);
 	result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;

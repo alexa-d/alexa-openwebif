@@ -25,14 +25,9 @@ final class IntentToggleMute : BaseIntent
 		AlexaResult result;
 		Vol res;
 		try
-		{
 			res = apiClient.vol("mute");
-		}
 		catch (Exception e)
-		{
-			result = returnError(this);
-			return result;
-		}
+			return returnError(this, e);
 
 		result.response.card.title =  getText(TextId.MuteCardTitle);
 		result.response.card.content = getText(TextId.MuteCardContent);

@@ -25,15 +25,10 @@ final class IntentRecordNow : BaseIntent
 		RecordNow res;
 		AlexaResult result;
 		try
-		{
 			res = apiClient.recordnow();
-		}
 		catch (Exception e)
-		{
-			result = returnError(this);
-			return result;
-		}
-		
+			return returnError(this, e);
+
 		result.response.card.title =  getText(TextId.RecordNowCardTitle);
 		result.response.card.content = getText(TextId.RecordNowCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
