@@ -71,9 +71,7 @@ final class IntentZapUp : BaseIntent
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapUpCardTitle);
 		result.response.card.content = getText(TextId.ZapUpCardContent);
-		result = doZapIntent(true, apiClient, this);
-
-		return result;
+		return doZapIntent(true, apiClient, this, result);
 	}
 }
 
@@ -94,9 +92,7 @@ final class IntentZapDown : BaseIntent
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapDownCardTitle);
 		result.response.card.content = getText(TextId.ZapDownCardContent);
-		result = doZapIntent(false, apiClient, this);
-
-		return result;
+		return doZapIntent(false, apiClient, this, result);
 	}
 }
 
@@ -117,7 +113,7 @@ final class IntentZapRandom : BaseIntent
 		import std.format : format;
 
 		Subservice matchedServices;
-		AlexaResult result;
+
 		ServicesList allservices;
 
 		auto switchedTo = getText(TextId.ZapFailedSSML);
@@ -132,7 +128,7 @@ final class IntentZapRandom : BaseIntent
 			apiClient.zap(matchedServices.servicereference);
 			switchedTo = matchedServices.servicename;
 		}
-
+		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapRandomCardTitle);
 		result.response.card.content = getText(TextId.ZapRandomCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -206,12 +202,11 @@ final class IntentZapToEvent : BaseIntent
 }
 
 ///
-static AlexaResult doZapIntent(bool up, OpenWebifApi apiClient, ITextManager texts)
+static AlexaResult doZapIntent(bool up, OpenWebifApi apiClient, ITextManager texts, AlexaResult result)
 {
 	import std.format : format;
 
 	Subservice matchedServices;
-	AlexaResult result;
 	ServicesList allservices;
 
 	auto switchedTo = texts.getText(TextId.ZapFailedSSML);
