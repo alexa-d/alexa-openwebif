@@ -165,7 +165,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	///
 	bool runAmazonLogin(string _accessToken)
 	{
-	if (_accessToken.length == 0)
+		if (_accessToken.length == 0)
 		{
 			return false;
 		}
