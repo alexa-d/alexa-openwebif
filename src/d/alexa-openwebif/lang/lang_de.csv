@@ -41,6 +41,7 @@ ZapRandomCardContent,   Zufälliges umschalten
 ZapToEventCardTitle,    Umschalten zu Sendung
 ZapToEventCardContent,  Umschalten zu Sendung
 ZapToEventFailedSSML,   <speak>Die Sendung läuft zur Zeit leider nicht. Die nächste Sendung <p>%s</p> läuft um <p>%s Uhr</p> auf <p>%s</p></speak>
+ZapToEventNotFoundSSML, <speak>Die Sendung konnte in deinem e p g nicht gefunden werden</speak>
 ZapFailedSSML,          nichts
 ZapSSML,                <speak>Ich habe umgeschaltet zu: <p>%s</p></speak>
 ZapUp,                  hoch
@@ -55,8 +56,8 @@ SleepTimerFailedSSML,   <speak>Der Timer konnte nicht gesetzt werden.</speak>
 SleepTimerNoTimerSSML,  <speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>
 CurrentCardTitle,       Es läuft
 CurrentCardContent,     Es läuft
-CurrentSSML,            <speak>Du guckst gerade: <p>%s</p>. Aktuell läuft: %s</speak>
-CurrentNextSSML,        <speak>Du guckst gerade: <p>%s</p>. Aktuell läuft: %s. anschliessend läuft: %s</speak>
+CurrentSSML,            <speak>Du guckst gerade: <p>%s</p> Aktuell läuft: %s</speak>
+CurrentNextSSML,        <speak>Du guckst gerade: <p>%s</p> Aktuell läuft: %s anschliessend läuft: %s</speak>
 RCPlayPauseCardTitle,   Program pausieren/abspielen
 RCPlayPauseCardContent, Program pausieren/abspielen
 RCOKSSML,               <speak>OK</speak>

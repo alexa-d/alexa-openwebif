@@ -25,13 +25,13 @@ final class IntentCurrent : BaseIntent
 		import std.format : format;
 		import std.string : replace;
 		CurrentService currentService;
-		AlexaResult result;
-		
+
 		try
 			currentService = apiClient.getcurrent();
 		catch (Exception e)
 			return returnError(this, e);
-		
+
+		AlexaResult result;
 		result.response.card.title = getText(TextId.CurrentCardTitle);
 		result.response.card.content = getText(TextId.CurrentCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
