@@ -27,7 +27,6 @@ final class IntentZapTo : BaseIntent
 		auto targetChannel = event.request.intent.slots["targetChannel"].value;
 		Subservice matchedServices;
 		auto switchedTo = getText(TextId.ZapFailedSSML);
-		AlexaResult result;
 
 		if (targetChannel.length > 0)
 		{
@@ -38,7 +37,7 @@ final class IntentZapTo : BaseIntent
 			}
 			catch (Exception e)
 			{
-				result = returnError(this);
+				auto result = returnError(this);
 				return result;
 			}
 			matchedServices = zapTo(targetChannel, allservices);
@@ -49,7 +48,7 @@ final class IntentZapTo : BaseIntent
 			apiClient.zap(matchedServices.servicereference);
 			switchedTo = matchedServices.servicename;
 		}
-		
+		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapToCardTitle);
 		result.response.card.content = getText(TextId.ZapToCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -77,7 +76,7 @@ final class IntentZapUp : BaseIntent
 		result.response.card.title = getText(TextId.ZapUpCardTitle);
 		result.response.card.content = getText(TextId.ZapUpCardContent);
 		result = doZapIntent(true, apiClient, this);
-		
+
 		return result;
 	}
 }
