@@ -6,6 +6,8 @@ import ask.ask;
 
 import texts;
 
+import skill;
+
 ///
 final class IntentMovies : BaseIntent
 {
@@ -21,9 +23,13 @@ final class IntentMovies : BaseIntent
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
 		import std.format:format;
-		auto movies = apiClient.movielist();
-
+		MovieList movies;
 		AlexaResult result;
+		try
+			movies = apiClient.movielist();
+		catch (Exception e)
+			return returnError(this, e);
+
 		result.response.card.title = getText(TextId.MoviesCardTitle);
 		result.response.card.content = getText(TextId.MoviesCardContent);
 

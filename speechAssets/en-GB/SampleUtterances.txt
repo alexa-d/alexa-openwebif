@@ -37,11 +37,11 @@ IntentRecordNow record
 IntentRecordNow start recording
 IntentRecordNow record now
 
-IntentSetVolume to set volume {volume}
-IntentSetVolume turn volume to {volume} 
+IntentSetVolume to set volume {targetVolume}
+IntentSetVolume turn volume to {targetVolume} 
 
-IntentSleepTimer to sleep in {minutes}
-IntentSleepTimer sleep in {minutes}
+IntentSleepTimer to sleep in {targetMinutes}
+IntentSleepTimer sleep in {targetMinutes}
 
 IntentAbout what it is written in
 IntentAbout where it is coming from

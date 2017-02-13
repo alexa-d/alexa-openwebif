@@ -5,6 +5,7 @@ import openwebif.api;
 import ask.ask;
 
 import texts;
+
 import skill;
 
 ///
@@ -21,10 +22,10 @@ final class IntentRCPlayPause : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		auto result = doRCIntent("PlayPause",apiClient,this);	
+		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPlayPauseCardTitle);
 		result.response.card.content = getText(TextId.RCPlayPauseCardContent);
-		return result;
+		return doRCIntent("PlayPause", apiClient, this, result);	
 	}
 }
 
@@ -42,10 +43,10 @@ final class IntentRCStop : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		auto result = doRCIntent("Stop",apiClient,this);	
+		AlexaResult result;
 		result.response.card.title = getText(TextId.RCStopCardTitle);
 		result.response.card.content = getText(TextId.RCStopCardContent);
-		return result;
+		return doRCIntent("Stop", apiClient, this, result);	
 	}
 }
 
@@ -63,29 +64,37 @@ final class IntentRCPrevious : BaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		auto result = doRCIntent("Previous",apiClient,this);	
+		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPreviousCardTitle);
 		result.response.card.content = getText(TextId.RCPreviousCardContent);
-		return result;
+		return doRCIntent("Previous", apiClient, this, result);	
 	}
 }
 
 
 ///
-static AlexaResult doRCIntent(string action, OpenWebifApi apiClient, ITextManager texts)
+static AlexaResult doRCIntent(string action, OpenWebifApi apiClient, ITextManager texts, AlexaResult result)
 {
 		import std.format : format;
-		auto boxinfo = apiClient.about();
+		About boxinfo;
+		try
+			boxinfo = apiClient.about();
+		catch (Exception e)
+			return returnError(texts, e);
+		
 		int code;
-
-		AlexaResult result;
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
 		if (checkBox(boxinfo.info.imagedistro,action,code))
 		{
-			auto rc = apiClient.remotecontrol(code);
-
+			Remotecontrol rc;
+			// is needed because an call on about doesn't need authorization - this one does - so catch auth errors
+			try 
+				rc = apiClient.remotecontrol(code); 
+			catch(Exception e) 
+				return returnError(texts, e);
+			
 			if(rc.result)
 			{
 				result.response.outputSpeech.ssml = texts.getText(TextId.RCOKSSML);
