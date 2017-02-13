@@ -81,4 +81,5 @@ enum TextId
 	ErrorCardTitle,
 	ErrorCardContent,
 	ErrorSSML,
+	SetVolumeRangeErrorSSML
 }

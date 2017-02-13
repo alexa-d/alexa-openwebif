@@ -69,3 +69,4 @@ RCPreviousCardContent,  Vorheriger Kanal
 ErrorCardTitle,         Es ist ein Fehler aufgetreten
 ErrorCardContent,       Bitte prüfe auf https://funok.de:8080/ ob deine Openwebif Daten richtig eingetragen sind. Solltest du weiterhin Probleme haben kannst du gerne ein Ticket mit der Referenz: %s auf https://github.com/alexa-d/alexa-openwebif/issues eröffnen.
 ErrorSSML,              <speak>Es ist ein Fehler aufgetreten. Genauere Informationen findest du in deiner Alexa App.</speak>
+SetVolumeRangeErrorSSML,<speak>Der Wert %s ist als Lautstärke nicht möglich. 0-100 möglich.</speak>

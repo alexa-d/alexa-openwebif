@@ -53,12 +53,12 @@ IntentRecordNow aufnehmen
 IntentRecordNow Aufnahme starten
 IntentRecordNow jetzt aufnehmen
 
-IntentSetVolume die Lautstärke auf {volume} setzen
-IntentSetVolume die Lautstärke auf {volume} zu setzen
-IntentSetVolume Lautstärke auf {volume}
+IntentSetVolume die Lautstärke auf {targetVolume} setzen
+IntentSetVolume die Lautstärke auf {targetVolume} zu setzen
+IntentSetVolume Lautstärke auf {targetVolume}
 
-IntentSleepTimer einschlafen in {minutes}
-IntentSleepTimer ausschalten in {minutes}
+IntentSleepTimer einschlafen in {targetMinutes}
+IntentSleepTimer ausschalten in {targetMinutes}
 
 IntentAbout worin es geschrieben wurde
 IntentAbout wo es her kommt
