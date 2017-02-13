@@ -41,6 +41,7 @@ ZapRandomCardContent,   Zufälliges umschalten
 ZapToEventCardTitle,    Umschalten zu Sendung
 ZapToEventCardContent,  Umschalten zu Sendung
 ZapToEventFailedSSML,   <speak>Die Sendung läuft zur Zeit leider nicht. Die nächste Sendung <p>%s</p> läuft um <p>%s Uhr</p> auf <p>%s</p></speak>
+ZapToEventNotFoundSSML, <speak>Die Sendung konnte in deinem e p g nicht gefunden werden</speak>
 ZapFailedSSML,          nichts
 ZapSSML,                <speak>Ich habe umgeschaltet zu: <p>%s</p></speak>
 ZapUp,                  hoch

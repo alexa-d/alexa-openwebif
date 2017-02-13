@@ -159,11 +159,20 @@ final class IntentZapToEvent : BaseIntent
 
 		EPGSearchList eventList;
 		AlexaResult result;
+		result.response.card.title = getText(TextId.ZapToEventCardTitle);
+		result.response.card.content = getText(TextId.ZapToEventCardContent);
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
 		try
 			eventList = apiClient.epgsearch(targetEvent);
 		catch (Exception e)
 			return returnError(this, e);
+
+		if (eventList.events.length == 0)
+		{
+			result.response.outputSpeech.ssml = getText(TextId.ZapToEventNotFoundSSML);
+			return result;
+		}
 
 		import std.algorithm : sort;
 		import std.datetime : Clock;
@@ -182,9 +191,6 @@ final class IntentZapToEvent : BaseIntent
 			idx++;
 		}
 
-		result.response.card.title = getText(TextId.ZapToEventCardTitle);
-		result.response.card.content = getText(TextId.ZapToEventCardContent);
-		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		if(idx < sortedEventList.length)
 		{
 			apiClient.zap(sortedEventList[idx].sref);

@@ -41,6 +41,7 @@ ZapRandomCardContent,   Switch to random channel
 ZapToEventCardTitle,    Switch to program
 ZapToEventCardContent,  Switch to program
 ZapToEventFailedSSML,   <speak>The program is not broadcasted right now. The next programm <p>%s</p> will be at <p>%s</p> on <p>%s</p></speak>
+ZapToEventNotFoundSSML, <speak>The program could not be found in your e p g</speak>
 ZapFailedSSML,          none
 ZapSSML,                <speak>I've switched channel to <p>%s</p></speak>
 ZapUp,                  up
@@ -57,12 +58,12 @@ CurrentCardTitle,       You're watching
 CurrentCardContent,     You're watching
 CurrentSSML,            <speak>You are on: %s. it is playing: %s</speak>
 CurrentNextSSML,        <speak>You are on: %s. it is playing: %s. up next is: %s</speak>
-RCPlayPauseCardTitle,   Play/Pause 
+RCPlayPauseCardTitle,   Play/Pause
 RCPlayPauseCardContent, Play/Pause
 RCOKSSML,               <speak>OK</speak>
 RCFailedSSML,           <speak>Failed</speak>
 RCStopCardTitle,        Stop pause
-RCStopCardContent,      Stop pause 
+RCStopCardContent,      Stop pause
 NotSupportedSSML,       <speak>This function is not supported for your box. Please open a ticket at github</speak>
 RCPreviousCardTitle,    Previous channel
 RCPreviousCardContent,  Previous channel

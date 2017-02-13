@@ -53,6 +53,7 @@ enum TextId
 	ZapToEventCardTitle,
 	ZapToEventCardContent,
 	ZapToEventFailedSSML,
+	ZapToEventNotFoundSSML,
 	ZapFailedSSML,
 	ZapSSML,
 	ZapUp,
