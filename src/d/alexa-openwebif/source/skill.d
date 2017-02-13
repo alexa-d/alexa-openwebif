@@ -176,11 +176,15 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			import std.stdio : stderr;
 
 			try
+			{
 				immutable tokenInfo = amazonLoginApi.tokeninfo(_accessToken);
+				amazonProfile = amazonLoginApi.profile();
+			}
 			catch (Exception e)
+			{
 				stderr.writefln("tokenInfo parsing error: %s", e);
-
-			amazonProfile = amazonLoginApi.profile();
+				return false;
+			}
 		}
 		return true;
 	}
