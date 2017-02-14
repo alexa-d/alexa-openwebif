@@ -6,51 +6,51 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentSleepTimer : BaseIntent
+final class IntentSleepTimer : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
 	override AlexaResult onIntent(AlexaEvent event, AlexaContext)
 	{
-		import std.conv:to;
-		import std.format:format;
+		import std.conv : to;
+		import std.format : format;
+
 		auto minutes = to!int(event.request.intent.slots["targetMinutes"].value);
 		AlexaResult result;
-		result.response.card.title =  getText(TextId.SleepTimerCardTitle);
+		result.response.card.title = getText(TextId.SleepTimerCardTitle);
 		result.response.card.content = getText(TextId.SleepTimerCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
-		if(minutes >= 0 && minutes < 999)
+		if (minutes >= 0 && minutes < 999)
 		{
 			SleepTimer sleepTimer;
 
 			try
-				sleepTimer = apiClient.sleeptimer("get","standby",0, "False");
+				sleepTimer = apiClient.sleeptimer("get", "standby", 0, "False");
 			catch (Exception e)
-				return returnError(this, e);
+				return returnError(e);
 
 			if (sleepTimer.enabled)
 			{
 				if (minutes == 0)
 				{
-					sleepTimer = apiClient.sleeptimer("set","",0, "False");
+					sleepTimer = apiClient.sleeptimer("set", "", 0, "False");
 					result.response.outputSpeech.ssml = getText(TextId.SleepTimerOffSSML);
 				}
 				else
 				{
-					auto sleepTimerNew = apiClient.sleeptimer("set","standby", to!int(minutes), "True");
-					result.response.outputSpeech.ssml =
-						format(getText(TextId.SleepTimerResetSSML),sleepTimer.minutes,sleepTimerNew.minutes);
+					auto sleepTimerNew = apiClient.sleeptimer("set", "standby",
+							to!int(minutes), "True");
+					result.response.outputSpeech.ssml = format(getText(TextId.SleepTimerResetSSML),
+							sleepTimer.minutes, sleepTimerNew.minutes);
 				}
 			}
 			else
@@ -59,11 +59,11 @@ final class IntentSleepTimer : BaseIntent
 				{
 					result.response.outputSpeech.ssml = getText(TextId.SleepTimerNoTimerSSML);
 				}
-				else if (minutes >0)
+				else if (minutes > 0)
 				{
 					sleepTimer = apiClient.sleeptimer("set", "standby", to!int(minutes), "True");
-					result.response.outputSpeech.ssml =
-						format(getText(TextId.SleepTimerSetSSML),sleepTimer.minutes);
+					result.response.outputSpeech.ssml = format(getText(TextId.SleepTimerSetSSML),
+							sleepTimer.minutes);
 				}
 				else
 				{
@@ -79,4 +79,3 @@ final class IntentSleepTimer : BaseIntent
 		return result;
 	}
 }
-

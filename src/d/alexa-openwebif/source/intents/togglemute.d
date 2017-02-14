@@ -6,17 +6,15 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentToggleMute : BaseIntent
+final class IntentToggleMute : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -27,16 +25,16 @@ final class IntentToggleMute : BaseIntent
 		try
 			res = apiClient.vol("mute");
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
-		result.response.card.title =  getText(TextId.MuteCardTitle);
+		result.response.card.title = getText(TextId.MuteCardTitle);
 		result.response.card.content = getText(TextId.MuteCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.MuteFailedSSML);
 
-		if(res.result && res.ismute)
+		if (res.result && res.ismute)
 			result.response.outputSpeech.ssml = getText(TextId.MutedSSML);
-		else if(res.result && !res.ismute)
+		else if (res.result && !res.ismute)
 			result.response.outputSpeech.ssml = getText(TextId.UnMutedSSML);
 
 		return result;

@@ -6,44 +6,43 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentServices : BaseIntent
+final class IntentServices : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		import std.format:format;
+		import std.format : format;
+
 		ServicesList serviceList;
 		AlexaResult result;
 		try
 			serviceList = removeMarkers(apiClient.getallservices());
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
 		result.response.card.title = getText(TextId.ChannelsCardTitle);
 		result.response.card.content = getText(TextId.ChannelsCardContent);
 
 		string channels;
 
-		foreach(service; serviceList.services)
+		foreach (service; serviceList.services)
 		{
-			foreach(subservice; service.subservices) {
-				channels ~= format("<p>%s</p>",subservice.servicename);
+			foreach (subservice; service.subservices)
+			{
+				channels ~= format("<p>%s</p>", subservice.servicename);
 			}
 		}
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml =
-			format(getText(TextId.ChannelsSSML),channels);
+		result.response.outputSpeech.ssml = format(getText(TextId.ChannelsSSML), channels);
 
 		return result;
 	}

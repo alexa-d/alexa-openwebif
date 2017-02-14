@@ -17,28 +17,61 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	private AmazonLoginApiFactory amazonLoginApiFactory = &createAmazonLoginApi;
 	private AmazonLoginApi amazonLoginApi;
 	private UserProfile amazonProfile;
+	private BaseIntent aboutIntent;
+	private bool accountsSetup;
 
 	///
-	this(string accessToken, string locale)
+	this(string accessToken, string locale, string accessKey, string secretKey,
+			string awsRegion, string owifTableName)
+	{
+		accountsSetup = setupAccounts(accessToken, accessKey, secretKey, awsRegion, owifTableName);
+
+		locale = locale.toLower;
+		immutable isLangDe = locale == "de-de";
+
+		super(isLangDe ? AlexaText_de : AlexaText_en);
+
+		this.addIntent(aboutIntent = new IntentAbout());
+
+		if (accountsSetup)
+		{
+			this.addIntent(new IntentCurrent(apiClient));
+			this.addIntent(new IntentMovies(apiClient));
+			this.addIntent(new IntentRecordNow(apiClient));
+			this.addIntent(new IntentServices(apiClient));
+			this.addIntent(new IntentSleepTimer(apiClient));
+			this.addIntent(new IntentToggleMute(apiClient));
+			this.addIntent(new IntentToggleStandby(apiClient));
+			this.addIntent(new IntentVolumeUp(apiClient));
+			this.addIntent(new IntentVolumeDown(apiClient));
+			this.addIntent(new IntentSetVolume(apiClient));
+			this.addIntent(new IntentZapTo(apiClient));
+			this.addIntent(new IntentZapUp(apiClient));
+			this.addIntent(new IntentZapDown(apiClient));
+			this.addIntent(new IntentZapRandom(apiClient));
+			this.addIntent(new IntentZapToEvent(apiClient));
+			this.addIntent(new IntentRCPlayPause(apiClient));
+			this.addIntent(new IntentRCStop(apiClient));
+			this.addIntent(new IntentRCPrevious(apiClient));
+		}
+	}
+
+	private bool setupAccounts(string accessToken, string accessKey,
+			string secretKey, string awsRegion, string owifTableName)
 	{
 		import std.conv : to;
-		import std.process : environment;
 		import std.stdio : stderr;
 		import std.string : toLower;
 		import vibe.aws.aws : StaticAWSCredentials;
 		import vibe.aws.dynamodb : DynamoDB;
 
-		immutable accessKey = environment["ACCESS_KEY"];
-		immutable secretKey = environment["SECRET_KEY"];
-		immutable awsRegion = environment["AWS_DYNAMODB_REGION"];
-		immutable owifTableName = environment["OPENWEBIF_TABLENAME"];
 		auto creds = new StaticAWSCredentials(accessKey, secretKey);
 		auto ddb = new DynamoDB(awsRegion, creds);
 		auto table = ddb.table(owifTableName);
 		string baseUrl;
 		string dbAccessToken;
 
-		if(runAmazonLogin(accessToken))
+		if (runAmazonLogin(accessToken))
 		{
 			try
 			{
@@ -46,6 +79,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 				string user;
 				import std.digest.sha : sha256Of;
 				import std.digest.digest : toHexString;
+
 				dbAccessToken = (sha256Of(amazonProfile.user_id)).toHexString();
 				auto item = table.get("accessToken", dbAccessToken);
 				if ("password" in item)
@@ -66,47 +100,49 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			}
 			catch (Exception e)
 			{
-				stderr.writefln("Username: %s with user id: %s and token %s has no entry in db: %s", amazonProfile.name, amazonProfile.user_id, dbAccessToken, e);
+				stderr.writefln("Username: %s with user id: %s and token %s has no entry in db: %s",
+						amazonProfile.name, amazonProfile.user_id, dbAccessToken, e);
+				return false;
 			}
-			try 
-			{
+
+			try
 				apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
-			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				stderr.writefln("Error with URL: %s", baseUrl~"/api/");
+				stderr.writefln("Error with URL: %s", baseUrl ~ "/api/");
+				return false;
 			}
+
+			return true;
 		}
 
-		locale = locale.toLower;
-		immutable isLangDe = locale == "de-de";
+		return false;
+	}
 
-		super(isLangDe ? AlexaText_de : AlexaText_en);
-		this.addIntent(new IntentAbout());
-		this.addIntent(new IntentCurrent(apiClient));
-		this.addIntent(new IntentMovies(apiClient));
-		this.addIntent(new IntentRecordNow(apiClient));
-		this.addIntent(new IntentServices(apiClient));
-		this.addIntent(new IntentSleepTimer(apiClient));
-		this.addIntent(new IntentToggleMute(apiClient));
-		this.addIntent(new IntentToggleStandby(apiClient));
-		this.addIntent(new IntentVolumeUp(apiClient));
-		this.addIntent(new IntentVolumeDown(apiClient));
-		this.addIntent(new IntentSetVolume(apiClient));
-		this.addIntent(new IntentZapTo(apiClient));
-		this.addIntent(new IntentZapUp(apiClient));
-		this.addIntent(new IntentZapDown(apiClient));
-		this.addIntent(new IntentZapRandom(apiClient));
-		this.addIntent(new IntentZapToEvent(apiClient));
-		this.addIntent(new IntentRCPlayPause(apiClient));
-		this.addIntent(new IntentRCStop(apiClient));
-		this.addIntent(new IntentRCPrevious(apiClient));
+	///
+	override AlexaResult noIntentMatch(AlexaEvent event, AlexaContext context)
+	{
+		if (accountsSetup)
+		{
+			return aboutIntent.onIntent(event, context);
+		}
+		else
+		{
+			AlexaResult result;
+			result.response.card.content = format(getText(TextId.HelloCardContent),
+					amazonProfile.name);
+			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+			result.response.outputSpeech.ssml = .format(getText(TextId.HelloSSML),
+					amazonProfile.name);
+			return result;
+		}
 	}
 
 	///
 	override AlexaResult onLaunch(AlexaEvent event, AlexaContext)
 	{
 		import std.stdio : stderr;
+
 		AlexaResult result;
 		result.response.card.title = getText(TextId.DefaultCardTitle);
 
@@ -136,7 +172,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	{
 		import std.algorithm.searching : canFind;
 
-		auto skill = new OpenWebifSkill("", "de-DE");
+		auto skill = new OpenWebifSkill("", "de-DE", "", "", "", "");
 		AlexaEvent ev;
 		auto resp = skill.onLaunch(ev, AlexaContext.init);
 		assert(resp.response.card.type == AlexaCard.Type.LinkAccount);
@@ -146,7 +182,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			{
 				TokenInfo tokeninfo(string)
 				{
-					return TokenInfo();
+					return TokenInfo("", 0, "", "some fake user id", "app id", 0);
 				}
 
 				UserProfile profile()
@@ -163,7 +199,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	bool runAmazonLogin(string _accessToken)
+	private bool runAmazonLogin(string _accessToken)
 	{
 		if (_accessToken.length == 0)
 		{
@@ -178,6 +214,10 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			try
 			{
 				immutable tokenInfo = amazonLoginApi.tokeninfo(_accessToken);
+
+				if (tokenInfo.user_id.length == 0)
+					throw new Exception("amazon access token could not be verified");
+
 				amazonProfile = amazonLoginApi.profile();
 			}
 			catch (Exception e)
@@ -190,49 +230,11 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 }
 
-///
-static ServicesList removeMarkers(ServicesList _list)
-{
-	import std.algorithm.mutation : remove;
-
-	auto i = 0;
-	while (i < _list.services[0].subservices.length)
-	{
-		if (_list.services[0].subservices[i].servicereference.endsWith(
-				_list.services[0].subservices[i].servicename))
-		{
-			_list.services[0].subservices = remove(_list.services[0].subservices, i);
-			continue;
-		}
-		i++;
-	}
-	return _list;
-}
-
 //TODO: move to baselib
 unittest
 {
-	auto skill = new OpenWebifSkill("", "de-DE");
+	auto skill = new OpenWebifSkill("", "de-DE", "", "", "", "");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_de[TextId.PleaseLogin].text);
-	skill = new OpenWebifSkill("", "en-US");
+	skill = new OpenWebifSkill("", "en-US", "", "", "", "");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_en[TextId.PleaseLogin].text);
-}
-
-AlexaResult returnError(ITextManager texts, Exception e)
-{
-	import std.format : format;
-	import std.random : uniform;
-	import std.conv : to;
-	import std.digest.crc : hexDigest, CRC32;
-	import std.stdio : stderr;
-
-	AlexaResult result;
-	auto errorId = uniform!uint();
-	auto errorHash = hexDigest!CRC32(to!string(errorId));
-	stderr.writefln("Error: %s - Exception: %s", errorHash, e);
-	result.response.card.title = texts.getText(TextId.ErrorCardTitle);
-	result.response.card.content = format(texts.getText(TextId.ErrorCardContent),errorHash);
-	result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-	result.response.outputSpeech.ssml = texts.getText(TextId.ErrorSSML);
-	return result;
 }

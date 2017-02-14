@@ -6,17 +6,15 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentToggleStandby : BaseIntent
+final class IntentToggleStandby : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -27,16 +25,16 @@ final class IntentToggleStandby : BaseIntent
 		try
 			res = apiClient.powerstate(0);
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
-		result.response.card.title =  getText(TextId.StandbyCardTitle);
+		result.response.card.title = getText(TextId.StandbyCardTitle);
 		result.response.card.content = getText(TextId.StandbyCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.StandbyFailedSSML);
 
-		if(res.result && res.instandby)
+		if (res.result && res.instandby)
 			result.response.outputSpeech.ssml = getText(TextId.BoxStartedSSML);
-		else if(res.result && !res.instandby)
+		else if (res.result && !res.instandby)
 			result.response.outputSpeech.ssml = getText(TextId.StandbySSML);
 
 		return result;

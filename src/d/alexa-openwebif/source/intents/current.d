@@ -6,17 +6,15 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentCurrent : BaseIntent
+final class IntentCurrent : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -24,12 +22,13 @@ final class IntentCurrent : BaseIntent
 	{
 		import std.format : format;
 		import std.string : replace;
+
 		CurrentService currentService;
 
 		try
 			currentService = apiClient.getcurrent();
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
 		AlexaResult result;
 		result.response.card.title = getText(TextId.CurrentCardTitle);
