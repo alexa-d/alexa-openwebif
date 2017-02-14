@@ -26,7 +26,6 @@ final class IntentSleepTimer : OpenWebifBaseIntent
 		auto minutes = to!int(event.request.intent.slots["targetMinutes"].value);
 		AlexaResult result;
 		result.response.card.title = getText(TextId.SleepTimerCardTitle);
-		result.response.card.content = getText(TextId.SleepTimerCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
 		if (minutes >= 0 && minutes < 999)
@@ -75,7 +74,7 @@ final class IntentSleepTimer : OpenWebifBaseIntent
 		{
 			result.response.outputSpeech.ssml = getText(TextId.SleepTimerFailedSSML);
 		}
-
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }

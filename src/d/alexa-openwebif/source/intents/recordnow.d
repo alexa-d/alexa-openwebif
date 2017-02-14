@@ -28,12 +28,11 @@ final class IntentRecordNow : OpenWebifBaseIntent
 			return returnError(e);
 
 		result.response.card.title = getText(TextId.RecordNowCardTitle);
-		result.response.card.content = getText(TextId.RecordNowCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.RecordNowFailedSSML);
 		if (res.result)
 			result.response.outputSpeech.ssml = getText(TextId.RecordNowSSML);
-
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }
