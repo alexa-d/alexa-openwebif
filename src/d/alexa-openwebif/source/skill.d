@@ -18,7 +18,12 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	private AmazonLoginApi amazonLoginApi;
 	private UserProfile amazonProfile;
 	private BaseIntent aboutIntent;
-	private bool accountsSetup;
+	private enum SetupStates {
+		OK = 0,
+		NOT_LINKED = 1,
+		DB_API_ERROR = 2
+	}
+	private SetupStates accountsSetup;
 
 	///
 	this(string accessToken, string locale, string accessKey, string secretKey,
@@ -33,7 +38,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		this.addIntent(aboutIntent = new IntentAbout());
 
-		if (accountsSetup)
+		if (accountsSetup == SetupStates.OK)
 		{
 			this.addIntent(new IntentCurrent(apiClient));
 			this.addIntent(new IntentMovies(apiClient));
@@ -56,7 +61,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 	}
 
-	private bool setupAccounts(string accessToken, string accessKey,
+	private SetupStates setupAccounts(string accessToken, string accessKey,
 			string secretKey, string awsRegion, string owifTableName)
 	{
 		import std.conv : to;
@@ -102,7 +107,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			{
 				stderr.writefln("Username: %s with user id: %s and token %s has no entry in db: %s",
 						amazonProfile.name, amazonProfile.user_id, dbAccessToken, e);
-				return false;
+				return SetupStates.DB_API_ERROR;
 			}
 
 			try
@@ -110,29 +115,48 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			catch (Exception e)
 			{
 				stderr.writefln("Error with URL: %s", baseUrl ~ "/api/");
-				return false;
+				return SetupStates.DB_API_ERROR;
 			}
 
-			return true;
+			return SetupStates.OK;
 		}
 
-		return false;
+		return SetupStates.NOT_LINKED;
 	}
 
 	///
 	override AlexaResult noIntentMatch(AlexaEvent event, AlexaContext context)
 	{
-		if (accountsSetup)
+		if (accountsSetup == SetupStates.OK)
 		{
 			return aboutIntent.onIntent(event, context);
 		}
 		else
 		{
 			AlexaResult result;
-			result.response.card.content = getText(TextId.PleaseLogin);
-			result.response.card.type = AlexaCard.Type.LinkAccount;
-			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-			result.response.outputSpeech.ssml = getText(TextId.PleaseLoginSSML);
+			if (accountsSetup == SetupStates.NOT_LINKED)
+			{
+				result.response.card.content = getText(TextId.PleaseLogin);
+				result.response.card.type = AlexaCard.Type.LinkAccount;
+				result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+				result.response.outputSpeech.ssml = getText(TextId.PleaseLoginSSML);
+			}
+			else
+			{
+				import std.format : format;
+				import std.random : uniform;
+				import std.conv : to;
+				import std.digest.crc : hexDigest, CRC32;
+				import std.stdio : stderr;
+
+				auto errorId = uniform!uint();
+				auto errorHash = hexDigest!CRC32(to!string(errorId));
+				stderr.writefln("Error: %s", errorHash);
+				result.response.card.title = getText(TextId.ErrorCardTitle);
+				result.response.card.content = format(getText(TextId.ErrorCardContent), errorHash);
+				result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+				result.response.outputSpeech.ssml = getText(TextId.ErrorSSML);
+			}
 			return result;
 		}
 	}
