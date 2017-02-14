@@ -4,42 +4,31 @@ DefaultCardTitle,       Enigma Control
 HelloCardContent,       Enigma Control sagt hallo zu %s
 HelloSSML,              <speak>Hallo %s, danke fürs einloggen. Was kann ich für dich tun?</speak>
 ChannelsCardTitle,      Kanäle
-ChannelsCardContent,    Kanäle
 ChannelsSSML,           <speak>Du hast die folgenden Kanäle %s</speak>
 AboutCardTitle,         Enigma Control Info
-AboutCardContent,       Enigma Control Info
+AboutCardContent,       Ich bin Enigma Control, ein Alexa Skill geschrieben in D. Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. Finde mehr über mich heraus bei github.
 AboutSSML,              <speak>Ich bin Enigma Control, ein Alexa Skill geschrieben in D. Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. Finde mehr über mich heraus bei github.</speak>
 MoviesCardTitle,        Filmliste
-MoviesCardContent,      Filmliste
 MoviesSSML,             <speak>Du hast die folgenden Filme %s</speak>
 MuteCardTitle,          Stummschalten
-MuteCardContent,        Stummschalten
 MutedSSML,              <speak>Stumm geschaltet</speak>
 MuteFailedSSML,         <speak>Stummschalten fehlgeschlagen</speak>
 UnMutedSSML,            <speak>Stummschalten abgeschaltet</speak>
 StandbyCardTitle,       Standby
-StandbyCardContent,     Standby
 StandbyFailedSSML,      <speak>In Standby wechseln ist fehlgeschlagen</speak>
 StandbySSML,            <speak>Box in Standby geschaltet</speak>
 BoxStartedSSML,         <speak>Box gestartet</speak>
 SetVolumeCardTitle,     Lautstärke anpassen
-SetVolumeCardContent,   Lautstärke anpassen
 SetVolumeFailedSSML,    <speak>Lautstärke anpassen fehlgeschlagen</speak>
 SetVolumeSSML,          <speak>Lautstärke auf %s gesetzt</speak>
 RecordNowCardTitle,     Aufnahme starten
-RecordNowCardContent,   Aufnahme starten
-RecordNowFailedSSML,    <speak>Aufnhame starten fehlgeschlagen</speak>
-RecordNowSSML,          <speak>Aufnhame gestartet</speak>
+RecordNowFailedSSML,    <speak>Aufnahme starten fehlgeschlagen</speak>
+RecordNowSSML,          <speak>Aufnahme gestartet</speak>
 ZapToCardTitle,         Umschalten
-ZapToCardContent,       Umschalten
 ZapUpCardTitle,         Hoch schalten
-ZapUpCardContent,       Hoch schalten
 ZapDownCardTitle,       Runter schalten
-ZapDownCardContent,     Runter schalten
 ZapRandomCardTitle,     Zufälliges umschalten
-ZapRandomCardContent,   Zufälliges umschalten
 ZapToEventCardTitle,    Umschalten zu Sendung
-ZapToEventCardContent,  Umschalten zu Sendung
 ZapToEventFailedSSML,   <speak>Die Sendung läuft zur Zeit leider nicht. Die nächste Sendung <p>%s</p> läuft um <p>%s Uhr</p> auf <p>%s</p></speak>
 ZapToEventNotFoundSSML, <speak>Die Sendung konnte in deinem e p g nicht gefunden werden</speak>
 ZapFailedSSML,          nichts
@@ -48,25 +37,20 @@ ZapUp,                  hoch
 ZapDown,                runter
 ZapToRandom,            zufall
 SleepTimerCardTitle,    Sleep Timer
-SleepTimerCardContent,  Sleep Timer
 SleepTimerOffSSML,      <speak>Sleep Timer wurde deaktiviert</speak>
 SleepTimerResetSSML,    <speak>Es existiert bereits ein Sleep Timer mit <p>%s verbleibenden Minuten. Timer wurde auf %s Minuten zurückgesetzt.</p></speak>
 SleepTimerSetSSML,      <speak>Ich habe den Sleep Timer auf <p>%s Minuten eingestellt</p></speak>
 SleepTimerFailedSSML,   <speak>Der Timer konnte nicht gesetzt werden.</speak>
 SleepTimerNoTimerSSML,  <speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>
 CurrentCardTitle,       Es läuft
-CurrentCardContent,     Es läuft
 CurrentSSML,            <speak>Du guckst gerade: <p>%s</p> Aktuell läuft: %s</speak>
 CurrentNextSSML,        <speak>Du guckst gerade: <p>%s</p> Aktuell läuft: %s anschliessend läuft: %s</speak>
 RCPlayPauseCardTitle,   Program pausieren/abspielen
-RCPlayPauseCardContent, Program pausieren/abspielen
 RCOKSSML,               <speak>OK</speak>
 RCFailedSSML,  <speak>Fehlgeschlagen</speak>
 RCStopCardTitle,        Program pausieren abbrechen
-RCStopCardContent,      Program pausieren abbrechen
 NotSupportedSSML,       <speak>Diese Funktion ist für deine Box noch nicht verfügbar. Bitte besuche uns auf github und eröffne ein Ticket</speak>
 RCPreviousCardTitle,    Vorheriger Kanal
-RCPreviousCardContent,  Vorheriger Kanal
 ErrorCardTitle,         Es ist ein Fehler aufgetreten
 ErrorCardContent,       Bitte prüfe auf https://funok.de:8080/ ob deine Openwebif Daten richtig eingetragen sind. Solltest du weiterhin Probleme haben kannst du gerne ein Ticket mit der Referenz: %s auf https://github.com/alexa-d/alexa-openwebif/issues eröffnen.
 ErrorSSML,              <speak>Es ist ein Fehler aufgetreten. Genauere Informationen findest du in deiner Alexa App.</speak>
