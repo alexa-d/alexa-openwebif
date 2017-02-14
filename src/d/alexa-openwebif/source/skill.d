@@ -129,11 +129,10 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		else
 		{
 			AlexaResult result;
-			result.response.card.content = format(getText(TextId.HelloCardContent),
-					amazonProfile.name);
+			result.response.card.content = getText(TextId.PleaseLogin);
+			result.response.card.type = AlexaCard.Type.LinkAccount;
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-			result.response.outputSpeech.ssml = .format(getText(TextId.HelloSSML),
-					amazonProfile.name);
+			result.response.outputSpeech.ssml = getText(TextId.PleaseLoginSSML);
 			return result;
 		}
 	}
