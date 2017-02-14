@@ -6,43 +6,41 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentMovies : BaseIntent
+final class IntentMovies : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
-		import std.format:format;
+		import std.format : format;
+
 		MovieList movies;
 		AlexaResult result;
 		try
 			movies = apiClient.movielist();
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
 		result.response.card.title = getText(TextId.MoviesCardTitle);
 		result.response.card.content = getText(TextId.MoviesCardContent);
 
 		string moviesList;
 
-		foreach(movie; movies.movies)
+		foreach (movie; movies.movies)
 		{
 			moviesList ~= "<p>" ~ movie.eventname ~ "</p>";
 		}
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-		result.response.outputSpeech.ssml =
-			format(getText(TextId.MoviesSSML),moviesList);
+		result.response.outputSpeech.ssml = format(getText(TextId.MoviesSSML), moviesList);
 
 		return result;
 	}

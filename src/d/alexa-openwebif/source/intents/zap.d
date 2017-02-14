@@ -6,17 +6,52 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentZapTo : BaseIntent
+abstract class ZapBaseIntent : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
+	}
+
+	///
+	protected AlexaResult doZapIntent(bool up, OpenWebifApi apiClient, AlexaResult result)
+	{
+		import std.format : format;
+
+		Subservice matchedServices;
+		ServicesList allservices;
+
+		auto switchedTo = getText(TextId.ZapFailedSSML);
+		try
+			allservices = removeMarkers(apiClient.getallservices());
+		catch (Exception e)
+			return returnError(e);
+
+		matchedServices = zapUpDown(up, apiClient, allservices);
+		if (matchedServices.servicereference.length > 0)
+		{
+			apiClient.zap(matchedServices.servicereference);
+			switchedTo = matchedServices.servicename;
+		}
+
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML), switchedTo);
+
+		return result;
+	}
+}
+
+///
+final class IntentZapTo : ZapBaseIntent
+{
+	///
+	this(OpenWebifApi api)
+	{
+		super(api);
 	}
 
 	///
@@ -34,7 +69,7 @@ final class IntentZapTo : BaseIntent
 			try
 				allservices = removeMarkers(apiClient.getallservices());
 			catch (Exception e)
-				return returnError(this, e);
+				return returnError(e);
 
 			matchedServices = zapTo(targetChannel, allservices);
 		}
@@ -44,6 +79,7 @@ final class IntentZapTo : BaseIntent
 			apiClient.zap(matchedServices.servicereference);
 			switchedTo = matchedServices.servicename;
 		}
+
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapToCardTitle);
 		result.response.card.content = getText(TextId.ZapToCardContent);
@@ -55,14 +91,12 @@ final class IntentZapTo : BaseIntent
 }
 
 ///
-final class IntentZapUp : BaseIntent
+final class IntentZapUp : ZapBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -71,19 +105,17 @@ final class IntentZapUp : BaseIntent
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapUpCardTitle);
 		result.response.card.content = getText(TextId.ZapUpCardContent);
-		return doZapIntent(true, apiClient, this, result);
+		return doZapIntent(true, apiClient, result);
 	}
 }
 
 ///
-final class IntentZapDown : BaseIntent
+final class IntentZapDown : ZapBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -92,19 +124,17 @@ final class IntentZapDown : BaseIntent
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapDownCardTitle);
 		result.response.card.content = getText(TextId.ZapDownCardContent);
-		return doZapIntent(false, apiClient, this, result);
+		return doZapIntent(false, apiClient, result);
 	}
 }
 
 ///
-final class IntentZapRandom : BaseIntent
+final class IntentZapRandom : ZapBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -120,7 +150,7 @@ final class IntentZapRandom : BaseIntent
 		try
 			allservices = removeMarkers(apiClient.getallservices());
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
 		matchedServices = zapRandom(allservices);
 		if (matchedServices.servicereference.length > 0)
@@ -138,14 +168,12 @@ final class IntentZapRandom : BaseIntent
 }
 
 ///
-final class IntentZapToEvent : BaseIntent
+final class IntentZapToEvent : ZapBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -166,7 +194,7 @@ final class IntentZapToEvent : BaseIntent
 		try
 			eventList = apiClient.epgsearch(targetEvent);
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
 		if (eventList.events.length == 0)
 		{
@@ -176,22 +204,24 @@ final class IntentZapToEvent : BaseIntent
 
 		import std.algorithm : sort;
 		import std.datetime : Clock;
-		import core.stdc.time: time, time_t;
+		import core.stdc.time : time, time_t;
 
-		time_t now = time(null);
-		auto sortedEventList = eventList.events.sort!((a, b) => a.begin_timestamp < b.begin_timestamp);
+		immutable now = time(null);
+		auto sortedEventList = eventList.events.sort!((a,
+				b) => a.begin_timestamp < b.begin_timestamp);
 		auto idx = 0;
 		auto idxnext = -1;
-		foreach( thisEvent; sortedEventList)
+		foreach (thisEvent; sortedEventList)
 		{
-			if ((thisEvent.begin_timestamp > now) && idxnext == -1 )
+			if ((thisEvent.begin_timestamp > now) && idxnext == -1)
 				idxnext = idx;
-			if (thisEvent.begin_timestamp <= now && (thisEvent.begin_timestamp + thisEvent.duration_sec) > now)
+			if (thisEvent.begin_timestamp <= now
+					&& (thisEvent.begin_timestamp + thisEvent.duration_sec) > now)
 				break;
 			idx++;
 		}
 
-		if(idx < sortedEventList.length)
+		if (idx < sortedEventList.length)
 		{
 			apiClient.zap(sortedEventList[idx].sref);
 			switchedTo = sortedEventList[idx].sname;
@@ -200,39 +230,12 @@ final class IntentZapToEvent : BaseIntent
 		else
 		{
 			auto ev = sortedEventList[idxnext];
-			result.response.outputSpeech.ssml = format(getText(TextId.ZapToEventFailedSSML), ev.title, ev.begin, ev.sname);
+			result.response.outputSpeech.ssml = format(getText(TextId.ZapToEventFailedSSML),
+					ev.title, ev.begin, ev.sname);
 		}
 
 		return result;
 	}
-}
-
-///
-static AlexaResult doZapIntent(bool up, OpenWebifApi apiClient, ITextManager texts, AlexaResult result)
-{
-	import std.format : format;
-
-	Subservice matchedServices;
-	ServicesList allservices;
-
-	auto switchedTo = texts.getText(TextId.ZapFailedSSML);
-	try
-		allservices = removeMarkers(apiClient.getallservices());
-	catch (Exception e)
-		return returnError(texts, e);
-
-	matchedServices = zapUpDown(up, apiClient, allservices);
-	if (matchedServices.servicereference.length > 0)
-	{
-		apiClient.zap(matchedServices.servicereference);
-		switchedTo = matchedServices.servicename;
-	}
-
-
-	result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-	result.response.outputSpeech.ssml = format(texts.getText(TextId.ZapSSML), switchedTo);
-
-	return result;
 }
 
 ///
@@ -248,15 +251,6 @@ static Subservice zapRandom(ServicesList _allservices)
 	Subservice _ret;
 	return _ret;
 
-}
-
-///
-struct ServiceAlias
-{
-	///
-	string serviceName;
-	///
-	string aliasName;
 }
 
 ///
@@ -384,165 +378,204 @@ static Subservice zapUpDown(bool up, OpenWebifApi apiClient, ServicesList _allse
 	return _allservices.services[0].subservices[j];
 }
 
+///
+struct ServiceAlias
+{
+	///
+	string serviceName;
+	///
+	string aliasName;
+}
+
 //TODO: support english aliases
 ///
 static immutable ServiceAliases = [
-	ServiceAlias("Das Erste", "ard"), ServiceAlias("Das Erste", "a. r. d."),
-		ServiceAlias("Das Erste HD", "a. r. d. h. d."), ServiceAlias("Das Erste HD", "ard hd"),
-	ServiceAlias("WDR HD", "w. d. r. h. d."), ServiceAlias("WDR HD", "wdr hd"),
-	ServiceAlias("WDR", "w. d. r."), ServiceAlias("WDR", "wdr"),
-	ServiceAlias("WDR Essen", "w. d. r. essen"), ServiceAlias("WDR Essen", "wdr essen"),
-	ServiceAlias("WDR Duisburg", "w. d. r. duisburg"), ServiceAlias("WDR Duisburg", "wdr duisburg"),
-	ServiceAlias("WDR Bonn", "w. d. r. bonn"), ServiceAlias("WDR Bonn", "wdr bonn"),
-	ServiceAlias("WDR Bielefeld", "w. d. r. bielefeld"), ServiceAlias("WDR bielefeld", "wdr bielefeld"),
-	ServiceAlias("WDR Münster", "w. d. r. münster"), ServiceAlias("WDR Münster", "wdr münster"),
-	ServiceAlias("WDR Düsseldorf", "w. d. r. düsseldorf"), ServiceAlias("WDR Düsseldorf", "wdr düsseldorf"),
-	ServiceAlias("WDR Aachen", "w. d. r. aachen"), ServiceAlias("WDR Aachen", "wdr aachen"),
-	ServiceAlias("WDR Siegen", "w. d. r. Siegen"), ServiceAlias("WDR Siegen", "wdr siegen"),
-	ServiceAlias("WDR wuppertal", "w. d. r. wuppertal"), ServiceAlias("WDR Wuppertal", "wdr wuppertal"),
-	ServiceAlias("WDR Köln", "w. d. r. köln"), ServiceAlias("WDR Köln", "wdr köln"),
-		ServiceAlias("WDR Köln HD", "w. d. r. köln h. d."), ServiceAlias("WDR Köln HD", "wdr Köln HD"),
-	ServiceAlias("n-tv", "n. t. v."), ServiceAlias("n-tv", "ntv"),
-	ServiceAlias("n-tv HD", "n. t. v. h. d."), ServiceAlias("n-tv HD", "ntv hd"),
-	ServiceAlias("RTL television", "r. t. l."), ServiceAlias("RTL Television", "rtl"),
-	ServiceAlias("RTL television HD", "r. t. l. h. d."), ServiceAlias("RTL Television", "rtl hd"),
-	ServiceAlias("RTL2", "r. t. l. zwei"), ServiceAlias("RTL2", "rtl zwei"),
-	ServiceAlias("RTL2 HD", "r. t. l. zwei h. d."), ServiceAlias("RTL2 HD", "rtl zwei hd"),
-	ServiceAlias("Super RTL", "super r. t. l."),
+	ServiceAlias("Das Erste", "ard"), ServiceAlias("Das Erste", "a. r. d."), ServiceAlias("Das Erste HD",
+		"a. r. d. h. d."), ServiceAlias("Das Erste HD", "ard hd"), ServiceAlias("WDR HD", "w. d. r. h. d."),
+	ServiceAlias("WDR HD", "wdr hd"), ServiceAlias("WDR", "w. d. r."),
+	ServiceAlias("WDR", "wdr"), ServiceAlias("WDR Essen",
+		"w. d. r. essen"), ServiceAlias("WDR Essen", "wdr essen"),
+	ServiceAlias("WDR Duisburg", "w. d. r. duisburg"), ServiceAlias(
+		"WDR Duisburg", "wdr duisburg"), ServiceAlias("WDR Bonn",
+		"w. d. r. bonn"), ServiceAlias("WDR Bonn", "wdr bonn"),
+	ServiceAlias("WDR Bielefeld",
+		"w. d. r. bielefeld"), ServiceAlias("WDR bielefeld", "wdr bielefeld"),
+	ServiceAlias("WDR Münster", "w. d. r. münster"),
+	ServiceAlias("WDR Münster",
+		"wdr münster"), ServiceAlias("WDR Düsseldorf", "w. d. r. düsseldorf"),
+	ServiceAlias("WDR Düsseldorf", "wdr düsseldorf"),
+	ServiceAlias("WDR Aachen", "w. d. r. aachen"),
+	ServiceAlias("WDR Aachen", "wdr aachen"), ServiceAlias("WDR Siegen",
+		"w. d. r. Siegen"), ServiceAlias("WDR Siegen", "wdr siegen"),
+	ServiceAlias("WDR wuppertal", "w. d. r. wuppertal"),
+	ServiceAlias("WDR Wuppertal", "wdr wuppertal"), ServiceAlias("WDR Köln",
+		"w. d. r. köln"), ServiceAlias("WDR Köln", "wdr köln"),
+	ServiceAlias("WDR Köln HD", "w. d. r. köln h. d."),
+	ServiceAlias("WDR Köln HD", "wdr Köln HD"), ServiceAlias("n-tv",
+		"n. t. v."), ServiceAlias("n-tv", "ntv"), ServiceAlias("n-tv HD",
+		"n. t. v. h. d."), ServiceAlias("n-tv HD", "ntv hd"),
+	ServiceAlias("RTL television", "r. t. l."), ServiceAlias("RTL Television",
+		"rtl"), ServiceAlias("RTL television HD", "r. t. l. h. d."),
+	ServiceAlias("RTL Television", "rtl hd"), ServiceAlias("RTL2",
+		"r. t. l. zwei"), ServiceAlias("RTL2", "rtl zwei"), ServiceAlias("RTL2 HD",
+		"r. t. l. zwei h. d."), ServiceAlias("RTL2 HD",
+		"rtl zwei hd"), ServiceAlias("Super RTL", "super r. t. l."),
 	ServiceAlias("Super RTL HD", "super r. t. l. h. d."),
-	ServiceAlias("NDR", "n. d. r."),
-	ServiceAlias("N24", "n. 24"), ServiceAlias("N24", "n. vierundzwanzig"),
-	ServiceAlias("N24 HD", "n. 24 h. d."), ServiceAlias("N24 HD", "n. vierundzwanzig h. d."),
-	ServiceAlias("MTV", "m. t. v."), ServiceAlias("MTV HD", "m. t. v. h. d."),
-	ServiceAlias("MGM", "m. g. m."),
-	ServiceAlias("ARD Alpha", "a. r. d. alpha"), ServiceAlias("ARD Alpha", "ard alpha"),
-	ServiceAlias("ZDF HD", "z. d. f."),
-	ServiceAlias("ZDF HD", "z. d. f. h. d."),
-	ServiceAlias("zdf_neo", "z. d. f. neo"), ServiceAlias("PHOENIX HD", "phönix"),
-	ServiceAlias("QVC", "q. v. c."),
-	ServiceAlias("Sky Sport Bundesliga 1 HD", "Sky Bundesliga 1 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 2 HD", "Sky Bundesliga 2 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 3 HD", "Sky Bundesliga 3 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 4 HD", "Sky Bundesliga 4 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 5 HD", "Sky Bundesliga 5 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 6 HD", "Sky Bundesliga 6 h. d."),
+	ServiceAlias("NDR", "n. d. r."), ServiceAlias("N24", "n. 24"),
+	ServiceAlias("N24", "n. vierundzwanzig"), ServiceAlias("N24 HD",
+		"n. 24 h. d."), ServiceAlias("N24 HD", "n. vierundzwanzig h. d."),
+	ServiceAlias("MTV", "m. t. v."), ServiceAlias("MTV HD",
+		"m. t. v. h. d."), ServiceAlias("MGM", "m. g. m."),
+	ServiceAlias("ARD Alpha", "a. r. d. alpha"), ServiceAlias("ARD Alpha",
+		"ard alpha"), ServiceAlias("ZDF HD", "z. d. f."),
+	ServiceAlias("ZDF HD", "z. d. f. h. d."), ServiceAlias("zdf_neo",
+		"z. d. f. neo"), ServiceAlias("PHOENIX HD", "phönix"), ServiceAlias("QVC",
+		"q. v. c."), ServiceAlias("Sky Sport Bundesliga 1 HD",
+		"Sky Bundesliga 1 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 2 HD",
+		"Sky Bundesliga 2 h. d."), ServiceAlias("Sky Sport Bundesliga 3 HD",
+		"Sky Bundesliga 3 h. d."), ServiceAlias("Sky Sport Bundesliga 4 HD",
+		"Sky Bundesliga 4 h. d."), ServiceAlias(
+		"Sky Sport Bundesliga 5 HD", "Sky Bundesliga 5 h. d."), ServiceAlias(
+		"Sky Sport Bundesliga 6 HD", "Sky Bundesliga 6 h. d."),
 	ServiceAlias("Sky Sport Bundesliga 7 HD", "Sky Bundesliga 7 h. d."),
 	ServiceAlias("Sky Sport Bundesliga 8 HD", "Sky Bundesliga 8 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 9 HD", "Sky Bundesliga 9 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 10 HD", "Sky Bundesliga 10 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 1 HD", "Sky Bundesliga eins h. d."),
-	ServiceAlias("Sky Sport Bundesliga 2 HD", "Sky Bundesliga zwei h. d."),
-	ServiceAlias("Sky Sport Bundesliga 3 HD", "Sky Bundesliga drei h. d."),
-	ServiceAlias("Sky Sport Bundesliga 4 HD", "Sky Bundesliga vier h. d."),
+	ServiceAlias("Sky Sport Bundesliga 9 HD",
+		"Sky Bundesliga 9 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 10 HD",
+		"Sky Bundesliga 10 h. d."), ServiceAlias("Sky Sport Bundesliga 1 HD",
+		"Sky Bundesliga eins h. d."), ServiceAlias("Sky Sport Bundesliga 2 HD",
+		"Sky Bundesliga zwei h. d."), ServiceAlias(
+		"Sky Sport Bundesliga 3 HD", "Sky Bundesliga drei h. d."), ServiceAlias(
+		"Sky Sport Bundesliga 4 HD", "Sky Bundesliga vier h. d."),
 	ServiceAlias("Sky Sport Bundesliga 5 HD", "Sky Bundesliga fünf h. d."),
 	ServiceAlias("Sky Sport Bundesliga 6 HD", "Sky Bundesliga sechs h. d."),
-	ServiceAlias("Sky Sport Bundesliga 7 HD", "Sky Bundesliga sieben h. d."),
-	ServiceAlias("Sky Sport Bundesliga 8 HD", "Sky Bundesliga acht h. d."),
-	ServiceAlias("Sky Sport Bundesliga 9 HD", "Sky Bundesliga neun h. d."),
-	ServiceAlias("Sky Sport Bundesliga 10 HD", "Sky Bundesliga zehn h. d."),
-	ServiceAlias("Sky Sport Bundesliga 1 HD", "Sky Sport Bundesliga 1 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 2 HD", "Sky Sport Bundesliga 2 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 3 HD", "Sky Sport Bundesliga 3 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 4 HD", "Sky Sport Bundesliga 4 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 5 HD", "Sky Sport Bundesliga 5 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 6 HD", "Sky Sport Bundesliga 6 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 7 HD", "Sky Sport Bundesliga 7 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 8 HD", "Sky Sport Bundesliga 8 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 9 HD", "Sky Sport Bundesliga 9 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 10 HD", "Sky Sport Bundesliga 10 h. d."),
-	ServiceAlias("Sky Sport Bundesliga 1 HD", "Sky Sport Bundesliga eins h. d."),
+	ServiceAlias("Sky Sport Bundesliga 7 HD",
+		"Sky Bundesliga sieben h. d."),
+	ServiceAlias("Sky Sport Bundesliga 8 HD",
+		"Sky Bundesliga acht h. d."), ServiceAlias("Sky Sport Bundesliga 9 HD",
+		"Sky Bundesliga neun h. d."), ServiceAlias("Sky Sport Bundesliga 10 HD",
+		"Sky Bundesliga zehn h. d."),
+	ServiceAlias("Sky Sport Bundesliga 1 HD",
+		"Sky Sport Bundesliga 1 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 2 HD",
+		"Sky Sport Bundesliga 2 h. d."), ServiceAlias("Sky Sport Bundesliga 3 HD",
+		"Sky Sport Bundesliga 3 h. d."), ServiceAlias("Sky Sport Bundesliga 4 HD",
+		"Sky Sport Bundesliga 4 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 5 HD",
+		"Sky Sport Bundesliga 5 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 6 HD",
+		"Sky Sport Bundesliga 6 h. d."), ServiceAlias("Sky Sport Bundesliga 7 HD",
+		"Sky Sport Bundesliga 7 h. d."), ServiceAlias("Sky Sport Bundesliga 8 HD",
+		"Sky Sport Bundesliga 8 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 9 HD",
+		"Sky Sport Bundesliga 9 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 10 HD",
+		"Sky Sport Bundesliga 10 h. d."), ServiceAlias("Sky Sport Bundesliga 1 HD",
+		"Sky Sport Bundesliga eins h. d."),
 	ServiceAlias("Sky Sport Bundesliga 2 HD", "Sky Sport Bundesliga zwei h. d."),
-	ServiceAlias("Sky Sport Bundesliga 3 HD", "Sky Sport Bundesliga drei h. d."),
-	ServiceAlias("Sky Sport Bundesliga 4 HD", "Sky Sport Bundesliga vier h. d."),
-	ServiceAlias("Sky Sport Bundesliga 5 HD", "Sky Sport Bundesliga fünf h. d."),
+	ServiceAlias("Sky Sport Bundesliga 3 HD",
+		"Sky Sport Bundesliga drei h. d."),
+	ServiceAlias("Sky Sport Bundesliga 4 HD",
+		"Sky Sport Bundesliga vier h. d."), ServiceAlias("Sky Sport Bundesliga 5 HD",
+		"Sky Sport Bundesliga fünf h. d."),
 	ServiceAlias("Sky Sport Bundesliga 6 HD", "Sky Sport Bundesliga sechs h. d."),
-	ServiceAlias("Sky Sport Bundesliga 7 HD", "Sky Sport Bundesliga sieben h. d."),
-	ServiceAlias("Sky Sport Bundesliga 8 HD", "Sky Sport Bundesliga acht h. d."),
-	ServiceAlias("Sky Sport Bundesliga 9 HD", "Sky Sport Bundesliga neun h. d."),
+	ServiceAlias("Sky Sport Bundesliga 7 HD",
+		"Sky Sport Bundesliga sieben h. d."),
+	ServiceAlias("Sky Sport Bundesliga 8 HD",
+		"Sky Sport Bundesliga acht h. d."), ServiceAlias("Sky Sport Bundesliga 9 HD",
+		"Sky Sport Bundesliga neun h. d."),
 	ServiceAlias("Sky Sport Bundesliga 10 HD", "Sky Sport Bundesliga zehn h. d."),
-	ServiceAlias("Sky Sport Bundesliga 1", "Sky Sport Bundesliga eins"),
-	ServiceAlias("Sky Sport Bundesliga 2", "Sky Sport Bundesliga zwei"),
-	ServiceAlias("Sky Sport Bundesliga 3", "Sky Sport Bundesliga drei"),
-	ServiceAlias("Sky Sport Bundesliga 4", "Sky Sport Bundesliga vier"),
-	ServiceAlias("Sky Sport Bundesliga 5", "Sky Sport Bundesliga fünf"),
-	ServiceAlias("Sky Sport Bundesliga 6", "Sky Sport Bundesliga sechs"),
+	ServiceAlias("Sky Sport Bundesliga 1",
+		"Sky Sport Bundesliga eins"),
+	ServiceAlias("Sky Sport Bundesliga 2",
+		"Sky Sport Bundesliga zwei"), ServiceAlias("Sky Sport Bundesliga 3",
+		"Sky Sport Bundesliga drei"), ServiceAlias("Sky Sport Bundesliga 4",
+		"Sky Sport Bundesliga vier"), ServiceAlias(
+		"Sky Sport Bundesliga 5", "Sky Sport Bundesliga fünf"), ServiceAlias(
+		"Sky Sport Bundesliga 6", "Sky Sport Bundesliga sechs"),
 	ServiceAlias("Sky Sport Bundesliga 7", "Sky Sport Bundesliga sieben"),
 	ServiceAlias("Sky Sport Bundesliga 8", "Sky Sport Bundesliga acht"),
-	ServiceAlias("Sky Sport Bundesliga 9", "Sky Sport Bundesliga neun"),
-	ServiceAlias("Sky Sport Bundesliga 10", "Sky Sport Bundesliga zehn"),
-	ServiceAlias("Sky Sport 1 HD", "Sky Sport 1 h. d."),
-	ServiceAlias("Sky Sport 2 HD", "Sky Sport 2 h. d."),
-	ServiceAlias("Sky Sport 3 HD", "Sky Sport 3 h. d."),
-	ServiceAlias("Sky Sport 4 HD", "Sky Sport 4 h. d."),
+	ServiceAlias("Sky Sport Bundesliga 9",
+		"Sky Sport Bundesliga neun"), ServiceAlias("Sky Sport Bundesliga 10",
+		"Sky Sport Bundesliga zehn"), ServiceAlias("Sky Sport 1 HD",
+		"Sky Sport 1 h. d."), ServiceAlias("Sky Sport 2 HD", "Sky Sport 2 h. d."),
+	ServiceAlias("Sky Sport 3 HD",
+		"Sky Sport 3 h. d."), ServiceAlias("Sky Sport 4 HD", "Sky Sport 4 h. d."),
 	ServiceAlias("Sky Sport 5 HD", "Sky Sport 5 h. d."),
-	ServiceAlias("Sky Sport 6 HD", "Sky Sport 6 h. d."),
-	ServiceAlias("Sky Sport 7 HD", "Sky Sport 7 h. d."),
+	ServiceAlias("Sky Sport 6 HD",
+		"Sky Sport 6 h. d."), ServiceAlias("Sky Sport 7 HD", "Sky Sport 7 h. d."),
 	ServiceAlias("Sky Sport 8 HD", "Sky Sport 8 h. d."),
-	ServiceAlias("Sky Sport 9 HD", "Sky Sport 9 h. d."),
-	ServiceAlias("Sky Sport 10 HD", "Sky Sport 10 h. d."),
+	ServiceAlias("Sky Sport 9 HD",
+		"Sky Sport 9 h. d."), ServiceAlias("Sky Sport 10 HD", "Sky Sport 10 h. d."),
 	ServiceAlias("Sky Sport 1 HD", "Sky Sport eins h. d."),
-	ServiceAlias("Sky Sport 2 HD", "Sky Sport zwei h. d."),
-	ServiceAlias("Sky Sport 3 HD", "Sky Sport drei h. d."),
-	ServiceAlias("Sky Sport 4 HD", "Sky Sport vier h. d."),
+	ServiceAlias("Sky Sport 2 HD",
+		"Sky Sport zwei h. d."), ServiceAlias("Sky Sport 3 HD",
+		"Sky Sport drei h. d."), ServiceAlias("Sky Sport 4 HD", "Sky Sport vier h. d."),
 	ServiceAlias("Sky Sport 5 HD", "Sky Sport fünf h. d."),
-	ServiceAlias("Sky Sport 6 HD", "Sky Sport sechs h. d."),
-	ServiceAlias("Sky Sport 7 HD", "Sky Sport sieben h. d."),
-	ServiceAlias("Sky Sport 8 HD", "Sky Sport acht h. d."),
+	ServiceAlias("Sky Sport 6 HD",
+		"Sky Sport sechs h. d."), ServiceAlias("Sky Sport 7 HD",
+		"Sky Sport sieben h. d."), ServiceAlias("Sky Sport 8 HD", "Sky Sport acht h. d."),
 	ServiceAlias("Sky Sport 9 HD", "Sky Sport neun h. d."),
-	ServiceAlias("Sky Sport 10 HD", "Sky Sport zehn h. d."),
-	ServiceAlias("Sky Sport 1", "Sky Sport eins"),
+	ServiceAlias("Sky Sport 10 HD",
+		"Sky Sport zehn h. d."), ServiceAlias("Sky Sport 1", "Sky Sport eins"),
 	ServiceAlias("Sky Sport 2", "Sky Sport zwei"),
-	ServiceAlias("Sky Sport 3", "Sky Sport drei"),
-	ServiceAlias("Sky Sport 4", "Sky Sport vier"),
+	ServiceAlias("Sky Sport 3",
+		"Sky Sport drei"), ServiceAlias("Sky Sport 4", "Sky Sport vier"),
 	ServiceAlias("Sky Sport 5", "Sky Sport fünf"),
-	ServiceAlias("Sky Sport 6", "Sky Sport sechs"),
-	ServiceAlias("Sky Sport 7", "Sky Sport sieben"),
+	ServiceAlias("Sky Sport 6",
+		"Sky Sport sechs"), ServiceAlias("Sky Sport 7", "Sky Sport sieben"),
 	ServiceAlias("Sky Sport 8", "Sky Sport acht"),
-	ServiceAlias("Sky Sport 9", "Sky Sport neun"),
-	ServiceAlias("Sky Sport 10", "Sky Sport zehn"),
-	ServiceAlias("Sky Cinema +1", "Sky Cinema plus eins"), ServiceAlias("Sky Cinema +1", "Sky Cinema + eins"),
-	ServiceAlias("Sky Cinema +1 HD", "Sky Cinema plus eins h. d."), ServiceAlias("Sky Cinema +1 HD", "Sky Cinema + eins h. d."),
-	ServiceAlias("Sky Cinema +24", "Sky Cinema plus vierundzwanzig"),ServiceAlias("Sky Cinema +24", "Sky Cinema + vierundzwanzig"),
+	ServiceAlias("Sky Sport 9",
+		"Sky Sport neun"), ServiceAlias("Sky Sport 10", "Sky Sport zehn"),
+	ServiceAlias("Sky Cinema +1", "Sky Cinema plus eins"), ServiceAlias("Sky Cinema +1",
+		"Sky Cinema + eins"), ServiceAlias("Sky Cinema +1 HD",
+		"Sky Cinema plus eins h. d."), ServiceAlias("Sky Cinema +1 HD",
+		"Sky Cinema + eins h. d."), ServiceAlias("Sky Cinema +24",
+		"Sky Cinema plus vierundzwanzig"),
+	ServiceAlias("Sky Cinema +24",
+		"Sky Cinema + vierundzwanzig"),
 	ServiceAlias("Sky Cinema HD", "Sky Cinema h. d."),
 	ServiceAlias("Discovery Channel (S)", "Discovery Channel"),
 	ServiceAlias("Discovery Channel", "Discovery Channel"),
-	ServiceAlias("Discovery HD (S)", "Discovery Channel h. d."),ServiceAlias("Discovery HD (S)", "Discovery h. d."),
-	ServiceAlias("Discovery HD", "Discovery Channel h. d."),ServiceAlias("Discovery HD", "Discovery h. d."),
-	ServiceAlias("Disney Cinemagic HD", "Disney Cinemagic h. d."),
-	ServiceAlias("Disney Junior (S)", "Disney Junior"),
-	ServiceAlias("Disney Junior", "Disney Junior"),
+	ServiceAlias("Discovery HD (S)",
+		"Discovery Channel h. d."), ServiceAlias("Discovery HD (S)", "Discovery h. d."),
+	ServiceAlias("Discovery HD", "Discovery Channel h. d."),
+	ServiceAlias("Discovery HD",
+		"Discovery h. d."), ServiceAlias("Disney Cinemagic HD",
+		"Disney Cinemagic h. d."), ServiceAlias("Disney Junior (S)",
+		"Disney Junior"), ServiceAlias("Disney Junior", "Disney Junior"),
 	ServiceAlias("Disney XD (S)", "Disney x. d."),
-	ServiceAlias("Disney XD", "Disney x. d."),
-	ServiceAlias("Eurosport 1 HD", "Eurosport eins h. d."),
-	ServiceAlias("Eurosport 1", "Eurosport eins"),
-	ServiceAlias("Fox Serie (S)", "Fox Serie"),ServiceAlias("Fox Serie (S)", "Fox"),
-	ServiceAlias("Fox Serie", "Fox Serie"),ServiceAlias("Fox Serie", "Fox"),
-	ServiceAlias("Fox HD (S)", "Fox h. d."),
-	ServiceAlias("Fox HD", "Fox h. d."),
-	ServiceAlias("Nat Geo Wild HD", "Nat Geo Wild h. d."), ServiceAlias("Nat Geo Wild HD", "National geographic wild h. d."),
-	ServiceAlias("Nat Geo Wild", "Nat Geo Wild"), ServiceAlias("Nat Geo Wild", "National geographic wild"),
-	ServiceAlias("Nat Geo HD (S)", "Nat Geo h. d."), ServiceAlias("Nat Geo HD (S)", "National geographic h. d."),
-	ServiceAlias("Nat Geo HD", "Nat Geo h. d."), ServiceAlias("Nat Geo HD", "National geographic h. d."),
-	ServiceAlias("National Geographic (S)", "National Geographic"),
-	ServiceAlias("National Geographic", "National Geographic"),
-	ServiceAlias("RTL Crime (S)", "r. t. l. crime"),
-	ServiceAlias("RTL Crime", "r. t. l. crime"),
-	ServiceAlias("RTL Passion (S)", "r. t. l. passion"),
+	ServiceAlias("Disney XD", "Disney x. d."), ServiceAlias("Eurosport 1 HD",
+		"Eurosport eins h. d."), ServiceAlias("Eurosport 1", "Eurosport eins"),
+	ServiceAlias("Fox Serie (S)", "Fox Serie"), ServiceAlias("Fox Serie (S)",
+		"Fox"), ServiceAlias("Fox Serie", "Fox Serie"),
+	ServiceAlias("Fox Serie", "Fox"), ServiceAlias("Fox HD (S)", "Fox h. d."),
+	ServiceAlias("Fox HD", "Fox h. d."), ServiceAlias("Nat Geo Wild HD",
+		"Nat Geo Wild h. d."), ServiceAlias("Nat Geo Wild HD",
+		"National geographic wild h. d."), ServiceAlias("Nat Geo Wild",
+		"Nat Geo Wild"), ServiceAlias("Nat Geo Wild", "National geographic wild"),
+	ServiceAlias("Nat Geo HD (S)",
+		"Nat Geo h. d."), ServiceAlias("Nat Geo HD (S)", "National geographic h. d."),
+	ServiceAlias("Nat Geo HD", "Nat Geo h. d."), ServiceAlias("Nat Geo HD",
+		"National geographic h. d."), ServiceAlias("National Geographic (S)",
+		"National Geographic"), ServiceAlias("National Geographic",
+		"National Geographic"), ServiceAlias("RTL Crime (S)", "r. t. l. crime"),
+	ServiceAlias("RTL Crime",
+		"r. t. l. crime"), ServiceAlias("RTL Passion (S)", "r. t. l. passion"),
 	ServiceAlias("RTL Passion", "r. t. l. passion"),
-	ServiceAlias("Sky 1", "sky eins"),
-	ServiceAlias("Sky 1 HD", "sky eins h. d."),
-	ServiceAlias("Sky Atlantic HD", "Sky Atlantic h. d."),
+	ServiceAlias("Sky 1", "sky eins"), ServiceAlias("Sky 1 HD",
+		"sky eins h. d."), ServiceAlias("Sky Atlantic HD", "Sky Atlantic h. d."),
 	ServiceAlias("Sky Cinema Action HD", "Sky Cinema Action h. d."),
-	ServiceAlias("Sky Cinema Hits HD", "Sky Cinema Hits h. d."),
-	ServiceAlias("Sky Sport News HD", "Sky Sport News h. d."),
-	ServiceAlias("TNT Serie (S)", "t. n. t. serie"),
-	ServiceAlias("TNT Serie (S)", "t. n. t."),
-	ServiceAlias("TNT Serie", "t. n. t. serie"),
-	ServiceAlias("TNT Serie", "t. n. t."),
+	ServiceAlias("Sky Cinema Hits HD",
+		"Sky Cinema Hits h. d."), ServiceAlias("Sky Sport News HD",
+		"Sky Sport News h. d."), ServiceAlias("TNT Serie (S)",
+		"t. n. t. serie"), ServiceAlias("TNT Serie (S)", "t. n. t."),
+	ServiceAlias("TNT Serie",
+		"t. n. t. serie"), ServiceAlias("TNT Serie", "t. n. t."),
 	ServiceAlias("TNT Serie HD (S)", "t. n. t. serie h. d."),
-	ServiceAlias("TNT Serie HD (S)", "t. n. t. h. d."),
-	ServiceAlias("TNT Serie HD", "t. n. t. serie h. d."),
-	ServiceAlias("TNT Serie HD", "t. n. t. h. d."),
-	ServiceAlias("ARD-alpha", "a. r. d. alpha"),
+	ServiceAlias("TNT Serie HD (S)",
+		"t. n. t. h. d."), ServiceAlias("TNT Serie HD", "t. n. t. serie h. d."),
+	ServiceAlias("TNT Serie HD", "t. n. t. h. d."), ServiceAlias("ARD-alpha", "a. r. d. alpha"),
 
 ];

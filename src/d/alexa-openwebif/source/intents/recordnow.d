@@ -6,17 +6,15 @@ import ask.ask;
 
 import texts;
 
-import skill;
+import openwebifbaseintent;
 
 ///
-final class IntentRecordNow : BaseIntent
+final class IntentRecordNow : OpenWebifBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
-		apiClient = api;
+		super(api);
 	}
 
 	///
@@ -27,9 +25,9 @@ final class IntentRecordNow : BaseIntent
 		try
 			res = apiClient.recordnow();
 		catch (Exception e)
-			return returnError(this, e);
+			return returnError(e);
 
-		result.response.card.title =  getText(TextId.RecordNowCardTitle);
+		result.response.card.title = getText(TextId.RecordNowCardTitle);
 		result.response.card.content = getText(TextId.RecordNowCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.RecordNowFailedSSML);
@@ -39,4 +37,3 @@ final class IntentRecordNow : BaseIntent
 		return result;
 	}
 }
-
