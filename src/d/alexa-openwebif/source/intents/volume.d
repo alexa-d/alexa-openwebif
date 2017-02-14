@@ -49,8 +49,6 @@ abstract class VolumeBaseIntent : OpenWebifBaseIntent
 ///
 final class IntentVolumeDown : VolumeBaseIntent
 {
-	private OpenWebifApi apiClient;
-
 	///
 	this(OpenWebifApi api)
 	{
