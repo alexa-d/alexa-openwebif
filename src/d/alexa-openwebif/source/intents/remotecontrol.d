@@ -55,6 +55,7 @@ abstract class RemoteControlBaseIntent : OpenWebifBaseIntent
 		{
 			result.response.outputSpeech.ssml = texts.getText(TextId.NotSupportedSSML);
 		}
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 
@@ -103,7 +104,6 @@ final class IntentRCPlayPause : RemoteControlBaseIntent
 	{
 		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPlayPauseCardTitle);
-		result.response.card.content = getText(TextId.RCPlayPauseCardContent);
 		return doRCIntent("PlayPause", apiClient, this, result);
 	}
 }
@@ -122,7 +122,6 @@ final class IntentRCStop : RemoteControlBaseIntent
 	{
 		AlexaResult result;
 		result.response.card.title = getText(TextId.RCStopCardTitle);
-		result.response.card.content = getText(TextId.RCStopCardContent);
 		return doRCIntent("Stop", apiClient, this, result);
 	}
 }
@@ -141,7 +140,6 @@ final class IntentRCPrevious : RemoteControlBaseIntent
 	{
 		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPreviousCardTitle);
-		result.response.card.content = getText(TextId.RCPreviousCardContent);
 		return doRCIntent("Previous", apiClient, this, result);
 	}
 }

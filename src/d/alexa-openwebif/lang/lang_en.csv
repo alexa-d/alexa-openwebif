@@ -4,42 +4,31 @@ DefaultCardTitle,       Enigma Control
 HelloCardContent,       Enigma Control says hello to %s
 HelloSSML,              <speak>Hello %s, thanks for logging in. What can I do for you?</speak>
 ChannelsCardTitle,      Channels
-ChannelsCardContent,    Channels
 ChannelsSSML,           <speak>You've got the following channels %s</speak>
 AboutCardTitle,         Enigma Control Info
-AboutCardContent,       Enigma Control Info
+AboutCardContent,       I am Enigma Control, a alexa skill written in D. Stephan aka extrawurst and Fabian aka fabsi88 are my authors. Visit github for more information.
 AboutSSML,              <speak>I am Enigma Control, a alexa skill written in D. Stephan aka extrawurst and Fabian aka fabsi88 are my authors. Visit github for more information.</speak>
 MoviesCardTitle,        Movie list
-MoviesCardContent,      Movie list
 MoviesSSML,             <speak>You've got the following movies %s</speak>
 MuteCardTitle,          Mute
-MuteCardContent,        Mute
 MutedSSML,              <speak>Muted</speak>
 MuteFailedSSML,         <speak>Mute failed</speak>
 UnMutedSSML,            <speak>Unmuted</speak>
 StandbyCardTitle,       Standby
-StandbyCardContent,     Standby
 StandbyFailedSSML,      <speak>Switch to standby failed</speak>
 StandbySSML,            <speak>Switched box to standby</speak>
 BoxStartedSSML,         <speak>Box started</speak>
 SetVolumeCardTitle,     Set volume
-SetVolumeCardContent,   Set volume
 SetVolumeFailedSSML,    <speak>Set volume failed</speak>
 SetVolumeSSML,          <speak>Set volume to %s</speak>
 RecordNowCardTitle,     Record now
-RecordNowCardContent,   Record now
 RecordNowFailedSSML,    <speak>Starting record failed</speak>
 RecordNowSSML,          <speak>Record started</speak>
 ZapToCardTitle,         Switch channel
-ZapToCardContent,       Switch channel
 ZapUpCardTitle,         Zap up
-ZapUpCardContent,       Zap up
 ZapDownCardTitle,       Zap down
-ZapDownCardContent,     Zap down
 ZapRandomCardTitle,     Switch to random channel
-ZapRandomCardContent,   Switch to random channel
 ZapToEventCardTitle,    Switch to program
-ZapToEventCardContent,  Switch to program
 ZapToEventFailedSSML,   <speak>The program is not broadcasted right now. The next programm <p>%s</p> will be at <p>%s</p> on <p>%s</p></speak>
 ZapToEventNotFoundSSML, <speak>The program could not be found in your e p g</speak>
 ZapFailedSSML,          none
@@ -48,25 +37,20 @@ ZapUp,                  up
 ZapDown,                down
 ZapToRandom,            random
 SleepTimerCardTitle,    Sleep Timer
-SleepTimerCardContent,  Sleep Timer
 SleepTimerOffSSML,      <speak>Sleep Timer switched off</speak>
 SleepTimerResetSSML,    <speak>There is sleep timer set with <p>%s minutes remaining. I've reset the sleep timer to %s minutes</p></speak>
 SleepTimerSetSSML,      <speak>I've set the sleepp timer to <p>%s minutes</p></speak>
 SleepTimerFailedSSML,   <speak>Set sleep timer failed</speak>
 SleepTimerNoTimerSSML,  <speak>No sleep timer found</speak>
 CurrentCardTitle,       You're watching
-CurrentCardContent,     You're watching
 CurrentSSML,            <speak>You are on: %s. it is playing: %s</speak>
 CurrentNextSSML,        <speak>You are on: %s. it is playing: %s. up next is: %s</speak>
 RCPlayPauseCardTitle,   Play/Pause
-RCPlayPauseCardContent, Play/Pause
 RCOKSSML,               <speak>OK</speak>
 RCFailedSSML,           <speak>Failed</speak>
 RCStopCardTitle,        Stop pause
-RCStopCardContent,      Stop pause
 NotSupportedSSML,       <speak>This function is not supported for your box. Please open a ticket at github</speak>
 RCPreviousCardTitle,    Previous channel
-RCPreviousCardContent,  Previous channel
 ErrorCardTitle,         An error has occured
 ErrorCardContent,       Please check if you have provided the correct parameters at https://funok.de:8080 . If you think we missed something please open a ticket with reference %s on https://github.com/alexa-d/alexa-openwebif/issues
 ErrorSSML,              <speak>An error has occured. Please have a look in the alexa app for further information</speak>

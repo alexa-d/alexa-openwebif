@@ -28,7 +28,6 @@ final class IntentToggleMute : OpenWebifBaseIntent
 			return returnError(e);
 
 		result.response.card.title = getText(TextId.MuteCardTitle);
-		result.response.card.content = getText(TextId.MuteCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.MuteFailedSSML);
 
@@ -37,6 +36,7 @@ final class IntentToggleMute : OpenWebifBaseIntent
 		else if (res.result && !res.ismute)
 			result.response.outputSpeech.ssml = getText(TextId.UnMutedSSML);
 
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }

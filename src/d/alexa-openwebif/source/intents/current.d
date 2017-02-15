@@ -32,7 +32,6 @@ final class IntentCurrent : OpenWebifBaseIntent
 
 		AlexaResult result;
 		result.response.card.title = getText(TextId.CurrentCardTitle);
-		result.response.card.content = getText(TextId.CurrentCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
 		if (currentService.next.title.length > 0)
@@ -47,6 +46,7 @@ final class IntentCurrent : OpenWebifBaseIntent
 					currentService.info._name, currentService.now.title);
 		}
 
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }

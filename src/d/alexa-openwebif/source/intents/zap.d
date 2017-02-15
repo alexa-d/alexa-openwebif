@@ -40,7 +40,7 @@ abstract class ZapBaseIntent : OpenWebifBaseIntent
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML), switchedTo);
-
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }
@@ -82,9 +82,9 @@ final class IntentZapTo : ZapBaseIntent
 
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapToCardTitle);
-		result.response.card.content = getText(TextId.ZapToCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML), switchedTo);
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 
 		return result;
 	}
@@ -104,7 +104,6 @@ final class IntentZapUp : ZapBaseIntent
 	{
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapUpCardTitle);
-		result.response.card.content = getText(TextId.ZapUpCardContent);
 		return doZapIntent(true, apiClient, result);
 	}
 }
@@ -123,7 +122,6 @@ final class IntentZapDown : ZapBaseIntent
 	{
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapDownCardTitle);
-		result.response.card.content = getText(TextId.ZapDownCardContent);
 		return doZapIntent(false, apiClient, result);
 	}
 }
@@ -160,9 +158,9 @@ final class IntentZapRandom : ZapBaseIntent
 		}
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapRandomCardTitle);
-		result.response.card.content = getText(TextId.ZapRandomCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.ZapSSML), switchedTo);
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }
@@ -188,7 +186,6 @@ final class IntentZapToEvent : ZapBaseIntent
 		EPGSearchList eventList;
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapToEventCardTitle);
-		result.response.card.content = getText(TextId.ZapToEventCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
 		try
@@ -199,6 +196,7 @@ final class IntentZapToEvent : ZapBaseIntent
 		if (eventList.events.length == 0)
 		{
 			result.response.outputSpeech.ssml = getText(TextId.ZapToEventNotFoundSSML);
+			result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 			return result;
 		}
 
@@ -234,6 +232,7 @@ final class IntentZapToEvent : ZapBaseIntent
 					ev.title, ev.begin, ev.sname);
 		}
 
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }

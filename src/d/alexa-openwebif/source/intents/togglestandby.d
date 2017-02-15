@@ -28,7 +28,6 @@ final class IntentToggleStandby : OpenWebifBaseIntent
 			return returnError(e);
 
 		result.response.card.title = getText(TextId.StandbyCardTitle);
-		result.response.card.content = getText(TextId.StandbyCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.StandbyFailedSSML);
 
@@ -37,6 +36,7 @@ final class IntentToggleStandby : OpenWebifBaseIntent
 		else if (res.result && !res.instandby)
 			result.response.outputSpeech.ssml = getText(TextId.StandbySSML);
 
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }

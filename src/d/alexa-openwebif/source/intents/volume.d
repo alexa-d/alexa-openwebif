@@ -35,12 +35,12 @@ abstract class VolumeBaseIntent : OpenWebifBaseIntent
 			return returnError(e);
 
 		result.response.card.title = getText(TextId.SetVolumeCardTitle);
-		result.response.card.content = getText(TextId.SetVolumeCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.SetVolumeFailedSSML);
 		if (res.result)
 			result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeSSML), res.current);
 
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 
@@ -97,7 +97,6 @@ final class IntentSetVolume : VolumeBaseIntent
 
 		AlexaResult result;
 		result.response.card.title = getText(TextId.SetVolumeCardTitle);
-		result.response.card.content = getText(TextId.SetVolumeCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.SetVolumeFailedSSML);
 
@@ -119,6 +118,7 @@ final class IntentSetVolume : VolumeBaseIntent
 					to!string(targetVolume));
 		}
 
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
 }

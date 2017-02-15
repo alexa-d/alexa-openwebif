@@ -30,7 +30,6 @@ final class IntentMovies : OpenWebifBaseIntent
 			return returnError(e);
 
 		result.response.card.title = getText(TextId.MoviesCardTitle);
-		result.response.card.content = getText(TextId.MoviesCardContent);
 
 		string moviesList;
 
@@ -41,6 +40,7 @@ final class IntentMovies : OpenWebifBaseIntent
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.MoviesSSML), moviesList);
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 
 		return result;
 	}

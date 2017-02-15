@@ -30,7 +30,6 @@ final class IntentServices : OpenWebifBaseIntent
 			return returnError(e);
 
 		result.response.card.title = getText(TextId.ChannelsCardTitle);
-		result.response.card.content = getText(TextId.ChannelsCardContent);
 
 		string channels;
 
@@ -43,6 +42,7 @@ final class IntentServices : OpenWebifBaseIntent
 		}
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.ChannelsSSML), channels);
+		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 
 		return result;
 	}

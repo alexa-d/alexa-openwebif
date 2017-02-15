@@ -55,4 +55,21 @@ abstract class OpenWebifBaseIntent : BaseIntent
 		}
 		return _list;
 	}
+
+	///
+	static string removeTags(string _text)
+	{
+		import std.regex;
+		auto pexpr = regex("<\\/p>");
+		auto expr = regex("<[^>]*>");
+		_text = _text.replaceAll(pexpr, "\n");
+		return  _text.replaceAll(expr, "");
+	}
+
+	///
+	unittest
+	{
+		auto text = "<speak>This is a test <p>text</p></speak>";
+		assert (removeTags(text) == "This is a test text\n");
+	}
 }
