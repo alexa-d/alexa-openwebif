@@ -1,1 +1,1 @@
-openatv, enigma, openwebif, linux, tv, receiver
+openatv, enigma, openwebif, linux, tv, receiver, vu, vuplus, vu+, vti
