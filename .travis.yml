@@ -10,7 +10,7 @@ d:
 addons:
   apt:
     packages:
-    - libev-dev
+    - libevent-devel
 
 script:
   - cd src/d/alexa-openwebif
