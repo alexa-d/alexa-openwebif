@@ -3,11 +3,23 @@ description "Amazon Alexa Skill to interact with a openwebif tv receiver"
 authors "Stephan Dilly, Fabian Wallentowitz"
 copyright "Copyright © 2017, Stephan Dilly"
 license "MIT"
+
 dependency "vibe-d" version="~>0.7.30"
 dependency "alexa-skill-kit-d" version="~>0.4"
 //dependency "alexa-skill-kit-d" version="~master" path="../../../../alexa-skill-kit-d"
 dependency "openwebif-client-d" version="~>0.1"
 dependency "vibe-aws" version="~master" path="../vibe-aws"
 dependency "amazonlogin-d" version="~>0.1"
-versions "VibeCustomMain"
+
 stringImportPaths "lang"
+versions "VibeCustomMain"
+
+configuration "app" {
+	target "executable"
+}
+
+configuration "unittest" {
+	target "lib"
+	excludedSourceFiles "source/main.d"
+	subConfiguration "vibe-d" "libasync"
+}
