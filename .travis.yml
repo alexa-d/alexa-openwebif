@@ -6,6 +6,12 @@ d:
   - dmd
   - ldc
 
+  
+addons:
+  apt:
+    packages:
+    - libev-dev
+
 script:
   - cd src/d/alexa-openwebif
   - dub test --compiler=$DC || exit 1
