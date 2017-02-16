@@ -1,0 +1,11 @@
+language: d
+
+sudo: false
+
+d:
+  - dmd
+  - ldc
+
+script:
+  - cd src/d/alexa-openwebif
+  - dub test --compiler=$DC || exit 1
