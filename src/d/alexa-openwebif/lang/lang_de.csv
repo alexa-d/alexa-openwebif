@@ -40,7 +40,7 @@ SleepTimerCardTitle,    Sleep Timer
 SleepTimerOffSSML,      <speak>Sleep Timer wurde deaktiviert</speak>
 SleepTimerResetSSML,    <speak>Es existiert bereits ein Sleep Timer mit <p>%s verbleibenden Minuten. Timer wurde auf %s Minuten zurückgesetzt.</p></speak>
 SleepTimerSetSSML,      <speak>Ich habe den Sleep Timer auf <p>%s Minuten eingestellt</p></speak>
-SleepTimerFailedSSML,   <speak>Der Timer konnte nicht gesetzt werden.</speak>
+SleepTimerFailedSSML,   <speak>Der Timer konnte nicht gesetzt werden. Es werden keine Werte über 24 Stunden akzeptiert.</speak>
 SleepTimerNoTimerSSML,  <speak>Es gibt keinen Timer der deaktiviert werden könnte</speak>
 CurrentCardTitle,       Es läuft
 CurrentSSML,            <speak>Du guckst gerade: <p>%s</p> Aktuell läuft: %s</speak>

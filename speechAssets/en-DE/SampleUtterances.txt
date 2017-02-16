@@ -73,9 +73,11 @@ IntentSetVolume Lautstärke auf {targetVolume} erhöhen
 IntentSetVolume Lautstärke auf {targetVolume} verringern
 
 IntentSleepTimer nach sleep timer in {targetMinutes}
+IntentSleepTimer nach sleep timer {targetMinutes}
 IntentSleepTimer nach einschlafen in {targetMinutes}
 IntentSleepTimer nach ausschalten in {targetMinutes}
 IntentSleepTimer sleep timer in {targetMinutes}
+IntentSleepTimer sleep timer {targetMinutes}
 
 IntentAbout worin es geschrieben wurde
 IntentAbout wo es her kommt
