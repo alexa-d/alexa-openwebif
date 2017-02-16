@@ -11,6 +11,7 @@ addons:
   apt:
     packages:
     - libevent-dev
+    - libc6
 
 script:
   - cd src/d/alexa-openwebif
