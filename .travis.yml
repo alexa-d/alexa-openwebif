@@ -6,11 +6,11 @@ d:
   - dmd
   - ldc
 
-  
+
 addons:
   apt:
     packages:
-    - libevent-devel
+    - libevent-dev
 
 script:
   - cd src/d/alexa-openwebif
