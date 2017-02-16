@@ -40,7 +40,7 @@ SleepTimerCardTitle,    Sleep Timer
 SleepTimerOffSSML,      <speak>Sleep Timer switched off</speak>
 SleepTimerResetSSML,    <speak>There is sleep timer set with <p>%s minutes remaining. I've reset the sleep timer to %s minutes</p></speak>
 SleepTimerSetSSML,      <speak>I've set the sleepp timer to <p>%s minutes</p></speak>
-SleepTimerFailedSSML,   <speak>Set sleep timer failed</speak>
+SleepTimerFailedSSML,   <speak>Set sleep timer failed. Please be aware that values over 24 hours are not working.</speak>
 SleepTimerNoTimerSSML,  <speak>No sleep timer found</speak>
 CurrentCardTitle,       You're watching
 CurrentSSML,            <speak>You are on: %s. it is playing: %s</speak>

@@ -22,8 +22,16 @@ final class IntentSleepTimer : OpenWebifBaseIntent
 	{
 		import std.conv : to;
 		import std.format : format;
-
-		auto minutes = to!int(event.request.intent.slots["targetMinutes"].value);
+		import std.stdio : stderr;
+		int minutes;
+		try
+		{
+			minutes = ISODurationToMinutes(event.request.intent.slots["targetMinutes"].value);
+		}
+		catch (Exception e)
+		{
+			return returnError(e);
+		}
 		AlexaResult result;
 		result.response.card.title = getText(TextId.SleepTimerCardTitle);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
@@ -76,5 +84,35 @@ final class IntentSleepTimer : OpenWebifBaseIntent
 		}
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
+	}
+
+	///
+	static int ISODurationToMinutes(string isoString)
+	{
+		import std.regex : regex, matchAll;
+		import std.conv : to;
+
+		auto expr = regex(`P((([0-9]*\.?[0-9]*)Y)?(([0-9]*\.?[0-9]*)M)?(([0-9]*\.?[0-9]*)W)?(([0-9]*\.?[0-9]*)D)?)?(T(([0-9]*\.?[0-9]*)H)?(([0-9]*\.?[0-9]*)M)?(([0-9]*\.?[0-9]*)S)?)?`);
+		auto res = matchAll(isoString, expr);
+		//only support hours minutes and seconds - formats like "PT..."
+		if (res.front[1].length > 0)
+			return -1;
+
+		int secs, mins, hrs;
+		if (res.front[16].length > 0) secs = to!int(res.front[16]);
+		if (res.front[14].length > 0) mins = to!int(res.front[14]);
+		if (res.front[12].length > 0) hrs = to!int(res.front[12]);
+		return secs / 60 + mins + hrs * 60;
+	}
+
+	///
+	unittest
+	{
+		assert (ISODurationToMinutes("PT10M") == 10);
+		assert (ISODurationToMinutes("PT10M120S") == 12);
+		assert (ISODurationToMinutes("PT10M80S") == 11);
+		assert (ISODurationToMinutes("PT1H") == 60);
+		assert (ISODurationToMinutes("PT2H10M") == 130);
+		assert (ISODurationToMinutes("P2YT10M") == -1);
 	}
 }
