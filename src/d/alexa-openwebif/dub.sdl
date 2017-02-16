@@ -13,13 +13,13 @@ dependency "amazonlogin-d" version="~>0.1"
 
 stringImportPaths "lang"
 versions "VibeCustomMain"
+targetType "executable"
 
-configuration "app" {
-	target "executable"
+configuration "debug" {
 }
 
 configuration "unittest" {
-	target "lib"
+	targetType "library"
 	excludedSourceFiles "source/main.d"
 	subConfiguration "vibe-d" "libasync"
 }
