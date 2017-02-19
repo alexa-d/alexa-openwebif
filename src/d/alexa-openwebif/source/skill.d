@@ -203,7 +203,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	@safe nothrow unittest
+	@system unittest
 	{
 		import std.algorithm.searching : canFind;
 
@@ -266,7 +266,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 }
 
 //TODO: move to baselib
-@safe nothrow unittest
+@system unittest
 {
 	auto skill = new OpenWebifSkill("", "de-DE", "", "", "", "");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_de[TextId.PleaseLogin].text);
