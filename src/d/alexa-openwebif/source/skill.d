@@ -129,7 +129,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	{
 		if (accountsSetup == SetupStates.OK)
 		{
-			return aboutIntent.onIntent(event, context);
+			return onIntentHelp(event, context);
 		}
 		else
 		{
@@ -187,6 +187,18 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 					amazonProfile.name);
 		}
 
+		return result;
+	}
+
+	///
+	@CustomIntent("AMAZON.HelpIntent")
+	AlexaResult onIntentHelp(AlexaEvent, AlexaContext)
+	{
+		AlexaResult result;
+		result.response.card.title =  getText(TextId.HelpCardTitle);
+		result.response.card.content = getText(TextId.HelpCardContent);
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = getText(TextId.HelpSSML);
 		return result;
 	}
 
