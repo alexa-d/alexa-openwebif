@@ -38,6 +38,8 @@ IntentZapTo zap zu {targetChannel}
 IntentZapTo schalte auf {targetChannel}
 IntentZapTo schalte {targetChannel}
 IntentZapTo wechsel {targetChannel}
+IntentZapTo umschalten auf {targetChannel}
+IntentZapTo umschalten zu {targetChannel}
 
 IntentZapToEvent ob die Sendung {targetEvent} läuft
 IntentZapToEvent ob Sendung {targetEvent} läuft
