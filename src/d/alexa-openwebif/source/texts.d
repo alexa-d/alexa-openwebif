@@ -66,5 +66,8 @@ enum TextId
 	ErrorCardTitle,
 	ErrorCardContent,
 	ErrorSSML,
-	SetVolumeRangeErrorSSML
+	SetVolumeRangeErrorSSML,
+	HelpCardTitle,
+	HelpCardContent,
+	HelpSSML
 }

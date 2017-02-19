@@ -1,6 +1,205 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/Wallentowitz) [![Build Status](https://travis-ci.org/alexa-d/alexa-openwebif.svg)](https://travis-ci.org/alexa-d/alexa-openwebif)
-# alexa-openwebif
-alexa skill to control your openwebif device.
+# Enigma2 Control Alexa Skill
+#### scroll down for self deployment instruction
+Mit dem Enigma2 Control Alexa Skill kannst du deinen Enigma2 Linux Receiver via Amazon Echo steuern. Der Skill befindet sich im Review durch Amazon und ist bald verfügbar. 
+Damit der Skill bei dir funktioniert müssen folgende Gegebenheiten erfüllt sein:
+* Der Skill muss aktiviert sein
+* Das Account-Linking muss erfolgt sein
+* Dein Receiver muss aus dem Internet erreichbar sein ([Hier](http://techify.de/vu-tutorial-aufnahmen-timer-mit-android-unterwegs-programmieren/) ist ein Tutorial um deine Box aus dem Internet erreichbar zu machen)
+* Du musst deine Zugangsdaten für die Box in unserem [Portal](https://funok.de:8080) hinterlegen
+
+Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` eine Liste über die verfügbaren Kommandos erhalten. Hier folgt die komplette Übersicht aller möglichen Befehle:
+
+### Was läuft gerade?
+`Alexa, frag Enigma`
+  * `was gerade läuft`
+  * `was ich gerade gucke`
+  * `was aktuell läuft`
+  
+`Alexa,`
+
+  * `was ist das`
+  * `aktuell`
+  * `was läuft gerade`
+  * `was gucke ich gerade`
+
+`mit Enigma`
+
+### Kanalübersicht
+`Alexa, frag Enigma`
+  * `nach meinen kanälen`
+  * `nach meinen sendern`
+  * `nach meinen services`
+
+`Alexa,`
+
+  * `meine Kanäle`
+  * `meine Sender`
+  * `meine Services`
+
+`mit Enigma`
+
+### Aufnahmen
+`Alexa, frag Enigma`
+  * `nach meinen aufnahmen`
+  * `nach meinen filmen`
+  * `welche aufnahmen habe ich`
+
+`Alexa,`
+
+  * `meine aufnahmen`
+
+`mit Enigma`
+
+### Lautstärkenregelung
+`Alexa, frag Enigma`
+  * `nach Ton ausschalten`
+  * `nach stumm schalten`
+  * `Ton auszumachen`
+  * `die Lautstärke auf <0-100> zu setzen`
+  
+`Alexa,`
+
+  * `Ton ausschalten`
+  * `mute`
+  * `Stumm schalten`
+  * `Ton an`
+  * `Ton aus`
+  * `erhöhe die Lautstärke`
+  * `verringer die Lautstärke`
+  * `Lautstärke hoch`
+  * `Lautstärke runter`
+  * `lauter`
+  * `leiser`
+  * `die Lautstärke auf <0-100> setzen`
+  * `Lautstärke auf <0-100>`
+  * `Lautstärke auf <0-100> erhöhen`
+  * `Lautstärke auf <0-100> verringern`
+
+`mit Enigma`
+
+### Umschalten auf Kanal
+`Alexa, frag Enigma`
+  * `und schalte auf <Kanal>`
+  * `auf <Kanal> zu schalten`
+  * `auf <Kanal> zu wechseln`
+  * `den Sender <Kanal> einzuschalten`
+  * `zu <Kanal> zu schalten`
+  * `zu <Kanal> zu wechseln`
+  
+`Alexa,`
+
+  * `wechsel zu <Kanal>`
+  * `zap zu <Kanal>`
+  * `schalte auf <Kanal>`
+  * `schalte <Kanal>`
+  * `wechsel <Kanal>`
+  * `umschalten auf <Kanal>`
+  * `umschalten zu <Kanal>`
+
+`mit Enigma`
+
+### Umschalten auf Sendung (wenn sie läuft - wenn nicht, sagt Alexa dir wann die Sendung wieder läuft)
+`Alexa, frag Enigma`
+  * `ob die Sendung <Sendung> läuft`
+  * `ob Sendung <Sendung> läuft`
+  * `ob <Sendung> läuft`
+  * `nach der Sendung <Sendung>`
+  * `nach Sendung <Sendung>`
+  
+`Alexa,`
+  * `such nach Sendung <Sendung>`
+  * `Sendung <Sendung>`
+  * `schalte auf <Sendung>`
+  * `schalte <Sendung>`
+  * `wechsel <Sendung>`
+  * `umschalten auf <Sendung>`
+  * `umschalten zu <Sendung>`
+
+`mit Enigma`
+
+### Hoch-/Runterschalten
+`Alexa,`
+  * `schalte runter`
+  * `schalte hoch`
+  * `runter schalten`
+  * `hoch schalten`
+  
+`mit Enigma`
+
+### Zufälliges umschalten
+`Alexa,`
+  * `schalte zufällig um`
+  * `zufällig umschalten`
+  
+`mit Enigma`
+
+### Standby 
+`Alexa,`
+  * `Standby umschalten`
+  * `Standby einschalten`
+  * `Standby ausschalten`
+  * `ausschalten`
+  * `einschalten`
+  * `anschalten`
+  
+`mit Enigma`
+
+### (Sofort-)Aufnahme starten
+`Alexa,`
+  * `aufnehmen`
+  * `Aufnahme starten`
+  * `jetzt aufnehmen`
+  
+`mit Enigma`
+
+### Pause/Fortsetzen/Stop
+`Alexa,`
+  * `pausieren`
+  * `pause`
+  * `fortsetzen`
+  * `stop`
+  
+`mit Enigma`
+
+### Sleeptimer (erwartet Minuten - 0 Minuten deaktiviert den Timer)
+`Alexa, frag Enigma`
+  * `nach sleep timer in <minuten> Minuten`
+  * `nach einschlafen in <minuten> Minuten`
+  * `nach ausschalten in <minuten> Minuten`
+
+`Alexa,`
+  * `sleep timer in <minuten> Minuten`
+  * `sleep timer <minuten> Minuten`
+
+`mit Enigma`
+
+### Vorheriger Kanal 
+`Alexa,`
+  * `vorheriger Kanal`
+  * `vorheriger Sender`
+  * `letzter Kanal`
+  * `letzter Sender`
+  * `zurückschalten`
+  * `zurück schalten`
+  * `zurück`
+  
+`mit Enigma`
+
+### About / Über uns
+`Alexa, frag Enigma`
+  * `worin es geschrieben wurde`
+  * `wo es her kommt`
+  * `wer es geschrieben hat`
+
+`Alexa,`
+  * `wer ist dein vater`
+
+`mit Enigma`
+
+
+# Self-Deployment
+alexa skill to control your enigma2 device.
 
 development blog post: [Alexa in D](http://blog.extrawurst.org/programming/dlang/alexa/2017/01/06/alexa-in-d.html)
 
