@@ -203,7 +203,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	@safe nothrow uunittest
+	@safe nothrow unittest
 	{
 		import std.algorithm.searching : canFind;
 
