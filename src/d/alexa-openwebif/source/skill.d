@@ -18,12 +18,12 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	private AmazonLoginApi amazonLoginApi;
 	private UserProfile amazonProfile;
 	private BaseIntent aboutIntent;
-	private enum SetupStates {
+	private enum SetupState {
 		OK = 0,
 		NOT_LINKED = 1,
 		DB_API_ERROR = 2
 	}
-	private SetupStates accountsSetup;
+	private SetupState accountsSetup;
 
 	///
 	this(string accessToken, string locale, string accessKey, string secretKey,
@@ -38,7 +38,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 		this.addIntent(aboutIntent = new IntentAbout());
 
-		if (accountsSetup == SetupStates.OK)
+		if (accountsSetup == SetupState.OK)
 		{
 			this.addIntent(new IntentCurrent(apiClient));
 			this.addIntent(new IntentMovies(apiClient));
@@ -61,7 +61,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 		}
 	}
 
-	private SetupStates setupAccounts(string accessToken, string accessKey,
+	private SetupState setupAccounts(string accessToken, string accessKey,
 			string secretKey, string awsRegion, string owifTableName)
 	{
 		import std.conv : to;
@@ -107,7 +107,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			{
 				stderr.writefln("Username: %s with user id: %s and token %s has no entry in db: %s",
 						amazonProfile.name, amazonProfile.user_id, dbAccessToken, e);
-				return SetupStates.DB_API_ERROR;
+				return SetupState.DB_API_ERROR;
 			}
 
 			try
@@ -115,26 +115,26 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			catch (Exception e)
 			{
 				stderr.writefln("Error with URL: %s", baseUrl ~ "/api/");
-				return SetupStates.DB_API_ERROR;
+				return SetupState.DB_API_ERROR;
 			}
 
-			return SetupStates.OK;
+			return SetupState.OK;
 		}
 
-		return SetupStates.NOT_LINKED;
+		return SetupState.NOT_LINKED;
 	}
 
 	///
 	override AlexaResult noIntentMatch(AlexaEvent event, AlexaContext context)
 	{
-		if (accountsSetup == SetupStates.OK)
+		if (accountsSetup == SetupState.OK)
 		{
 			return aboutIntent.onIntent(event, context);
 		}
 		else
 		{
 			AlexaResult result;
-			if (accountsSetup == SetupStates.NOT_LINKED)
+			if (accountsSetup == SetupState.NOT_LINKED)
 			{
 				result.response.card.content = getText(TextId.PleaseLogin);
 				result.response.card.type = AlexaCard.Type.LinkAccount;
@@ -191,7 +191,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	}
 
 	///
-	unittest
+	@safe nothrow unittest
 	{
 		import std.algorithm.searching : canFind;
 
@@ -254,7 +254,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 }
 
 //TODO: move to baselib
-unittest
+@safe nothrow unittest
 {
 	auto skill = new OpenWebifSkill("", "de-DE", "", "", "", "");
 	assert(skill.getText(TextId.PleaseLogin) == AlexaText_de[TextId.PleaseLogin].text);
