@@ -6,5 +6,7 @@ Was kannst du mit Enigma2 Control alles machen ?
 	* Schalte in Standby und zurück.
 	* und vieles mehr...
 
-Um Enigma2 Control nutzen zu können benötigst du einen OpenWebIf-fähigen TV Receiver. Per Account Linking kannst du dem Skill mitteilen wie er deinen Receiver aus dem Internet erreicht.
+Um Enigma2 Control nutzen zu können benötigst du einen Enigma2 TV Receiver. Per Account Linking kannst du dem Skill mitteilen wie er deinen Receiver aus dem Internet erreicht.
 Diese Daten musst du in dem Portal https://funok.de:8080 hinterlegen. Der Login funktioniert mit deinem Amazon Account.
+
+Nutze die Hilfe im Skill um eine Übersicht über alle Befehle zu erhalten. Ebenso findest du eine Übersicht sowie weitere Informationen unter https://github.com/alexa-d/alexa-openwebif

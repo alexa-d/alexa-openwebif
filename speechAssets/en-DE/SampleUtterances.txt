@@ -44,6 +44,12 @@ IntentZapTo umschalten zu {targetChannel}
 IntentZapToEvent ob die Sendung {targetEvent} läuft
 IntentZapToEvent ob Sendung {targetEvent} läuft
 IntentZapToEvent ob {targetEvent} läuft
+IntentZapToEvent ob die Sendung {targetEvent} gerade läuft
+IntentZapToEvent ob Sendung {targetEvent} gerade läuft
+IntentZapToEvent ob {targetEvent} gerade läuft
+IntentZapToEvent ob die Sendung {targetEvent} aktuell läuft
+IntentZapToEvent ob Sendung {targetEvent} aktuell läuft
+IntentZapToEvent ob {targetEvent} aktuell läuft
 IntentZapToEvent nach der Sendung {targetEvent}
 IntentZapToEvent nach Sendung {targetEvent} 
 IntentZapToEvent such nach Sendung {targetEvent} 
