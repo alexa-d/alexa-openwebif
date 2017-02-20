@@ -6,7 +6,7 @@ Damit der Skill bei dir funktioniert müssen folgende Gegebenheiten erfüllt sei
 * Der Skill muss aktiviert sein
 * Das Account-Linking muss erfolgt sein
 * Dein Receiver muss aus dem Internet erreichbar sein ([Hier](http://techify.de/vu-tutorial-aufnahmen-timer-mit-android-unterwegs-programmieren/) ist ein Tutorial um deine Box aus dem Internet erreichbar zu machen)
-* Du musst deine Zugangsdaten für die Box in unserem [Portal](https://funok.de:8080) hinterlegen
+* Du musst deine Zugangsdaten für die Box in unserem [Portal](https://funok.de:8080) hinterlegen (URL muss mit http:// oder https:// beginnen)
 
 Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` eine Liste über die verfügbaren Kommandos erhalten. Hier folgt die komplette Übersicht aller möglichen Befehle:
 
