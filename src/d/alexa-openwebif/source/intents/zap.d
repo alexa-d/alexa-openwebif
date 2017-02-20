@@ -182,6 +182,7 @@ final class IntentZapToEvent : ZapBaseIntent
 
 		auto targetEvent = event.request.intent.slots["targetEvent"].value;
 		auto switchedTo = getText(TextId.ZapFailedSSML);
+		ServicesList allservices;
 
 		EPGSearchList eventList;
 		AlexaResult result;
@@ -190,6 +191,11 @@ final class IntentZapToEvent : ZapBaseIntent
 
 		try
 			eventList = apiClient.epgsearch(targetEvent);
+		catch (Exception e)
+			return returnError(e);
+
+		try
+			allservices = removeMarkers(apiClient.getallservices());
 		catch (Exception e)
 			return returnError(e);
 
@@ -203,14 +209,30 @@ final class IntentZapToEvent : ZapBaseIntent
 		import std.algorithm : sort;
 		import std.datetime : Clock;
 		import core.stdc.time : time, time_t;
+		import std.algorithm.searching : countUntil;
 
 		immutable now = time(null);
 		auto sortedEventList = eventList.events.sort!((a,
 				b) => a.begin_timestamp < b.begin_timestamp);
 		auto idx = 0;
 		auto idxnext = -1;
+
+		static bool pred(Subservice subs, string curr)
+		{
+			return curr == subs.servicereference;
+		}
+
 		foreach (thisEvent; sortedEventList)
 		{
+			immutable index = cast(int) countUntil!(pred)(allservices.services[0].subservices,
+			thisEvent.sref);
+
+			if (index == -1)
+			{
+				idx++;
+				continue;
+			}
+
 			if ((thisEvent.begin_timestamp > now) && idxnext == -1)
 				idxnext = idx;
 			if (thisEvent.begin_timestamp <= now
