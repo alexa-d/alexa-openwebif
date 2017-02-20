@@ -1,4 +1,4 @@
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/Wallentowitz) [![Build Status](https://travis-ci.org/alexa-d/alexa-openwebif.svg)](https://travis-ci.org/alexa-d/alexa-openwebif) ![Submission State](https://img.shields.io/badge/submission_state-rejected-red.svg)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/Wallentowitz) [![Build Status](https://travis-ci.org/alexa-d/alexa-openwebif.svg)](https://travis-ci.org/alexa-d/alexa-openwebif) ![Submission State](https://img.shields.io/badge/submission_state-in_progress-yellow.svg)
 # Enigma2 Control Alexa Skill
 #### scroll down for self deployment instruction or click [HERE](https://github.com/alexa-d/alexa-openwebif#self-deployment)
 Mit dem Enigma2 Control Alexa Skill kannst du deinen Enigma2 Linux Receiver via Amazon Echo steuern. Der Skill befindet sich im Review durch Amazon und ist bald verfügbar. 
