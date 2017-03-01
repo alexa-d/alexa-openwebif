@@ -46,7 +46,7 @@ final class IntentCurrent : OpenWebifBaseIntent
 					currentService.info._name, currentService.now.title);
 		}
 
-		result.response.outputSpeech.ssml = result.response.outputSpeech.ssml.replace("&", getText(TextId.And));
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}

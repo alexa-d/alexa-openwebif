@@ -82,6 +82,8 @@ final class IntentSleepTimer : OpenWebifBaseIntent
 		{
 			result.response.outputSpeech.ssml = getText(TextId.SleepTimerFailedSSML);
 		}
+
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}

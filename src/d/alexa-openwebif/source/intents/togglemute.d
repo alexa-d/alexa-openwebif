@@ -36,6 +36,8 @@ final class IntentToggleMute : OpenWebifBaseIntent
 		else if (res.result && !res.ismute)
 			result.response.outputSpeech.ssml = getText(TextId.UnMutedSSML);
 
+
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
