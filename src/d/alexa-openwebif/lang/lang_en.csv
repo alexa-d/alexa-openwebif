@@ -58,3 +58,4 @@ SetVolumeRangeErrorSSML,<speak>Value %s not possible. Pleas provide volume betwe
 HelpCardTitle,          Help
 HelpCardContent,        HelpContent will follow on english submission
 HelpSSML,               <speak>With this skill you are able to control your enigma2 receiver. Call<p>Switch channel to C. N. N. with Enigma</p>to switch your current channel or call <p>Stop stop Enigma</p> to stop the current program. For further calls have a look at your alexa app.</speak>
+And,                    and
