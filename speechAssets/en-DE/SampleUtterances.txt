@@ -106,6 +106,7 @@ IntentRCPlayPause pause
 IntentRCPlayPause fortsetzen
 
 IntentRCStop stop
+IntentRCStop stopp
 
 IntentRCPrevious vorheriger Kanal
 IntentRCPrevious vorheriger Sender
