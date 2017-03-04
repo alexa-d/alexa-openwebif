@@ -183,7 +183,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			result.response.card.content = format(getText(TextId.HelloCardContent),
 					amazonProfile.name);
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
-			result.response.outputSpeech.ssml = .format(getText(TextId.HelloSSML),
+			result.response.outputSpeech.ssml = format(getText(TextId.HelloSSML),
 					amazonProfile.name);
 		}
 
