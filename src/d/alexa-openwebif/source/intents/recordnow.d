@@ -32,6 +32,8 @@ final class IntentRecordNow : OpenWebifBaseIntent
 		result.response.outputSpeech.ssml = getText(TextId.RecordNowFailedSSML);
 		if (res.result)
 			result.response.outputSpeech.ssml = getText(TextId.RecordNowSSML);
+
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}

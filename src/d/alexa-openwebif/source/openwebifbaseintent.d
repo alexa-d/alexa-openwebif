@@ -72,4 +72,13 @@ abstract class OpenWebifBaseIntent : BaseIntent
 		auto text = "<speak>This is a test <p>text</p></speak>";
 		assert (removeTags(text) == "This is a test text\n");
 	}
+
+	///
+	protected string replaceSpecialChars(string _text)
+	{
+		import std.array : replace;
+		_text = _text.replace("&", getText(TextId.And));
+		_text = _text.replace("\"","");
+		return _text.replace("'","");
+	}
 }

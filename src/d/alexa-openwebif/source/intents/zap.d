@@ -254,6 +254,7 @@ final class IntentZapToEvent : ZapBaseIntent
 					ev.title, ev.begin, ev.sname);
 		}
 
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}

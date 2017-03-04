@@ -40,6 +40,7 @@ abstract class VolumeBaseIntent : OpenWebifBaseIntent
 		if (res.result)
 			result.response.outputSpeech.ssml = format(getText(TextId.SetVolumeSSML), res.current);
 
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
@@ -118,6 +119,7 @@ final class IntentSetVolume : VolumeBaseIntent
 					to!string(targetVolume));
 		}
 
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}

@@ -55,6 +55,8 @@ abstract class RemoteControlBaseIntent : OpenWebifBaseIntent
 		{
 			result.response.outputSpeech.ssml = texts.getText(TextId.NotSupportedSSML);
 		}
+
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}

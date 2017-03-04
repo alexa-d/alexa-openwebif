@@ -40,6 +40,7 @@ final class IntentMovies : OpenWebifBaseIntent
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = format(getText(TextId.MoviesSSML), moviesList);
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 
 		return result;

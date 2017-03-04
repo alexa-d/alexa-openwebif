@@ -36,6 +36,7 @@ final class IntentToggleStandby : OpenWebifBaseIntent
 		else if (res.result && !res.instandby)
 			result.response.outputSpeech.ssml = getText(TextId.StandbySSML);
 
+		result.response.outputSpeech.ssml = replaceSpecialChars(result.response.outputSpeech.ssml);
 		result.response.card.content = removeTags(result.response.outputSpeech.ssml);
 		return result;
 	}
