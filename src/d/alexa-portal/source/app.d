@@ -52,6 +52,7 @@ class OpenWebIfDB
 	{
 		import std.algorithm.searching : startsWith;
 		import std.uni : toLower;
+		import std.string : format;
 		
 		auto openwebifItem = Item().set("accessToken", _token);
 		_url = _url.toLower;
