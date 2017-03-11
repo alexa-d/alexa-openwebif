@@ -50,8 +50,18 @@ class OpenWebIfDB
 	///
 	void writeEntry(string _url, string _username, string _password, string _auth, string _token)
 	{
+		import std.algorithm.searching : startsWith;
+		import std.uni : toLower;
+		
 		auto openwebifItem = Item().set("accessToken", _token);
-		openwebifItem.set("url",_url);
+		_url = _url.toLower;
+
+		if (!_url.startsWith("http://") && !_url.startsWith("https://"))
+		{
+			//falling back to http if no protocol is set
+			_url = format("http://%s", _url);
+		}
+		openwebifItem.set("url", _url);
 		if(_password.length)
 			openwebifItem.set("password", _password);
 		if(_username.length)
