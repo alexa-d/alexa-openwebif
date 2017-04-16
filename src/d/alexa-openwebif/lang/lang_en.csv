@@ -57,5 +57,5 @@ ErrorSSML,              <speak>An error has occured. Please have a look in the a
 SetVolumeRangeErrorSSML,<speak>Value %s not possible. Pleas provide volume between 0 and 100</speak>
 HelpCardTitle,          Help
 HelpCardContent,        HelpContent will follow on english submission
-HelpSSML,               <speak>With this skill you are able to control your enigma2 receiver. Call<p>Switch channel to C. N. N. with Enigma</p>to switch your current channel or call <p>Stop stop Enigma</p> to stop the current program. For further calls have a look at your alexa app.</speak>
+HelpSSML,               <speak>With this skill you are able to control your enigma2 receiver. Call<p>Switch channel to CNN with Enigma Control</p>to switch your current channel or call <p>Stop Enigma Control</p> to stop the current program. For further calls have a look at your alexa app. What do you want me to do?</speak>
 And,                    and

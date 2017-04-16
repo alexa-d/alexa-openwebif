@@ -187,6 +187,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 			result.response.outputSpeech.ssml = format(getText(TextId.HelloSSML),
 					amazonProfile.name);
+			result.response.shouldEndSession = false;
 		}
 
 		return result;

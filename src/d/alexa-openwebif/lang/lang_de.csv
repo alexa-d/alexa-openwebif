@@ -2,7 +2,7 @@ PleaseLogin,            Bitte log dich ein
 PleaseLoginSSML,        <speak>Bitte log dich in deiner Alexa App ein</speak>
 DefaultCardTitle,       Enigma Control
 HelloCardContent,       Enigma Control sagt hallo zu %s. Mit diesem Skill kannst du deinen Enigma2 Receiver steuern. So kannst du z.B. mit Umschalten auf ARD mit Enigma den Kanal wechseln oder mit Pause mit Enigma das laufende Programm anhalten. Weitere Befehle kannst du mit Frage Enigma nach Hilfe erfragen
-HelloSSML,              <speak>Hallo %s, danke fürs einloggen. Mit diesem Skill kannst du deinen Enigma2 Receiver steuern. So kannst du z.B. mit <p>Umschalten auf A. R. D. mit Enigma</p>den Kanal wechseln oder mit <p>Pause mit Enigma</p> das laufende Programm anhalten. Weitere Befehle kannst du mit <p>Frage Enigma nach Hilfe</p> erfragen</speak>
+HelloSSML,              <speak>Hallo %s, danke fürs einloggen. Mit diesem Skill kannst du deinen Enigma2 Receiver steuern. So kannst du z.B. mit <p>Umschalten auf ARD</p>den Kanal wechseln oder mit <p>Pause</p> das laufende Programm anhalten. Weitere Befehle kannst du mit <p>Frage Enigma Control nach Hilfe</p> erfragen. Was soll ich für dich ausführen?</speak>
 ChannelsCardTitle,      Kanäle
 ChannelsSSML,           <speak>Du hast die folgenden Kanäle %s</speak>
 AboutCardTitle,         Enigma Control Info
