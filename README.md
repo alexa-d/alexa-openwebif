@@ -11,7 +11,7 @@ Damit der Skill bei dir funktioniert müssen folgende Gegebenheiten erfüllt sei
 Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` eine Liste über die verfügbaren Kommandos erhalten. Hier folgt die komplette Übersicht aller möglichen Befehle:
 
 ### Was läuft gerade?
-`Alexa, frag Enigma`
+`Alexa, frag Enigma Control`
   * `was gerade läuft`
   * `was ich gerade gucke`
   * `was aktuell läuft`
@@ -23,10 +23,10 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `was läuft gerade`
   * `was gucke ich gerade`
 
-`mit Enigma`
+`mit Enigma Control`
 
 ### Kanalübersicht
-`Alexa, frag Enigma`
+`Alexa, frag Enigma Control`
   * `nach meinen kanälen`
   * `nach meinen sendern`
   * `nach meinen services`
@@ -37,10 +37,10 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `meine Sender`
   * `meine Services`
 
-`mit Enigma`
+`mit Enigma Control`
 
 ### Aufnahmen
-`Alexa, frag Enigma`
+`Alexa, frag Enigma Control`
   * `nach meinen aufnahmen`
   * `nach meinen filmen`
   * `welche aufnahmen habe ich`
@@ -49,10 +49,10 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
 
   * `meine aufnahmen`
 
-`mit Enigma`
+`mit Enigma Control`
 
 ### Lautstärkenregelung
-`Alexa, frag Enigma`
+`Alexa, frag Enigma Control`
   * `nach Ton ausschalten`
   * `nach stumm schalten`
   * `Ton auszumachen`
@@ -76,10 +76,10 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `Lautstärke auf <0-100> erhöhen`
   * `Lautstärke auf <0-100> verringern`
 
-`mit Enigma`
+`mit Enigma Control`
 
 ### Umschalten auf Kanal
-`Alexa, frag Enigma`
+`Alexa, frag Enigma Control`
   * `und schalte auf <Kanal>`
   * `auf <Kanal> zu schalten`
   * `auf <Kanal> zu wechseln`
@@ -97,10 +97,10 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `umschalten auf <Kanal>`
   * `umschalten zu <Kanal>`
 
-`mit Enigma`
+`mit Enigma Control`
 
 ### Umschalten auf Sendung (wenn sie läuft - wenn nicht, sagt Alexa dir wann die Sendung wieder läuft)
-`Alexa, frag Enigma`
+`Alexa, frag Enigma Control`
   * `ob die Sendung <Sendung> läuft`
   * `ob Sendung <Sendung> läuft`
   * `ob <Sendung> läuft`
@@ -116,7 +116,7 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `umschalten auf <Sendung>`
   * `umschalten zu <Sendung>`
 
-`mit Enigma`
+`mit Enigma Control`
 
 ### Hoch-/Runterschalten
 `Alexa,`
@@ -125,14 +125,14 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `runter schalten`
   * `hoch schalten`
   
-`mit Enigma`
+`mit Enigma Control`
 
 ### Zufälliges umschalten
 `Alexa,`
   * `schalte zufällig um`
   * `zufällig umschalten`
   
-`mit Enigma`
+`mit Enigma Control`
 
 ### Standby 
 `Alexa,`
@@ -143,7 +143,7 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `einschalten`
   * `anschalten`
   
-`mit Enigma`
+`mit Enigma Control`
 
 ### (Sofort-)Aufnahme starten
 `Alexa,`
@@ -151,7 +151,7 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `Aufnahme starten`
   * `jetzt aufnehmen`
   
-`mit Enigma`
+`mit Enigma Control`
 
 ### Pause/Fortsetzen/Stop
 `Alexa,`
@@ -160,10 +160,10 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `fortsetzen`
   * `stop`
   
-`mit Enigma`
+`mit Enigma Control`
 
 ### Sleeptimer (erwartet Minuten - 0 Minuten deaktiviert den Timer)
-`Alexa, frag Enigma`
+`Alexa, frag Enigma Control`
   * `nach sleep timer in <minuten> Minuten`
   * `nach einschlafen in <minuten> Minuten`
   * `nach ausschalten in <minuten> Minuten`
@@ -172,7 +172,7 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `sleep timer in <minuten> Minuten`
   * `sleep timer <minuten> Minuten`
 
-`mit Enigma`
+`mit Enigma Control`
 
 ### Vorheriger Kanal 
 `Alexa,`
@@ -184,7 +184,7 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
   * `zurück schalten`
   * `zurück`
   
-`mit Enigma`
+`mit Enigma Control`
 
 ### About / Über uns
 `Alexa, frag Enigma`
@@ -195,7 +195,7 @@ Wenn alle Gegebenheiten erfüllt sind kannst du mit `Alexa, hilfe mit Enigma` ei
 `Alexa,`
   * `wer ist dein vater`
 
-`mit Enigma`
+`mit Enigma Control`
 
 
 # Self-Deployment
@@ -257,9 +257,3 @@ Provide your url with https protocol, port (default 8080) and path /login in you
 * turn on/off
 * volume control
 * recording
-
-## todo
-
-current major planned features:
-
-1. conversation mode
