@@ -18,11 +18,13 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 	private AmazonLoginApi amazonLoginApi;
 	private UserProfile amazonProfile;
 	private BaseIntent aboutIntent;
-	private enum SetupState {
+	private enum SetupState
+	{
 		OK = 0,
 		NOT_LINKED = 1,
 		DB_API_ERROR = 2
 	}
+
 	private SetupState accountsSetup;
 
 	///
@@ -185,6 +187,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 			result.response.outputSpeech.ssml = format(getText(TextId.HelloSSML),
 					amazonProfile.name);
+			result.response.shouldEndSession = false;
 		}
 
 		return result;
@@ -192,13 +195,14 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 
 	///
 	@CustomIntent("AMAZON.HelpIntent")
-	AlexaResult onIntentHelp(AlexaEvent, AlexaContext)
+	AlexaResult onIntentHelp(AlexaEvent e, AlexaContext)
 	{
 		AlexaResult result;
-		result.response.card.title =  getText(TextId.HelpCardTitle);
+		result.response.card.title = getText(TextId.HelpCardTitle);
 		result.response.card.content = getText(TextId.HelpCardContent);
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 		result.response.outputSpeech.ssml = getText(TextId.HelpSSML);
+		result.response.shouldEndSession = false;
 		return result;
 	}
 
