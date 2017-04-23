@@ -1,28 +1,39 @@
 IntentCurrent was gerade läuft
 IntentCurrent was ich gerade gucke
+IntentCurrent was ich gerade schau
+IntentCurrent was ich gerade schaue
 IntentCurrent was aktuell läuft
 IntentCurrent was ist das
 IntentCurrent aktuell
 IntentCurrent was läuft gerade
 IntentCurrent was gucke ich gerade
+IntentCurrent was schau ich gerade
+IntentCurrent was schaue ich gerade
 
-IntentServices nach meinen kanälen
-IntentServices nach meinen sendern
-IntentServices nach meinen services
+IntentServices nach meinen Kanälen
+IntentServices nach meinen Sendern
+IntentServices nach meinen Services
 IntentServices meine Kanäle
 IntentServices meine Sender
 IntentServices meine Services 
 
-IntentMovies nach meinen aufnahmen
-IntentMovies nach meinen filmen
-IntentMovies welche aufnahmen habe ich
-IntentMovies meine aufnahmen
+IntentMovies nach meinen Aufnahmen
+IntentMovies nach meinen Aufzeichnugen
+IntentMovies nach meinen Filmen
+IntentMovies welche Aufnahmen habe ich
+IntentMovies meine Aufnahmen
+IntentMovies meine Aufzeichnugen
+IntentMovies meine Filme
 
 IntentToggleMute Ton ausschalten
 IntentToggleMute mute
+IntentToggleMute stumm
+IntentToggleMute lautlos
 IntentToggleMute nach Ton ausschalten
 IntentToggleMute nach stumm schalten
-IntentToggleMute Stumm schalten
+IntentToggleMute nach lautlos schalten
+IntentToggleMute stumm schalten
+IntentToggleMute lautlos schalten
 IntentToggleMute Ton auszumachen
 IntentToggleMute Ton an
 IntentToggleMute Ton aus
@@ -66,6 +77,8 @@ IntentVolumeDown leiser
 IntentToggleStandby Standby umschalten
 IntentToggleStandby Standby einschalten
 IntentToggleStandby Standby ausschalten
+IntentToggleStandby Standby ein
+IntentToggleStandby Standby aus
 IntentToggleStandby ausschalten
 IntentToggleStandby einschalten
 IntentToggleStandby anschalten
@@ -97,6 +110,8 @@ IntentZapRandom zufällig umschalten
 
 IntentZapDown schalte runter
 IntentZapDown runter schalten
+IntentZapDown nächster Sender
+IntentZapDown nachfolgender Sender
 
 IntentZapUp schalte hoch
 IntentZapUp hoch schalten

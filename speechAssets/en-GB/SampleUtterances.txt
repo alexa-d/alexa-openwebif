@@ -1,5 +1,11 @@
-IntentCurrent whats is currently running
+IntentCurrent what's currently running
+IntentCurrent whats currently running
+IntentCurrent what is currently running
 IntentCurrent what's running
+IntentCurrent whats running
+IntentCurrent what is running
+IntentCurrent what's showing
+IntentCurrent whats showing
 IntentCurrent what is showing
 IntentCurrent what is shown
 
