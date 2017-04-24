@@ -22,6 +22,9 @@ final class IntentMovies : OpenWebifBaseIntent
 	{
 		import std.format : format;
 
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		MovieList movies;
 		AlexaResult result;
 		try

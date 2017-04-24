@@ -21,7 +21,10 @@ final class IntentServices : OpenWebifBaseIntent
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
 		import std.format : format;
-
+		
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+			
 		ServicesList serviceList;
 		AlexaResult result;
 		try

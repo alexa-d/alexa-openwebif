@@ -70,5 +70,8 @@ enum TextId
 	HelpCardTitle,
 	HelpCardContent,
 	HelpSSML,
-	And
+	And,
+	InStandbyCardTitle,
+	InStandbyCardContent,
+	InStandbySSML
 }

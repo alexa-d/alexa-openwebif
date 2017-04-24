@@ -22,6 +22,9 @@ abstract class ZapBaseIntent : OpenWebifBaseIntent
 	{
 		import std.format : format;
 
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		Subservice matchedServices;
 		ServicesList allservices;
 
@@ -58,6 +61,9 @@ final class IntentZapTo : ZapBaseIntent
 	override AlexaResult onIntent(AlexaEvent event, AlexaContext)
 	{
 		import std.format : format;
+
+		if (apiClient.powerstate().instandby)
+			return inStandby();
 
 		auto targetChannel = event.request.intent.slots["targetChannel"].value;
 		Subservice matchedServices;
@@ -102,6 +108,9 @@ final class IntentZapUp : ZapBaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapUpCardTitle);
 		return doZapIntent(true, apiClient, result);
@@ -120,6 +129,8 @@ final class IntentZapDown : ZapBaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
+		if (apiClient.powerstate().instandby)
+			return inStandby();
 		AlexaResult result;
 		result.response.card.title = getText(TextId.ZapDownCardTitle);
 		return doZapIntent(false, apiClient, result);
@@ -140,6 +151,8 @@ final class IntentZapRandom : ZapBaseIntent
 	{
 		import std.format : format;
 
+		if (apiClient.powerstate().instandby)
+			return inStandby();
 		Subservice matchedServices;
 
 		ServicesList allservices;
@@ -179,6 +192,9 @@ final class IntentZapToEvent : ZapBaseIntent
 	{
 		import std.format : format;
 		import std.stdio : writeln;
+
+		if (apiClient.powerstate().instandby)
+			return inStandby();
 
 		auto targetEvent = event.request.intent.slots["targetEvent"].value;
 		auto switchedTo = getText(TextId.ZapFailedSSML);

@@ -22,6 +22,9 @@ abstract class VolumeBaseIntent : OpenWebifBaseIntent
 	{
 		import std.format : format;
 
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		auto action = "down";
 
 		if (increase)
@@ -93,6 +96,9 @@ final class IntentSetVolume : VolumeBaseIntent
 	{
 		import std.format : format;
 		import std.conv : to;
+
+		if (apiClient.powerstate().instandby)
+			return inStandby();
 
 		auto targetVolume = to!int(event.request.intent.slots["targetVolume"].value);
 

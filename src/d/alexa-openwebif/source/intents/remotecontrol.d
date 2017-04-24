@@ -23,6 +23,9 @@ abstract class RemoteControlBaseIntent : OpenWebifBaseIntent
 	{
 		import std.format : format;
 
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		About boxinfo;
 		try
 			boxinfo = apiClient.about();
@@ -104,6 +107,9 @@ final class IntentRCPlayPause : RemoteControlBaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPlayPauseCardTitle);
 		return doRCIntent("PlayPause", apiClient, this, result);
@@ -122,6 +128,9 @@ final class IntentRCStop : RemoteControlBaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		AlexaResult result;
 		result.response.card.title = getText(TextId.RCStopCardTitle);
 		return doRCIntent("Stop", apiClient, this, result);
@@ -140,6 +149,9 @@ final class IntentRCPrevious : RemoteControlBaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		AlexaResult result;
 		result.response.card.title = getText(TextId.RCPreviousCardTitle);
 		return doRCIntent("Previous", apiClient, this, result);
