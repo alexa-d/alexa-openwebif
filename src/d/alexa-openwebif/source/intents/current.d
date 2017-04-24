@@ -23,6 +23,9 @@ final class IntentCurrent : OpenWebifBaseIntent
 		import std.format : format;
 		import std.string : replace;
 
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		CurrentService currentService;
 
 		try

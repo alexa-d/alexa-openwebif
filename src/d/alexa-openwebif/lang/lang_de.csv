@@ -47,7 +47,7 @@ CurrentSSML,            <speak>Du guckst gerade: <p>%s</p> Aktuell läuft: %s</s
 CurrentNextSSML,        <speak>Du guckst gerade: <p>%s</p> Aktuell läuft: %s anschliessend läuft: %s</speak>
 RCPlayPauseCardTitle,   Program pausieren/abspielen
 RCOKSSML,               <speak>OK</speak>
-RCFailedSSML,  <speak>Fehlgeschlagen</speak>
+RCFailedSSML,           <speak>Fehlgeschlagen</speak>
 RCStopCardTitle,        Program pausieren abbrechen
 NotSupportedSSML,       <speak>Diese Funktion ist für deine Box noch nicht verfügbar. Bitte besuche uns auf github und eröffne ein Ticket</speak>
 RCPreviousCardTitle,    Vorheriger Kanal
@@ -59,3 +59,6 @@ HelpCardTitle,          Hilfe
 HelpCardContent,        Es gibt die folgenden Befehle:\nUm dein aktuelles Programm zu erfragen sage: 'Was läuft gerade mit Enigma Control' oder 'Frag Enigma Control was gerade läuft'\nZum Umschalten sage: 'Umschalten auf ARD mit Enigma Control' oder 'Schalte zu ARD mit Enigma Control'\nUm nach einer bestimmten Sendung zu suchen und dorthin umzuschalten sage: 'Frage Enigma Control ob die Sendung Die Simpsons gerade läuft' oder 'such nach Die Simpsons mit Enigma Control'\nDie Lautstärke kannst du wie folgt anpassen: 'Lauter mit Enigma Control', 'Leiser mit Enigma Control' oder 'Setze Lautstärke auf 85 mit Enigma Control'\nUm eine Sofortaufnahme zu starten sage : 'Aufnehmen mit Enigma Control'\nDas aktuelle Programm kannst du mit den folgenden Befehlen anhalten oder fortsetzen: 'Anhalten mit Enigma Control' oder 'Fortsetzen mit Enigma Control' mit 'Stop mit Enigma Control' brichst du den Pause Modus ab\n'Sleep Timer in 30 Minuten mit Enigma Control' stellt einen SleepTimer.\nZufällig umschalten kannst du mit 'Schalte zufällig um mit Enigma Control'. Ebenso kannst du hoch- und runterschalten mit 'Schalte hoch/runter mit Enigma Control'\nMit 'ausschalten/einschalten mit Enigma Control' kannst du deinen Receiver in Standby setzen und wieder aufwecken.\n'Vorheriger Kanal mit Enigma Control' schaltet auf den vorherigen Kanal um\nWir arbeiten mit Hochdruck daran weitere Befehle zu unterstützen. Wenn du Ideen hast kannst du diese gerne auf https://github.com/alexa-d/alexa-openwebif/issues platzieren.
 HelpSSML,               <speak>Mit diesem Skill kannst du deinen Enigma2 Receiver steuern. So kannst du z.B. mit <p>Umschalten auf ARD mit Enigma Control</p>den Kanal wechseln oder mit <p>Pause mit Enigma Control</p> das laufende Programm anhalten. Weitere Befehle siehst du in deiner Alexa App. Was kann ich für dich tun?</speak>
 And,                    und
+InStandbyCardTitle,     Box ist im Standby
+InStandbyCardContent,   Deine Box ist im Standby. Nutze 'Einschalten mit enigma control' um sie einzuschalten
+InStandbySSML,          <speak>Deine Box ist im Standby. Nutze <p>Einschalten mit enigma control</p> um sie einzuschalten</speak>

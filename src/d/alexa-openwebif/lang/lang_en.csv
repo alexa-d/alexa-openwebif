@@ -59,3 +59,6 @@ HelpCardTitle,          Help
 HelpCardContent,        HelpContent will follow on english submission
 HelpSSML,               <speak>With this skill you are able to control your enigma2 receiver. Call<p>Switch channel to CNN with Enigma Control</p>to switch your current channel or call <p>Stop Enigma Control</p> to stop the current program. For further calls have a look at your alexa app. What do you want me to do?</speak>
 And,                    and
+InStandbyCardTitle,     Box is in standby
+InStandbyCardContent,   Your Box is in Standby mode. Use command 'switch on with enigma control' to turn it on
+InStandbySSML,          <speak>Your Box is in Standby mode. Use command <p>switch on with enigma control</p> to turn it on</speak>

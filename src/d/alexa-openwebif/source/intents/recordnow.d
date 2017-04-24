@@ -20,6 +20,9 @@ final class IntentRecordNow : OpenWebifBaseIntent
 	///
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		RecordNow res;
 		AlexaResult result;
 		try

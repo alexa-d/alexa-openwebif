@@ -24,6 +24,10 @@ final class IntentSleepTimer : OpenWebifBaseIntent
 		import std.format : format;
 		import std.stdio : stderr;
 		int minutes;
+		
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		try
 		{
 			minutes = ISODurationToMinutes(event.request.intent.slots["targetMinutes"].value);

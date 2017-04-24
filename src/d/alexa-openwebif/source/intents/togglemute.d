@@ -22,6 +22,10 @@ final class IntentToggleMute : OpenWebifBaseIntent
 	{
 		AlexaResult result;
 		Vol res;
+
+		if (apiClient.powerstate().instandby)
+			return inStandby();
+
 		try
 			res = apiClient.vol("mute");
 		catch (Exception e)
