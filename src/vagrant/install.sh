@@ -32,8 +32,5 @@ echo region=$IN_AWS_REGION >> /home/vagrant/.aws/config
 echo "##################################"
 echo "setup compiler ldc2 & dmd"
 sudo su vagrant -c "curl -fsS https://dlang.org/install.sh | bash -s ldc"
-sudo su vagrant -c "curl -fsS https://dlang.org/install.sh | bash -s dmd"
-sudo su vagrant -c 'echo export PATH="/home/vagrant/dlang/dub:/home/vagrant/dlang/dmd-2.073.0/linux/bin64:/home/vagrant/dlang/ldc-1.1.0/bin:\$PATH" >> /home/vagrant/.bash_profile'
-sudo su vagrant -c 'echo export LIBRARY_PATH="/home/vagrant/dlang/dmd-2.073.0/linux/lib64:/home/vagrant/dlang/ldc-1.1.0/lib:\$LIBRARY_PATH" >> /home/vagrant/.bash_profile'
-sudo su vagrant -c 'echo export LD_LIBRARY_PATH="/home/vagrant/dlang/dmd-2.073.0/linux/lib64:/home/vagrant/dlang/ldc-1.1.0/lib:\$LD_LIBRARY_PATH" >> /home/vagrant/.bash_profile'
+sudo su vagrant -c 'echo source ~/dlang/ldc-1.2.0/activate >> /home/vagrant/.bash_profile'
 sudo su vagrant -c ". ~/.bash_profile"
