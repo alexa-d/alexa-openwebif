@@ -2,7 +2,11 @@ printf "\nbuild d app\n"
 cd d/alexa-openwebif
 dub upgrade
 dub build --compiler=ldc2
-
+if [ $? -gt 0 ]
+then 
+    printf "\nbuild error - please fix\n"
+    exit
+fi
 printf "\nbuild zip\n"
 zip -j arch.zip ../../node/index.js libssl.so.10 libevent-2.0.so.5 libcrypto.so.10 libevent_pthreads-2.0.so.5 alexa-openwebif
 
