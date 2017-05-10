@@ -1,6 +1,6 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/Wallentowitz) [![Build Status](https://travis-ci.org/alexa-d/alexa-openwebif.svg)](https://travis-ci.org/alexa-d/alexa-openwebif) ![Submission State](https://img.shields.io/badge/submission_state-in_progress-yellow.svg)
 # Enigma2 Control Alexa Skill
-
+### Dreambox User mit Dreambox Webcontrol können den Skill bisher leider nicht benutzen. Wir empfehlen die Installation des Openwebif Plugins (see Ticket [#132](https://github.com/alexa-d/alexa-openwebif/issues/132))
 ### For Beta Testers (german only right now)
 Send mail with your amazon account email to fabian at wallentowitz dot de 
 After getting feedback
