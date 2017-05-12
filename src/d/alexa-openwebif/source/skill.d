@@ -113,7 +113,10 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			}
 
 			try
+			{
 				apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
+				apiClient.about();
+			}
 			catch (Exception e)
 			{
 				stderr.writefln("Error with URL: %s", baseUrl ~ "/api/");
