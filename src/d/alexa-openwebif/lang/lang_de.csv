@@ -9,7 +9,8 @@ AboutCardTitle,         Enigma Control Info
 AboutCardContent,       Ich bin Enigma Control, ein Alexa Skill geschrieben in D. Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. Finde mehr über mich heraus bei github.
 AboutSSML,              <speak>Ich bin Enigma Control, ein Alexa Skill geschrieben in D. Stephan aka extrawurst und Fabian aka fabsi88 sind meine Autoren. Finde mehr über mich heraus bei github.</speak>
 MoviesCardTitle,        Filmliste
-MoviesSSML,             <speak>Du hast die folgenden Filme %s</speak>
+MoviesSSML,             <speak>Du hast die folgenden Filme\n %s</speak>
+MoviesDateSSML,         vom %s
 MuteCardTitle,          Stummschalten
 MutedSSML,              <speak>Stumm geschaltet</speak>
 MuteFailedSSML,         <speak>Stummschalten fehlgeschlagen</speak>
