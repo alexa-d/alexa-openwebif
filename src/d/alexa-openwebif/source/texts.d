@@ -22,6 +22,7 @@ enum TextId
 	AboutSSML,
 	MoviesCardTitle,
 	MoviesSSML,
+	MoviesDateSSML,
 	MuteCardTitle,
 	MutedSSML,
 	MuteFailedSSML,

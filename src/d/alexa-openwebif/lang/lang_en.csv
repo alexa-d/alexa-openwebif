@@ -9,7 +9,8 @@ AboutCardTitle,         Enigma Control Info
 AboutCardContent,       I am Enigma Control, a alexa skill written in D. Stephan aka extrawurst and Fabian aka fabsi88 are my authors. Visit github for more information.
 AboutSSML,              <speak>I am Enigma Control, a alexa skill written in D. Stephan aka extrawurst and Fabian aka fabsi88 are my authors. Visit github for more information.</speak>
 MoviesCardTitle,        Movie list
-MoviesSSML,             <speak>You've got the following movies %s</speak>
+MoviesSSML,             <speak>You've got the following movies\n %s</speak>
+MoviesDateSSML,         of %s
 MuteCardTitle,          Mute
 MutedSSML,              <speak>Muted</speak>
 MuteFailedSSML,         <speak>Mute failed</speak>

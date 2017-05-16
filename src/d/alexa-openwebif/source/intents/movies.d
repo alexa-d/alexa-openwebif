@@ -21,6 +21,8 @@ final class IntentMovies : OpenWebifBaseIntent
 	override AlexaResult onIntent(AlexaEvent, AlexaContext)
 	{
 		import std.format : format;
+		import std.datetime : SysTime;
+		import std.conv : to;
 
 		if (apiClient.powerstate().instandby)
 			return inStandby();
@@ -36,9 +38,15 @@ final class IntentMovies : OpenWebifBaseIntent
 
 		string moviesList;
 
+		SysTime st;
+		string dateString;
+		string datessml;
+
 		foreach (movie; movies.movies)
 		{
-			moviesList ~= "<p>" ~ movie.eventname ~ "</p>";
+			st = SysTime.fromUnixTime(movie.recordingtime);
+			datessml = format("%02d.%02d.%s", st.day, to!int(st.month), st.year);
+			moviesList ~= format("<p>%s %s</p>", movie.eventname, format(getText(TextId.MoviesDateSSML), datessml));
 		}
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
