@@ -115,7 +115,7 @@ final class OpenWebifSkill : AlexaSkill!OpenWebifSkill
 			try
 			{
 				apiClient = new RestInterfaceClient!OpenWebifApi(baseUrl ~ "/api/");
-				apiClient.about();
+				apiClient.powerstate();
 			}
 			catch (Exception e)
 			{
