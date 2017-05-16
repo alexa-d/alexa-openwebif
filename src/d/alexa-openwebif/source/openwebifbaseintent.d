@@ -38,6 +38,20 @@ abstract class OpenWebifBaseIntent : BaseIntent
 	}
 
 	///
+	protected AlexaResult specificError(TextId _title, TextId _content)
+	{
+		import std.format : format;
+
+		AlexaResult result;
+		result.response.card.title = getText(_title);
+		result.response.card.content = removeTags(getText(_content));
+		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
+		result.response.outputSpeech.ssml = getText(_content);
+		return result;
+	}
+
+
+	///
 	protected AlexaResult inStandby()
 	{
 		AlexaResult result;

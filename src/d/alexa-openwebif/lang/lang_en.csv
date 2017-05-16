@@ -63,3 +63,7 @@ And,                    and
 InStandbyCardTitle,     Box is in standby
 InStandbyCardContent,   Your Box is in Standby mode. Use command 'switch on with enigma control' to turn it on
 InStandbySSML,          <speak>Your Box is in Standby mode. Use command <p>switch on with enigma control</p> to turn it on</speak>
+MoviesNoHDDTitle,       Harddisk error
+MoviesNoHDDSSML,        <speak>It seems your harddisk is not mounted or not configured correctly.</speak>
+MoviesNoFilesTitle,     No recordings
+MoviesNoFilesSSML,      <speak>No records found</speak>
