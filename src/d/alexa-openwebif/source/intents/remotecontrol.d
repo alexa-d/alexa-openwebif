@@ -39,7 +39,7 @@ abstract class RemoteControlBaseIntent : OpenWebifBaseIntent
 		if (checkBox(boxinfo.info.imagedistro, action, code))
 		{
 			Remotecontrol rc;
-			// is needed because an call on about doesn't need authorization - this one does - so catch auth errors
+
 			try
 				rc = apiClient.remotecontrol(code);
 			catch (Exception e)
