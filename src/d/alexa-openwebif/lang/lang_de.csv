@@ -63,3 +63,7 @@ And,                    und
 InStandbyCardTitle,     Box ist im Standby
 InStandbyCardContent,   Deine Box ist im Standby. Nutze 'Einschalten mit enigma control' um sie einzuschalten
 InStandbySSML,          <speak>Deine Box ist im Standby. Nutze <p>Einschalten mit enigma control</p> um sie einzuschalten</speak>
+MoviesNoHDDTitle,       Festplattenfehler
+MoviesNoHDDSSML,        <speak>Es scheint als wäre keine Festplatte eingebunden oder der Pfad zu deinen Aufnahmen nicht korrekt konfiguriert.</speak>
+MoviesNoFilesTitle,     Keine Aufnahmen
+MoviesNoFilesSSML,      <speak>Es wurden keine Aufnahmen gefunden</speak>

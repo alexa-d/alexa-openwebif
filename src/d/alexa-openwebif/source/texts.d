@@ -74,5 +74,9 @@ enum TextId
 	And,
 	InStandbyCardTitle,
 	InStandbyCardContent,
-	InStandbySSML
+	InStandbySSML,
+	MoviesNoHDDTitle,
+	MoviesNoHDDSSML,
+	MoviesNoFilesTitle,
+	MoviesNoFilesSSML
 }

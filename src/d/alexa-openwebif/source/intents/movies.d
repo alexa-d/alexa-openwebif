@@ -32,7 +32,12 @@ final class IntentMovies : OpenWebifBaseIntent
 		try
 			movies = apiClient.movielist();
 		catch (Exception e)
-			return returnError(e);
+			return specificError(TextId.MoviesNoHDDTitle, TextId.MoviesNoHDDSSML);
+
+		if (movies.movies.length <= 0)
+		{
+			return specificError(TextId.MoviesNoFilesTitle, TextId.MoviesNoFilesSSML);
+		}
 
 		result.response.card.title = getText(TextId.MoviesCardTitle);
 
