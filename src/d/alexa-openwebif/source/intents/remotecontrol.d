@@ -36,7 +36,14 @@ abstract class RemoteControlBaseIntent : OpenWebifBaseIntent
 
 		result.response.outputSpeech.type = AlexaOutputSpeech.Type.SSML;
 
-		if (checkBox(boxinfo.info.imagedistro, action, code))
+		// workaround for dreambox + openwebif #136 which has no imagedistro attribute
+		string box;
+		if (boxinfo.info.imagedistro.length == 0)
+			box = boxinfo.info.brand;
+		else
+			box = boxinfo.info.imagedistro;
+
+		if (checkBox(box, action, code))
 		{
 			Remotecontrol rc;
 
@@ -90,8 +97,9 @@ abstract class RemoteControlBaseIntent : OpenWebifBaseIntent
 	///
 	private static immutable KeyMappings = [
 		KeyMap("VTi-PlayPause", 207), KeyMap("VTi-Stop", 128), KeyMap("VTi-Previous",
-			412), KeyMap("openatv-PlayPause", 207), KeyMap("openatv-Stop",
-			128), KeyMap("openatv-Previous", 412)
+			412), KeyMap("openatv-PlayPause", 119), KeyMap("openatv-Stop",
+			128), KeyMap("openatv-Previous", 412), KeyMap("Dream Multimedia-PlayPause",400),
+			KeyMap("Dream Multimedia-Stop", 377)
 	];
 }
 
