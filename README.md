@@ -1,6 +1,9 @@
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/Wallentowitz) [![Build Status](https://travis-ci.org/alexa-d/alexa-openwebif.svg)](https://travis-ci.org/alexa-d/alexa-openwebif) [![Submission State](https://img.shields.io/badge/submission_state-live-green.svg)](https://www.amazon.de/dp/B01N4W07S4/ref=sr_1_1?s=digital-skills&ie=UTF8&qid=1495124694)
-# Enigma2 Control Alexa Skill
-## We are (finally) live with the skill - See [Alexa Skill Store for skill](https://www.amazon.de/dp/B01N4W07S4/ref=sr_1_1?s=digital-skills&ie=UTF8&qid=1495124694) and PLEASE rate us with five stars!!  - And feel free to [DONATE](https://paypal.me/Wallentowitz) so we could cover the costs for hosting this skill
+[![Build Status](https://travis-ci.org/alexa-d/alexa-openwebif.svg)](https://travis-ci.org/alexa-d/alexa-openwebif) [![Submission State](https://img.shields.io/badge/submission_state-live-green.svg)](https://www.amazon.de/dp/B01N4W07S4/ref=sr_1_1?s=digital-skills&ie=UTF8&qid=1495124694)
+
+THIS REPO IS NOT MAINTAINED ANYMORE! Feel free to fork and go ahead :)
+
+# Enigma2 Control Alexa Skill (not maintained anymore!!)
+## We are (finally) live with the skill - See [Alexa Skill Store for skill](https://www.amazon.de/dp/B01N4W07S4/ref=sr_1_1?s=digital-skills&ie=UTF8&qid=1495124694) and PLEASE rate us with five stars!!  -
 ### Dreambox User mit Dreambox Webcontrol können den Skill bisher leider nicht benutzen. Wir empfehlen die Installation des Openwebif Plugins (see Ticket [#132](https://github.com/alexa-d/alexa-openwebif/issues/132) and [#126](https://github.com/alexa-d/alexa-openwebif/issues/126) for ipk)
 ### For Beta Testers (german only right now)
 Send mail with your amazon account email to fabian at wallentowitz dot de 
