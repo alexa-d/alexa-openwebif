@@ -5,10 +5,6 @@ THIS REPO IS NOT MAINTAINED ANYMORE! Feel free to fork and go ahead :)
 # Enigma2 Control Alexa Skill (not maintained anymore!!)
 ## We are (finally) live with the skill - See [Alexa Skill Store for skill](https://www.amazon.de/dp/B01N4W07S4/ref=sr_1_1?s=digital-skills&ie=UTF8&qid=1495124694) and PLEASE rate us with five stars!!  -
 ### Dreambox User mit Dreambox Webcontrol können den Skill bisher leider nicht benutzen. Wir empfehlen die Installation des Openwebif Plugins (see Ticket [#132](https://github.com/alexa-d/alexa-openwebif/issues/132) and [#126](https://github.com/alexa-d/alexa-openwebif/issues/126) for ipk)
-### For Beta Testers (german only right now)
-Send mail with your amazon account email to fabian at wallentowitz dot de 
-After getting feedback
-Use this [Link](https://skills-store.amazon.com/deeplink/tvt/27c5832d8e3d52b83f7062d3689189c004e06b54743d201e47223db66a0b8a7a6b5d56aeabe89aa098a8fc032cd1c6c4850ba0342137be20f3e48ffc1d44660d2b90291b57348c50208507d77bfbee9d2123f30f388d2091c5de00b5a324e51d1b676e631c956d2efca510272bc5b4579a7abaca7c932ab6d85d9a76c3e81d887cbcb7f3a8bae847e7cde0b0ada8dac36c2fc71aa5a67b97c8f25af05f90545b06d26b59bd83f42af4d239) to subscribe for beta testing.
 #### scroll down for self deployment instruction or click [HERE](https://github.com/alexa-d/alexa-openwebif#self-deployment)
 Mit dem Enigma2 Control Alexa Skill kannst du deinen Enigma2 Linux Receiver via Amazon Echo steuern. Der Skill befindet sich im Review durch Amazon und ist bald verfügbar. 
 Damit der Skill bei dir funktioniert müssen folgende Gegebenheiten erfüllt sein:
